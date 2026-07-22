@@ -637,8 +637,8 @@ window.addEventListener('keydown', e => {
     return;
   }
 
-  // V — скопировать yaw,pitch в буфер (только англ. V)
-  if (code === 'KeyV') {
+  // V (англ.) / В (рус.) — скопировать yaw,pitch в буфер
+  if (code === 'KeyV' || code === 'KeyB') {
     const yawDeg = yaw * 180 / Math.PI;
     const pitchDeg = pitch * 180 / Math.PI;
     const str = yawDeg.toFixed(1) + ',' + pitchDeg.toFixed(1);
