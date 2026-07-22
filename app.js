@@ -94,7 +94,7 @@ const scenes = {
       { yaw: 3.092, pitch: -0.056, label: 'Третий этаж 2', target: 'floor3_2',
         returnYaw: 1.519, returnPitch: 0 },
       { yaw: 6.262, pitch: -0.075, label: 'Третий этаж 4', target: 'floor3_4',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 4.799, returnPitch: 0 }
     ]
   },
   'floor3_4': {
@@ -103,8 +103,20 @@ const scenes = {
       { label: 'Обычная', image: '3 этаж 4.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Третий этаж 3', target: 'floor3_3',
-        returnYaw: 3.121, returnPitch: 0 }
+      { yaw: 1.657, pitch: -0.094, label: 'Третий этаж 3', target: 'floor3_3',
+        returnYaw: 3.121, returnPitch: 0 },
+      { yaw: 3.257, pitch: -0.070, label: 'Третий этаж 5', target: 'floor3_5',
+        returnYaw: 3.142, returnPitch: 0 }
+    ]
+  },
+  'floor3_5': {
+    name: 'Третий этаж 5',
+    variants: [
+      { label: 'Обычная', image: '3 этаж 5.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Третий этаж 4', target: 'floor3_4',
+        returnYaw: 0.116, returnPitch: 0 }
     ]
   }
 };
