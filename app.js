@@ -58,7 +58,7 @@ const scenes = {
       { yaw: 0.873, pitch: -0.169, label: 'Охрана', target: 'security',
         returnYaw: 3.248, returnPitch: 0, descend: true, climbText: 'Спускаемся на 1 этаж' },
       { yaw: 4.684, pitch: -0.124, label: 'Третий этаж 1', target: 'floor3_1',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 1.604, returnPitch: 0 }
     ]
   },
   'floor3_1': {
@@ -67,8 +67,8 @@ const scenes = {
       { label: 'Обычная', image: '3 этаж 1.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Третий этаж', target: 'floor3',
-        returnYaw: 1.544, returnPitch: 0 }
+      { yaw: 4.745, pitch: -0.084, label: 'Третий этаж', target: 'floor3',
+        returnYaw: 1.543, returnPitch: 0 }
     ]
   }
 };
