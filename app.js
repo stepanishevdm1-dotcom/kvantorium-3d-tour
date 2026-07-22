@@ -40,9 +40,12 @@ const scenes = {
   'security': {
     name: 'Охрана',
     variants: [
-      { label: 'Обычная', image: 'у охраны.jpg' }
+      { label: 'Обычная', image: 'у охраны 1 .jpg' }
     ],
-    hotspots: []
+    hotspots: [
+      { yaw: 2.117, pitch: -0.119, label: 'Главный вход', target: 'main_entrance',
+        returnYaw: 5.964, returnPitch: -0.002 }
+    ]
   }
 };
 
@@ -176,15 +179,10 @@ function preloadAll() {
           const blob = new Blob(chunks, { type: response.headers.get('content-type') || 'image/jpeg' });
           const blobUrl = URL.createObjectURL(blob);
 
-          // Загружаем в Image, затем создаём текстуру — кешируем
-          const image = await new Promise((resolve, reject) => {
-            const imgEl = new Image();
-            imgEl.onload = () => resolve(imgEl);
-            imgEl.onerror = reject;
-            imgEl.src = blobUrl;
+          // TextureLoader сам выставляет colorSpace = SRGBColorSpace
+          const tex = await new Promise((resolve, reject) => {
+            new THREE.TextureLoader().load(blobUrl, resolve, undefined, reject);
           });
-
-          const tex = new THREE.Texture(image);
           tex.wrapS = THREE.RepeatWrapping;
           tex.repeat.x = -1;
           tex.needsUpdate = true;
@@ -271,35 +269,45 @@ let hotspotMeshes = [];
 function createHotspotSprite(label) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
-  canvas.width = 512;
-  canvas.height = 160;
+  canvas.width = 1024;
+  canvas.height = 256;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const cx = 60, cy = 80;
+  const cx = 100, cy = 128;
   ctx.beginPath();
-  ctx.arc(cx, cy, 36, 0, Math.PI * 2);
-  ctx.strokeStyle = 'rgba(255,255,255,0.9)';
-  ctx.lineWidth = 4;
+  ctx.arc(cx, cy, 58, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+  ctx.lineWidth = 8;
   ctx.stroke();
   ctx.beginPath();
-  ctx.arc(cx, cy, 26, 0, Math.PI * 2);
+  ctx.arc(cx, cy, 54, 0, Math.PI * 2);
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 5;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(cx, cy, 38, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(0,0,0,0.6)';
+  ctx.lineWidth = 5;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(cx, cy, 35, 0, Math.PI * 2);
   ctx.strokeStyle = 'rgba(255,255,255,0.4)';
   ctx.lineWidth = 2;
   ctx.stroke();
 
   ctx.fillStyle = '#fff';
-  ctx.font = 'bold 36px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  ctx.font = 'bold 52px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'left';
   ctx.shadowColor = 'rgba(0,0,0,0.8)';
-  ctx.shadowBlur = 8;
-  ctx.fillText(label, 100, 82);
+  ctx.shadowBlur = 10;
+  ctx.fillText(label, 170, 132);
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.needsUpdate = true;
   const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
   const sprite = new THREE.Sprite(mat);
-  sprite.scale.set(60, 20, 1);
+  sprite.scale.set(100, 25, 1);
   return sprite;
 }
 
