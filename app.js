@@ -425,7 +425,7 @@ function animateHotspotTransition(hs) {
   while (deltaYaw > Math.PI) deltaYaw -= 2 * Math.PI;
   while (deltaYaw < -Math.PI) deltaYaw += 2 * Math.PI;
 
-  const duration = 2800;
+  const duration = 4000;
   const climb = hs.stairs;
   const descend = hs.descend;
   let climbTextEl = null;
@@ -441,17 +441,30 @@ function animateHotspotTransition(hs) {
 
   function step(now) {
     const t = Math.min((now - startTime) / duration, 1);
-    const bob = Math.sin(t * Math.PI * 6) * (climb || descend ? 0.02 : 0.008);
-    const lookUp = climb ? t * 0.12 : descend ? -t * 0.12 : 0;
+
+    let fovTarget;
+    let bob;
+    let lookUp;
+    if (t < 0.1) {
+      const p = t / 0.1;
+      fovTarget = startFov + (120 - startFov) * p;
+      bob = 0;
+      lookUp = 0;
+    } else {
+      const w = (t - 0.1) / 0.9;
+      bob = Math.sin(w * Math.PI * 8) * (climb || descend ? 0.02 : 0.012);
+      lookUp = climb ? w * 0.12 : descend ? -w * 0.12 : 0;
+      fovTarget = 120 + (75 - 120) * (1 - Math.pow(1 - w, 2));
+    }
 
     yaw = startYaw + deltaYaw * (1 - Math.pow(1 - t, 2));
     pitch = startPitch + (targetHsPitch - startPitch) * t + lookUp + bob;
     targetYaw = yaw;
     targetPitch = pitch;
-    fov = startFov + (climb || descend ? 30 : 20 - startFov) * t;
+    fov = fovTarget;
     targetFov = fov;
 
-    if (t >= 0.85 && !crossfadeStarted) {
+    if (t >= 0.65 && !crossfadeStarted) {
       crossfadeStarted = true;
       doCrossfadeTransition(hs.target, hs.returnYaw, hs.returnPitch);
     }
@@ -463,21 +476,7 @@ function animateHotspotTransition(hs) {
         climbTextEl.style.opacity = '0';
         setTimeout(() => climbTextEl.remove(), 500);
       }
-      setTimeout(() => {
-        fov = 120;
-        targetFov = 120;
-        const fovStart = 120;
-        const fovDuration = 500;
-        const fovStartTime = performance.now();
-        function fovStep(now2) {
-          const ft = Math.min((now2 - fovStartTime) / fovDuration, 1);
-          fov = fovStart + (75 - fovStart) * (1 - Math.pow(1 - ft, 3));
-          targetFov = fov;
-          if (ft < 1) requestAnimationFrame(fovStep);
-          else isTransitioning = false;
-        }
-        requestAnimationFrame(fovStep);
-      }, 50);
+      isTransitioning = false;
     }
   }
   requestAnimationFrame(step);
