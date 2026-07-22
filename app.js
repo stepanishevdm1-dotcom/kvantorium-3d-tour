@@ -44,7 +44,19 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 2.067, pitch: -0.126, label: 'Главный вход', target: 'main_entrance',
-        returnYaw: 5.964, returnPitch: -0.002 }
+        returnYaw: 5.964, returnPitch: -0.002 },
+      { yaw: 0.136, pitch: -0.054, label: 'Третий этаж', target: 'floor3',
+        returnYaw: 3.278, returnPitch: 0.1, stairs: true }
+    ]
+  },
+  'floor3': {
+    name: '3 этаж',
+    variants: [
+      { label: 'Обычная', image: '3 этаж.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Охрана', target: 'security',
+        returnYaw: 3.278, returnPitch: 0.1 }
     ]
   }
 };
@@ -411,6 +423,49 @@ function animateHotspotTransition(hs) {
   const startPitch = pitch;
   const targetHsYaw = hs.yaw;
   const targetHsPitch = hs.pitch;
+
+  if (hs.stairs) {
+    const stairsDuration = 2800;
+    const stairsStart = performance.now();
+
+    function stairsStep(now) {
+      const t = Math.min((now - stairsStart) / stairsDuration, 1);
+      const bob = Math.sin(t * Math.PI * 6) * 0.015;
+      const lookUp = t * 0.12;
+
+      yaw = startYaw + (targetHsYaw - startYaw) * (1 - Math.pow(1 - t, 2));
+      pitch = startPitch + (targetHsPitch - startPitch) * t + lookUp + bob;
+      targetYaw = yaw;
+      targetPitch = pitch;
+      fov = startFov + (30 - startFov) * t;
+      targetFov = fov;
+
+      if (t >= 1) {
+        crossfadeStarted = true;
+        doCrossfadeTransition(hs.target, hs.returnYaw, hs.returnPitch);
+        setTimeout(() => {
+          fov = 120;
+          targetFov = 120;
+          const fovStart = 120;
+          const fovDuration = 500;
+          const fovStartTime = performance.now();
+          function fovStep(now2) {
+            const ft = Math.min((now2 - fovStartTime) / fovDuration, 1);
+            fov = fovStart + (75 - fovStart) * (1 - Math.pow(1 - ft, 3));
+            targetFov = fov;
+            if (ft < 1) requestAnimationFrame(fovStep);
+            else isTransitioning = false;
+          }
+          requestAnimationFrame(fovStep);
+        }, 50);
+      } else {
+        requestAnimationFrame(stairsStep);
+      }
+    }
+    requestAnimationFrame(stairsStep);
+    return;
+  }
+
   const duration = 600;
   const startTime = performance.now();
 
