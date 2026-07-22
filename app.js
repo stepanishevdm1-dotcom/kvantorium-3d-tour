@@ -220,7 +220,19 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 4.768, pitch: -0.084, label: 'Третий этаж 9', target: 'floor3_9',
-        returnYaw: 3.099, returnPitch: 0 }
+        returnYaw: 3.099, returnPitch: 0 },
+      { yaw: 0.096, pitch: -0.084, label: 'Третий этаж 11', target: 'floor3_11',
+        returnYaw: 3.142, returnPitch: 0 }
+    ]
+  },
+  'floor3_11': {
+    name: 'Третий этаж 11',
+    variants: [
+      { label: 'Обычная', image: '3 этаж 11.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Третий этаж 10', target: 'floor3_10',
+        returnYaw: 3.238, returnPitch: 0 }
     ]
   },
   'kabinet_304': {
@@ -253,8 +265,10 @@ const scenes = {
       { label: 'Обычная', image: 'Энерджиквантум.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Кабинет 304', target: 'kabinet_304',
-        returnYaw: 1.602, returnPitch: 0 }
+      { yaw: 4.737, pitch: -0.140, label: 'Кабинет 304', target: 'kabinet_304',
+        returnYaw: 1.602, returnPitch: 0 },
+      { yaw: 3.013, pitch: -0.070, label: 'Энерджиквантум 2', target: 'energikvantum_2',
+        returnYaw: 3.142, returnPitch: 0 }
     ]
   },
   'energikvantum_2': {
@@ -264,14 +278,16 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 0, pitch: 0, label: 'Кабинет 304', target: 'kabinet_304',
-        returnYaw: 1.602, returnPitch: 0 }
+        returnYaw: 1.602, returnPitch: 0 },
+      { yaw: 0, pitch: 0, label: 'Энерджиквантум', target: 'energikvantum',
+        returnYaw: 6.155, returnPitch: 0 }
     ]
   }
 };
 
 const sidebarGroups = [
   { label: null, scenes: ['main_entrance', 'security'] },
-  { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10'] },
+  { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10', 'floor3_11'] },
   { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo', 'kabinet_304', 'radio_station', 'energikvantum', 'energikvantum_2'] }
 ];
 
