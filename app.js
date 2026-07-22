@@ -118,7 +118,7 @@ const scenes = {
       { yaw: 3.171, pitch: -0.065, label: 'Третий этаж 4', target: 'floor3_4',
         returnYaw: 0.116, returnPitch: 0 },
       { yaw: 6.248, pitch: -0.105, label: 'Третий этаж 6', target: 'floor3_6',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 6.238, returnPitch: 0 }
     ]
   },
   'floor3_6': {
@@ -127,8 +127,32 @@ const scenes = {
       { label: 'Обычная', image: '3 этаж 6.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Третий этаж 5', target: 'floor3_5',
-        returnYaw: 3.107, returnPitch: 0 }
+      { yaw: 3.096, pitch: -0.059, label: 'Третий этаж 5', target: 'floor3_5',
+        returnYaw: 3.107, returnPitch: 0 },
+      { yaw: 6.282, pitch: -0.056, label: 'Третий этаж 7', target: 'floor3_7',
+        returnYaw: 3.142, returnPitch: 0 },
+      { yaw: 4.632, pitch: -0.150, label: 'Кабинет Промышленный дизайн', target: 'industrial_design',
+        returnYaw: 3.142, returnPitch: 0 }
+    ]
+  },
+  'floor3_7': {
+    name: 'Третий этаж 7',
+    variants: [
+      { label: 'Обычная', image: '3 этаж 7.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Третий этаж 6', target: 'floor3_6',
+        returnYaw: 3.141, returnPitch: 0 }
+    ]
+  },
+  'industrial_design': {
+    name: 'Кабинет Промышленный дизайн',
+    variants: [
+      { label: 'Обычная', image: 'Промышленный дизайн.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Третий этаж 6', target: 'floor3_6',
+        returnYaw: 1.491, returnPitch: 0 }
     ]
   }
 };
