@@ -239,8 +239,11 @@ async function setScene(id, variantIdx, preserveRotation = false) {
   if (!imgUrl) return;
 
   if (!preserveRotation) {
-    yaw = 0; targetYaw = 0;
-    pitch = 0; targetPitch = 0;
+    const firstHotspot = s.hotspots[0];
+    yaw = firstHotspot ? firstHotspot.yaw : 0;
+    pitch = firstHotspot ? firstHotspot.pitch : 0;
+    targetYaw = yaw;
+    targetPitch = pitch;
   }
 
   try {
