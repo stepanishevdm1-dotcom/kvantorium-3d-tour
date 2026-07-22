@@ -459,6 +459,16 @@ function animateHotspotTransition(hs) {
       doCrossfadeTransition(hs.target, hs.returnYaw, hs.returnPitch);
     }
 
+    if (crossfadeStarted) {
+      yaw = hs.returnYaw;
+      pitch = (hs.returnPitch || 0) + lean + stepPitch + bob;
+      targetYaw = yaw;
+      targetPitch = pitch;
+      fov = fovTarget;
+      targetFov = fov;
+      if (t < 1) { requestAnimationFrame(step); return; }
+    }
+
     if (t < 1) {
       requestAnimationFrame(step);
     } else {
@@ -550,6 +560,15 @@ function navigateTo(id, variantIdx) {
       const tex = await loadTexture(imgUrl);
       sphere.material.map = tex;
       sphere.material.needsUpdate = true;
+
+      const h = s.hotspots[0];
+      if (h) {
+        yaw = h.yaw + Math.PI;
+        pitch = h.pitch || 0;
+        if (yaw > Math.PI * 2) yaw -= Math.PI * 2;
+        targetYaw = yaw;
+        targetPitch = pitch;
+      }
 
       currentSceneId = id;
       currentVariantIdx = variantIdx;
