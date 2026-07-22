@@ -70,7 +70,7 @@ const scenes = {
       { yaw: 4.745, pitch: -0.084, label: 'Третий этаж', target: 'floor3',
         returnYaw: 1.543, returnPitch: 0 },
       { yaw: 1.429, pitch: -0.065, label: 'Третий этаж 2', target: 'floor3_2',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 4.744, returnPitch: 0 }
     ]
   },
   'floor3_2': {
@@ -79,8 +79,20 @@ const scenes = {
       { label: 'Обычная', image: '3 этаж 2.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Третий этаж 1', target: 'floor3_1',
-        returnYaw: 4.571, returnPitch: 0 }
+      { yaw: 1.602, pitch: -0.045, label: 'Третий этаж 1', target: 'floor3_1',
+        returnYaw: 4.571, returnPitch: 0 },
+      { yaw: 4.660, pitch: -0.080, label: 'Третий этаж 3', target: 'floor3_3',
+        returnYaw: 3.142, returnPitch: 0 }
+    ]
+  },
+  'floor3_3': {
+    name: 'Третий этаж 3',
+    variants: [
+      { label: 'Обычная', image: '3 этаж 3.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Третий этаж 2', target: 'floor3_2',
+        returnYaw: 1.519, returnPitch: 0 }
     ]
   }
 };
@@ -473,18 +485,15 @@ function animateHotspotTransition(hs) {
     if (crossfadeStarted) {
       yaw = hs.returnYaw;
       pitch = (hs.returnPitch || 0) + lean + stepPitch + bob;
-      const postT = Math.min((t - 0.65) / 0.35, 1);
-      fov = 120 + (75 - 120) * Math.pow(postT, 1.5);
     } else {
       yaw = startYaw + deltaYaw * (1 - Math.pow(1 - t, 2));
       pitch = startPitch + (targetHsPitch - startPitch) * t + lean + stepPitch + bob;
-      fov = startFov;
       if (t >= 0.65) {
         crossfadeStarted = true;
-        fov = 120;
         doCrossfadeTransition(hs.target, hs.returnYaw, hs.returnPitch);
       }
     }
+    fov = startFov;
     targetYaw = yaw;
     targetPitch = pitch;
     targetFov = fov;
