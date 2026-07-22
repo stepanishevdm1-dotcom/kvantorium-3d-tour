@@ -383,7 +383,7 @@ function onPointerMove(e) {
 
   const sens = 0.005 * (fov / 75);
   targetYaw += dx * sens;
-  targetPitch -= dy * sens;
+  targetPitch += dy * sens;
   targetPitch = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, targetPitch));
 
   prevPointer.x = x;
