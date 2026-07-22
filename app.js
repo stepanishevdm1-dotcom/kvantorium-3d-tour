@@ -109,7 +109,9 @@ function humanSize(bytes) {
 function preloadAll() {
   const images = getAllImages();
   const total = images.length;
-  let loaded = 0;
+  let loadedFiles = 0;
+  let totalBytes = 0;
+  let loadedBytes = 0;
 
   if (total === 0) {
     loadingEl.classList.add('hidden');
@@ -117,55 +119,92 @@ function preloadAll() {
     return;
   }
 
-  for (const img of images) {
-    const item = document.createElement('div');
-    item.className = 'preload-item' + (img.variant ? ' variant' : '');
-    const nameSpan = document.createElement('span');
-    nameSpan.className = 'name';
-    nameSpan.textContent = img.label + (img.variant ? ' (' + img.variant + ')' : '');
-    const progSpan = document.createElement('span');
-    progSpan.className = 'progress';
-    progSpan.textContent = '0% — MB';
-    item.appendChild(nameSpan);
-    item.appendChild(progSpan);
-    preloadList.appendChild(item);
+  // Узнаём размеры всех файлов перед загрузкой
+  Promise.all(images.map(img =>
+    fetch(encodeURI(img.file), { method: 'HEAD' })
+      .then(r => parseInt(r.headers.get('content-length') || 0))
+      .catch(() => 0)
+  )).then(sizes => {
+    totalBytes = sizes.reduce((a, b) => a + b, 0);
 
-    const url = encodeURI(img.file);
-    fetch(url, { method: 'HEAD' }).then(r => {
-      const size = r.headers.get('content-length');
-      if (size) item.dataset.size = size;
-    }).catch(() => {});
+    for (let i = 0; i < images.length; i++) {
+      const img = images[i];
+      const fileSize = sizes[i];
 
-    const texLoader = new THREE.TextureLoader();
-    texLoader.load(url, tex => {
-      tex.dispose();
-      loaded++;
-      const pct = Math.round((loaded / total) * 100);
-      progSpan.textContent = '100% — ' + humanSize(parseInt(item.dataset.size) || 0);
-      loadingStatus.textContent = 'Загрузка… ' + pct + '%';
-      if (loaded === total) {
-        setTimeout(() => {
-          loadingEl.classList.add('hidden');
-          startViewer();
-        }, 400);
-      }
-    }, xhr => {
-      if (xhr.total) {
-        const pct = Math.round((xhr.loaded / xhr.total) * 100);
-        progSpan.textContent = pct + '% — ' + humanSize(xhr.total);
-        item.dataset.size = xhr.total;
-      }
-    }, () => {
-      loaded++;
-      progSpan.textContent = 'Ошибка';
-      if (loaded === total) {
-        setTimeout(() => {
-          loadingEl.classList.add('hidden');
-          startViewer();
-        }, 400);
-      }
-    });
-  }
+      const item = document.createElement('div');
+      item.className = 'preload-item' + (img.variant ? ' variant' : '');
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'name';
+      nameSpan.textContent = img.label + (img.variant ? ' (' + img.variant + ')' : '');
+      const progSpan = document.createElement('span');
+      progSpan.className = 'progress';
+      progSpan.textContent = '0% — ' + humanSize(fileSize);
+      item.appendChild(nameSpan);
+      item.appendChild(progSpan);
+      preloadList.appendChild(item);
+
+      const url = encodeURI(img.file);
+      const cacheKey = img.file;
+
+      (async () => {
+        try {
+          const response = await fetch(url);
+          const reader = response.body.getReader();
+          let recv = 0;
+          const chunks = [];
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            chunks.push(value);
+            recv += value.length;
+            const filePct = fileSize ? Math.round((recv / fileSize) * 100) : 0;
+            progSpan.textContent = filePct + '% — ' + humanSize(fileSize);
+            loadedBytes += value.length;
+            loadingStatus.textContent = 'Загрузка… ' + (totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 0) + '%';
+          }
+
+          const blob = new Blob(chunks, { type: response.headers.get('content-type') || 'image/jpeg' });
+          const blobUrl = URL.createObjectURL(blob);
+
+          // Загружаем в Image, затем создаём текстуру — кешируем
+          const image = await new Promise((resolve, reject) => {
+            const imgEl = new Image();
+            imgEl.onload = () => resolve(imgEl);
+            imgEl.onerror = reject;
+            imgEl.src = blobUrl;
+          });
+
+          const tex = new THREE.Texture(image);
+          tex.wrapS = THREE.RepeatWrapping;
+          tex.repeat.x = -1;
+          tex.needsUpdate = true;
+          imageCache[cacheKey] = tex;
+          URL.revokeObjectURL(blobUrl);
+
+          loadedFiles++;
+          progSpan.textContent = '100% — ' + humanSize(fileSize);
+          loadingStatus.textContent = 'Загрузка… ' + Math.round((loadedFiles / total) * 100) + '%';
+
+          if (loadedFiles === total) {
+            setTimeout(() => {
+              loadingEl.classList.add('hidden');
+              startViewer();
+            }, 400);
+          }
+        } catch (e) {
+          loadedFiles++;
+          progSpan.textContent = 'Ошибка';
+          if (loadedFiles === total) {
+            setTimeout(() => {
+              loadingEl.classList.add('hidden');
+              startViewer();
+            }, 400);
+          }
+        }
+      })();
+    }
+  });
 }
 
 /* ============================================================
