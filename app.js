@@ -250,8 +250,17 @@ const scenes = {
   'energikvantum': {
     name: 'Кабинет Энерджиквантум',
     variants: [
-      { label: 'Обычная', image: 'Энерджиквантум.jpg' },
-      { label: 'Вторая', image: 'Энерджиквантум 2.jpg' }
+      { label: 'Обычная', image: 'Энерджиквантум.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Кабинет 304', target: 'kabinet_304',
+        returnYaw: 1.602, returnPitch: 0 }
+    ]
+  },
+  'energikvantum_2': {
+    name: 'Энерджиквантум 2',
+    variants: [
+      { label: 'Обычная', image: 'Энерджиквантум 2.jpg' }
     ],
     hotspots: [
       { yaw: 0, pitch: 0, label: 'Кабинет 304', target: 'kabinet_304',
@@ -263,7 +272,7 @@ const scenes = {
 const sidebarGroups = [
   { label: null, scenes: ['main_entrance', 'security'] },
   { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10'] },
-  { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo', 'kabinet_304', 'radio_station', 'energikvantum'] }
+  { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo', 'kabinet_304', 'radio_station', 'energikvantum', 'energikvantum_2'] }
 ];
 
 const DEFAULT_SCENE = 'main_entrance';
