@@ -164,12 +164,10 @@ function preloadAll() {
           const response = await fetch(url);
           const reader = response.body.getReader();
           let recv = 0;
-          const chunks = [];
 
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
-            chunks.push(value);
             recv += value.length;
             const filePct = fileSize ? Math.round((recv / fileSize) * 100) : 0;
             progSpan.textContent = humanSize(recv) + '/' + humanSize(fileSize) + ' ' + filePct + '%';
@@ -177,24 +175,11 @@ function preloadAll() {
             loadingStatus.textContent = 'Загрузка… ' + humanSize(loadedBytes) + '/' + humanSize(totalBytes) + ' ' + (totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 0) + '%';
           }
 
-          const blob = new Blob(chunks, { type: response.headers.get('content-type') || 'image/jpeg' });
-          const blobUrl = URL.createObjectURL(blob);
-
-          const tex = await new Promise((resolve, reject) => {
-            new THREE.TextureLoader().load(blobUrl, resolve, undefined, reject);
-          });
-          tex.colorSpace = THREE.SRGBColorSpace;
-          tex.wrapS = THREE.RepeatWrapping;
-          tex.repeat.x = -1;
-          tex.needsUpdate = true;
-          imageCache[cacheKey] = tex;
-          URL.revokeObjectURL(blobUrl);
-
           loadedFiles++;
           progSpan.textContent = humanSize(fileSize) + '/' + humanSize(fileSize) + ' 100%';
-          loadingStatus.textContent = 'Загрузка… ' + humanSize(totalBytes) + '/' + humanSize(totalBytes) + ' 100%';
 
           if (loadedFiles === total) {
+            loadingStatus.textContent = 'Загрузка… ' + humanSize(totalBytes) + '/' + humanSize(totalBytes) + ' 100%';
             setTimeout(() => {
               loadingEl.classList.add('hidden');
               startViewer();
@@ -274,28 +259,27 @@ function createHotspotSprite(label) {
   const ctx = canvas.getContext('2d');
   canvas.width = 1024;
   canvas.height = 256;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   const cx = 100, cy = 128;
   ctx.beginPath();
-  ctx.arc(cx, cy, 60, 0, Math.PI * 2);
+  ctx.arc(cx, cy, 80, 0, Math.PI * 2);
   ctx.strokeStyle = '#000';
-  ctx.lineWidth = 10;
+  ctx.lineWidth = 60;
   ctx.stroke();
   ctx.beginPath();
   ctx.arc(cx, cy, 54, 0, Math.PI * 2);
   ctx.strokeStyle = '#fff';
-  ctx.lineWidth = 6;
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(cx, cy, 36, 0, Math.PI * 2);
-  ctx.strokeStyle = '#000';
-  ctx.lineWidth = 8;
+  ctx.lineWidth = 12;
   ctx.stroke();
   ctx.beginPath();
   ctx.arc(cx, cy, 32, 0, Math.PI * 2);
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 48;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(cx, cy, 12, 0, Math.PI * 2);
   ctx.strokeStyle = '#fff';
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 6;
   ctx.stroke();
 
   ctx.fillStyle = '#fff';
@@ -304,14 +288,14 @@ function createHotspotSprite(label) {
   ctx.textAlign = 'left';
   ctx.shadowColor = '#000';
   ctx.shadowBlur = 12;
-  ctx.fillText(label, 170, 132);
+  ctx.fillText(label, 200, 132);
   ctx.shadowBlur = 0;
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.needsUpdate = true;
   const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
   const sprite = new THREE.Sprite(mat);
-  sprite.scale.set(100, 25, 1);
+  sprite.scale.set(300, 75, 1);
   return sprite;
 }
 
@@ -449,7 +433,6 @@ function animateHotspotTransition(hs) {
     if (t < 1) {
       transitionAnimId = requestAnimationFrame(step);
     } else {
-      // Мгновенно FOV=120 → анимация до 75 за 500ms
       setTimeout(() => {
         fov = 120;
         targetFov = 120;
@@ -461,6 +444,7 @@ function animateHotspotTransition(hs) {
           fov = fovStart + (75 - fovStart) * (1 - Math.pow(1 - ft, 3));
           targetFov = fov;
           if (ft < 1) requestAnimationFrame(fovStep);
+          else isTransitioning = false;
         }
         requestAnimationFrame(fovStep);
       }, 50);
