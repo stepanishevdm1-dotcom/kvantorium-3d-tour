@@ -577,12 +577,11 @@ async function doCrossfadeTransition(targetId, returnYaw, returnPitch) {
 
     sphere.material.transparent = true;
     const cfStart = performance.now();
-    const cfDur = 400;
+    const cfDur = 150;
     function cfStep(now) {
       const t = Math.min((now - cfStart) / cfDur, 1);
-      const ease = 1 - Math.pow(1 - t, 3);
-      sphere.material.opacity = Math.max(1 - ease, 0);
-      sphere2.material.opacity = Math.min(ease, 1);
+      sphere.material.opacity = 1 - t;
+      sphere2.material.opacity = t;
       if (t < 1) { requestAnimationFrame(cfStep); return; }
       scene.remove(sphere);
       sphere.material.dispose();
@@ -633,12 +632,11 @@ async function navigateTo(id, variantIdx) {
 
     sphere.material.transparent = true;
     const cfStart = performance.now();
-    const cfDur = 400;
+    const cfDur = 150;
     function step(now) {
       const t = Math.min((now - cfStart) / cfDur, 1);
-      const ease = 1 - Math.pow(1 - t, 3);
-      sphere.material.opacity = Math.max(1 - ease, 0);
-      sphere2.material.opacity = Math.min(ease, 1);
+      sphere.material.opacity = 1 - t;
+      sphere2.material.opacity = t;
       if (t < 1) { requestAnimationFrame(step); return; }
       scene.remove(sphere);
       sphere.material.dispose();
