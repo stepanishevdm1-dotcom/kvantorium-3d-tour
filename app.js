@@ -152,8 +152,7 @@ const scenes = {
   'industrial_design': {
     name: 'Кабинет Промышленный дизайн',
     variants: [
-      { label: 'Обычная', image: 'Промышленный дизайн.jpg' },
-      { label: 'Вторая', image: 'Промышленный дизайн 2.jpg' }
+      { label: 'Обычная', image: 'Промышленный дизайн.jpg' }
     ],
     hotspots: [
       { yaw: 6.251, pitch: -0.035, label: 'Третий этаж 6', target: 'floor3_6',
