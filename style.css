@@ -556,14 +556,14 @@ canvas:active {
 #bg-load-btn {
   margin-top: 16px;
   padding: 10px 24px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: #fff;
+  border: none;
   border-radius: 12px;
-  color: #fff;
+  color: #000;
   font-size: 0.85rem;
   font-family: inherit;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: opacity 0.2s;
 }
 
 #bg-load-btn:hover {
