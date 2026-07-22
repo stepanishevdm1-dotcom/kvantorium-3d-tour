@@ -169,7 +169,7 @@ const scenes = {
     hotspots: [
       { yaw: 4.732, pitch: -0.059, label: 'Промышленный дизайн', target: 'industrial_design',
         returnYaw: 1.621, returnPitch: 0 },
-      { yaw: 4.018, pitch: -0.070, label: 'Третий этаж 7', target: 'floor3_7',
+      { yaw: 4.018, pitch: -0.101, label: 'Третий этаж 6', target: 'floor3_6',
         returnYaw: 3.142, returnPitch: 0 }
     ]
   },
