@@ -33,8 +33,8 @@ const scenes = {
       { label: 'Обычная', image: 'Главный вход.jpg' }
     ],
     hotspots: [
-      { yaw: 2.822, pitch: -0.002, label: 'Охрана', target: 'security',
-        returnYaw: 5.964, returnPitch: -0.002 }
+      { yaw: 2.836, pitch: 0.033, label: 'Охрана', target: 'security',
+        returnYaw: 2.069, returnPitch: -0.093 }
     ]
   },
   'security': {
@@ -43,10 +43,10 @@ const scenes = {
       { label: 'Обычная', image: 'у охраны 1 .jpg' }
     ],
     hotspots: [
-      { yaw: 2.067, pitch: -0.126, label: 'Главный вход', target: 'main_entrance',
-        returnYaw: 5.964, returnPitch: -0.002 },
-      { yaw: 0.136, pitch: -0.054, label: 'Третий этаж', target: 'floor3',
-        returnYaw: 3.278, returnPitch: 0.1, stairs: true }
+      { yaw: 2.069, pitch: -0.093, label: 'Главный вход', target: 'main_entrance',
+        returnYaw: 2.836, returnPitch: 0.033 },
+      { yaw: 0.106, pitch: -0.042, label: 'Третий этаж', target: 'floor3',
+        returnYaw: 0.873, returnPitch: -0.169, stairs: true, climbText: 'Поднимаемся на 3 этаж' }
     ]
   },
   'floor3': {
@@ -55,8 +55,8 @@ const scenes = {
       { label: 'Обычная', image: '3 этаж.jpg' }
     ],
     hotspots: [
-      { yaw: 3.2, pitch: -0.1, label: 'Охрана', target: 'security',
-        returnYaw: 0.136, returnPitch: -0.054 }
+      { yaw: 0.873, pitch: -0.169, label: 'Охрана', target: 'security',
+        returnYaw: 0.106, returnPitch: -0.042, descend: true, climbText: 'Спускаемся на 1 этаж' }
     ]
   }
 };
@@ -425,70 +425,44 @@ function animateHotspotTransition(hs) {
   while (deltaYaw > Math.PI) deltaYaw -= 2 * Math.PI;
   while (deltaYaw < -Math.PI) deltaYaw += 2 * Math.PI;
 
-  if (hs.stairs) {
-    const stairsDuration = 2800;
-    const stairsStart = performance.now();
-
-    function stairsStep(now) {
-      const t = Math.min((now - stairsStart) / stairsDuration, 1);
-      const bob = Math.sin(t * Math.PI * 6) * 0.015;
-      const lookUp = t * 0.12;
-
-      yaw = startYaw + deltaYaw * (1 - Math.pow(1 - t, 2));
-      pitch = startPitch + (targetHsPitch - startPitch) * t + lookUp + bob;
-      targetYaw = yaw;
-      targetPitch = pitch;
-      fov = startFov + (30 - startFov) * t;
-      targetFov = fov;
-
-      if (t >= 1) {
-        crossfadeStarted = true;
-        doCrossfadeTransition(hs.target, hs.returnYaw, hs.returnPitch);
-        setTimeout(() => {
-          fov = 120;
-          targetFov = 120;
-          const fovStart = 120;
-          const fovDuration = 500;
-          const fovStartTime = performance.now();
-          function fovStep(now2) {
-            const ft = Math.min((now2 - fovStartTime) / fovDuration, 1);
-            fov = fovStart + (75 - fovStart) * (1 - Math.pow(1 - ft, 3));
-            targetFov = fov;
-            if (ft < 1) requestAnimationFrame(fovStep);
-            else isTransitioning = false;
-          }
-          requestAnimationFrame(fovStep);
-        }, 50);
-      } else {
-        requestAnimationFrame(stairsStep);
-      }
-    }
-    requestAnimationFrame(stairsStep);
-    return;
+  const duration = 2800;
+  const climb = hs.stairs;
+  const descend = hs.descend;
+  let climbTextEl = null;
+  if (hs.climbText) {
+    climbTextEl = document.createElement('div');
+    climbTextEl.textContent = hs.climbText;
+    climbTextEl.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:200;color:#fff;font:bold 32px -apple-system,sans-serif;text-shadow:0 0 20px rgba(0,0,0,0.8);pointer-events:none;opacity:0;transition:opacity 0.5s';
+    document.body.appendChild(climbTextEl);
+    requestAnimationFrame(() => { climbTextEl.style.opacity = '1'; });
   }
 
-  const duration = 600;
   const startTime = performance.now();
 
   function step(now) {
     const t = Math.min((now - startTime) / duration, 1);
-    const ease = 1 - Math.pow(1 - t, 3);
+    const bob = Math.sin(t * Math.PI * 6) * (climb || descend ? 0.02 : 0.008);
+    const lookUp = climb ? t * 0.12 : descend ? -t * 0.12 : 0;
 
-    yaw = startYaw + deltaYaw * ease;
-    pitch = startPitch + (targetHsPitch - startPitch) * ease;
+    yaw = startYaw + deltaYaw * (1 - Math.pow(1 - t, 2));
+    pitch = startPitch + (targetHsPitch - startPitch) * t + lookUp + bob;
     targetYaw = yaw;
     targetPitch = pitch;
-    fov = startFov + (20 - startFov) * ease;
+    fov = startFov + (climb || descend ? 30 : 20 - startFov) * t;
     targetFov = fov;
 
-    if (t >= 0.9 && !crossfadeStarted) {
+    if (t >= 0.85 && !crossfadeStarted) {
       crossfadeStarted = true;
       doCrossfadeTransition(hs.target, hs.returnYaw, hs.returnPitch);
     }
 
     if (t < 1) {
-      transitionAnimId = requestAnimationFrame(step);
+      requestAnimationFrame(step);
     } else {
+      if (climbTextEl) {
+        climbTextEl.style.opacity = '0';
+        setTimeout(() => climbTextEl.remove(), 500);
+      }
       setTimeout(() => {
         fov = 120;
         targetFov = 120;
@@ -506,7 +480,7 @@ function animateHotspotTransition(hs) {
       }, 50);
     }
   }
-  transitionAnimId = requestAnimationFrame(step);
+  requestAnimationFrame(step);
 }
 
 async function doCrossfadeTransition(targetId, returnYaw, returnPitch) {
