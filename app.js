@@ -276,7 +276,7 @@ function createHotspotSprite(label) {
   canvas.height = 256;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const cx = 120, cy = 180;
+  const cx = 512, cy = 180;
   ctx.beginPath();
   ctx.arc(cx, cy, 60, 0, Math.PI * 2);
   ctx.strokeStyle = '#000';
@@ -442,20 +442,9 @@ function animateHotspotTransition(hs) {
   function step(now) {
     const t = Math.min((now - startTime) / duration, 1);
 
-    let fovTarget;
-    let bob;
-    let lookUp;
-    if (t < 0.1) {
-      const p = t / 0.1;
-      fovTarget = startFov + (120 - startFov) * p;
-      bob = 0;
-      lookUp = 0;
-    } else {
-      const w = (t - 0.1) / 0.9;
-      bob = Math.sin(w * Math.PI * 8) * (climb || descend ? 0.02 : 0.012);
-      lookUp = climb ? w * 0.12 : descend ? -w * 0.12 : 0;
-      fovTarget = 120 + (75 - 120) * (1 - Math.pow(1 - w, 2));
-    }
+    const bob = Math.sin(t * Math.PI * 7) * (climb || descend ? 0.02 : 0.012) * Math.min(t * 3, 1);
+    const lookUp = climb ? t * 0.10 : descend ? -t * 0.10 : 0;
+    const fovTarget = startFov + 18 * Math.sin(t * Math.PI * 0.65) * (1 - t) + (75 - startFov) * Math.pow(t, 2);
 
     yaw = startYaw + deltaYaw * (1 - Math.pow(1 - t, 2));
     pitch = startPitch + (targetHsPitch - startPitch) * t + lookUp + bob;
