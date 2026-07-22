@@ -485,15 +485,17 @@ function animateHotspotTransition(hs) {
     if (crossfadeStarted) {
       yaw = hs.returnYaw;
       pitch = (hs.returnPitch || 0) + lean + stepPitch + bob;
+      const postT = Math.min((t - 0.65) / 0.35, 1);
+      fov = 120 + (75 - 120) * Math.pow(postT, 1.5);
     } else {
       yaw = startYaw + deltaYaw * (1 - Math.pow(1 - t, 2));
       pitch = startPitch + (targetHsPitch - startPitch) * t + lean + stepPitch + bob;
+      fov = startFov;
       if (t >= 0.65) {
         crossfadeStarted = true;
         doCrossfadeTransition(hs.target, hs.returnYaw, hs.returnPitch);
       }
     }
-    fov = startFov;
     targetYaw = yaw;
     targetPitch = pitch;
     targetFov = fov;
