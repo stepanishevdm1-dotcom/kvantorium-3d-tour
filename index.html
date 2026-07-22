@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>3D Тур — Кванториум 3 этаж</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+  }
+}
+</script>
+</head>
+<body>
+
+<div id="loading">
+  <div id="loading-content">
+    <h1>Кванториум — 3 этаж</h1>
+    <p id="loading-status">Загрузка панорам…</p>
+    <div id="preload-list"></div>
+  </div>
+</div>
+
+<div id="sidebar-btn">☰</div>
+
+<div id="sidebar">
+  <div id="sidebar-header">Комнаты</div>
+  <div id="sidebar-list"></div>
+</div>
+
+<div id="overlay"></div>
+
+<div id="ui">
+  <div id="scene-name"></div>
+  <div id="variants"></div>
+</div>
+
+<div id="crosshair">+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
