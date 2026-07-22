@@ -34,7 +34,7 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 2.836, pitch: 0.033, label: 'Охрана', target: 'security',
-        returnYaw: 2.069, returnPitch: -0.093 }
+        returnYaw: 5.211, returnPitch: 0 }
     ]
   },
   'security': {
@@ -44,9 +44,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 2.069, pitch: -0.093, label: 'Главный вход', target: 'main_entrance',
-        returnYaw: 2.836, returnPitch: 0.033 },
+        returnYaw: 5.978, returnPitch: 0 },
       { yaw: 0.106, pitch: -0.042, label: 'Третий этаж', target: 'floor3',
-        returnYaw: 0.873, returnPitch: -0.169, stairs: true, climbText: 'Поднимаемся на 3 этаж' }
+        returnYaw: 4.015, returnPitch: 0, stairs: true, climbText: 'Поднимаемся на 3 этаж' }
     ]
   },
   'floor3': {
@@ -56,7 +56,7 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 0.873, pitch: -0.169, label: 'Охрана', target: 'security',
-        returnYaw: 0.106, returnPitch: -0.042, descend: true, climbText: 'Спускаемся на 1 этаж' }
+        returnYaw: 3.248, returnPitch: 0, descend: true, climbText: 'Спускаемся на 1 этаж' }
     ]
   }
 };
@@ -442,12 +442,13 @@ function animateHotspotTransition(hs) {
   function step(now) {
     const t = Math.min((now - startTime) / duration, 1);
 
-    const bob = Math.sin(t * Math.PI * 7) * (climb || descend ? 0.02 : 0.012) * Math.min(t * 3, 1);
-    const lookUp = climb ? t * 0.10 : descend ? -t * 0.10 : 0;
+    const stepPitch = (climb ? 1 : descend ? -1 : 0) * 0.025 * Math.sin(t * Math.PI * 10 + 1.2) * Math.min(t * 4, 1);
+    const lean = climb ? t * 0.08 : descend ? -t * 0.08 : 0;
+    const bob = climb || descend ? 0 : Math.sin(t * Math.PI * 7) * 0.012 * Math.min(t * 4, 1);
     const fovTarget = startFov + 18 * Math.sin(t * Math.PI * 0.65) * (1 - t) + (75 - startFov) * Math.pow(t, 2);
 
     yaw = startYaw + deltaYaw * (1 - Math.pow(1 - t, 2));
-    pitch = startPitch + (targetHsPitch - startPitch) * t + lookUp + bob;
+    pitch = startPitch + (targetHsPitch - startPitch) * t + lean + stepPitch + bob;
     targetYaw = yaw;
     targetPitch = pitch;
     fov = fovTarget;
