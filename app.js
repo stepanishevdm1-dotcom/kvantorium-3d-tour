@@ -110,10 +110,9 @@ function getAllImages() {
 }
 
 function humanSize(bytes) {
-  if (!bytes) return '—';
   const mb = bytes / (1024 * 1024);
-  if (mb < 0.01) return '<0.01 MB';
-  return mb.toFixed(2) + ' MB';
+  if (mb < 0.01) return '0MB';
+  return mb.toFixed(1) + 'MB';
 }
 
 function preloadAll() {
@@ -148,7 +147,7 @@ function preloadAll() {
       nameSpan.textContent = img.label + (img.variant ? ' (' + img.variant + ')' : '');
       const progSpan = document.createElement('span');
       progSpan.className = 'progress';
-      progSpan.textContent = '0% — ' + humanSize(fileSize);
+      progSpan.textContent = '0B/' + humanSize(fileSize) + ' 0%';
       item.appendChild(nameSpan);
       item.appendChild(progSpan);
       preloadList.appendChild(item);
@@ -169,9 +168,9 @@ function preloadAll() {
             chunks.push(value);
             recv += value.length;
             const filePct = fileSize ? Math.round((recv / fileSize) * 100) : 0;
-            progSpan.textContent = filePct + '% — ' + humanSize(fileSize);
+            progSpan.textContent = humanSize(recv) + '/' + humanSize(fileSize) + ' ' + filePct + '%';
             loadedBytes += value.length;
-            loadingStatus.textContent = 'Загрузка… ' + (totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 0) + '%';
+            loadingStatus.textContent = 'Загрузка… ' + humanSize(loadedBytes) + '/' + humanSize(totalBytes) + ' ' + (totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 0) + '%';
           }
 
           const blob = new Blob(chunks, { type: response.headers.get('content-type') || 'image/jpeg' });
@@ -193,8 +192,8 @@ function preloadAll() {
           URL.revokeObjectURL(blobUrl);
 
           loadedFiles++;
-          progSpan.textContent = '100% — ' + humanSize(fileSize);
-          loadingStatus.textContent = 'Загрузка… ' + Math.round((loadedFiles / total) * 100) + '%';
+          progSpan.textContent = humanSize(fileSize) + '/' + humanSize(fileSize) + ' 100%';
+          loadingStatus.textContent = 'Загрузка… ' + humanSize(totalBytes) + '/' + humanSize(totalBytes) + ' 100%';
 
           if (loadedFiles === total) {
             setTimeout(() => {
