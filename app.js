@@ -276,7 +276,7 @@ function createHotspotSprite(label) {
   canvas.height = 256;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const cx = 100, cy = 128;
+  const cx = 120, cy = 180;
   ctx.beginPath();
   ctx.arc(cx, cy, 60, 0, Math.PI * 2);
   ctx.strokeStyle = '#000';
@@ -299,12 +299,12 @@ function createHotspotSprite(label) {
   ctx.stroke();
 
   ctx.fillStyle = '#fff';
-  ctx.font = 'bold 52px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  ctx.font = 'bold 44px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
   ctx.textBaseline = 'middle';
-  ctx.textAlign = 'left';
+  ctx.textAlign = 'center';
   ctx.shadowColor = '#000';
   ctx.shadowBlur = 12;
-  ctx.fillText(label, 200, 132);
+  ctx.fillText(label, cx, 60);
   ctx.shadowBlur = 0;
 
   const tex = new THREE.CanvasTexture(canvas);
