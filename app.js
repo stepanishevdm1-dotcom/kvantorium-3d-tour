@@ -144,7 +144,7 @@ const scenes = {
       { yaw: 3.162, pitch: -0.040, label: 'Третий этаж 6', target: 'floor3_6',
         returnYaw: 6.304, returnPitch: 0 },
       { yaw: 4.812, pitch: -0.126, label: 'Кабинет робоквантум', target: 'robo',
-        returnYaw: 1.671, returnPitch: 0 },
+        returnYaw: 3.844, returnPitch: 0 },
       { yaw: 6.202, pitch: -0.091, label: 'Третий этаж 8', target: 'floor3_8',
         returnYaw: 3.062, returnPitch: 0 }
     ]
@@ -182,6 +182,8 @@ const scenes = {
       { yaw: 0.702, pitch: -0.075, label: 'Третий этаж 7', target: 'floor3_7',
         returnYaw: 1.671, returnPitch: 0 },
       { yaw: 2.262, pitch: -0.080, label: 'Третий этаж 6', target: 'floor3_6',
+        returnYaw: 3.142, returnPitch: 0 },
+      { yaw: 0, pitch: 0, label: 'Третий этаж 8', target: 'floor3_8',
         returnYaw: 3.142, returnPitch: 0 }
     ]
   },
