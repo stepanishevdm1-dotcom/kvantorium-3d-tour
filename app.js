@@ -27,16 +27,16 @@ import * as THREE from 'three';
 */
 
 const scenes = {
-  'placeholder': {
-    name: 'Демо',
+  'main_entrance': {
+    name: 'Главный вход',
     variants: [
-      { label: 'Обычная', image: '' }
+      { label: 'Обычная', image: 'Главный вход.jpg' }
     ],
     hotspots: []
   }
 };
 
-const DEFAULT_SCENE = 'placeholder';
+const DEFAULT_SCENE = 'main_entrance';
 const SMOOTH = 0.18;
 const MIN_FOV = 20;
 const MAX_FOV = 120;
