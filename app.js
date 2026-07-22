@@ -309,6 +309,7 @@ const SETTINGS_DEFAULTS = {
   hotspotStyle: 0,
   textSize: 44,
   textColor: '#ffffff',
+  markerColor: '#ffffff',
   mouseSensitivity: 1,
   animations: true,
   transitionSpeed: 2500
@@ -541,6 +542,7 @@ function createHotspotSprite(label) {
   const style = settings.hotspotStyle;
   const tColor = settings.textColor;
   const tSize = settings.textSize;
+  const mColor = settings.markerColor;
 
   if (style === 0) {
     ctx.beginPath();
@@ -550,7 +552,7 @@ function createHotspotSprite(label) {
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(cx, cy, 46, 0, Math.PI * 2);
-    ctx.strokeStyle = '#fff';
+    ctx.strokeStyle = mColor;
     ctx.lineWidth = 12;
     ctx.stroke();
     ctx.beginPath();
@@ -560,7 +562,7 @@ function createHotspotSprite(label) {
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(cx, cy, 10, 0, Math.PI * 2);
-    ctx.strokeStyle = '#fff';
+    ctx.strokeStyle = mColor;
     ctx.lineWidth = 6;
     ctx.stroke();
   } else if (style === 1) {
@@ -571,12 +573,12 @@ function createHotspotSprite(label) {
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(cx, cy, 16, 0, Math.PI * 2);
-    ctx.strokeStyle = '#fff';
+    ctx.strokeStyle = mColor;
     ctx.lineWidth = 8;
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(cx, cy, 6, 0, Math.PI * 2);
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = mColor;
     ctx.fill();
   } else if (style === 2) {
     const r = 28;
@@ -587,12 +589,12 @@ function createHotspotSprite(label) {
     ctx.stroke();
     ctx.beginPath();
     ctx.roundRect(cx - r + 4, cy - r + 4, (r - 4) * 2, (r - 4) * 2, 8);
-    ctx.strokeStyle = '#fff';
+    ctx.strokeStyle = mColor;
     ctx.lineWidth = 8;
     ctx.stroke();
     ctx.beginPath();
     ctx.roundRect(cx - 8, cy - 8, 16, 16, 4);
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = mColor;
     ctx.fill();
   } else {
     ctx.beginPath();
@@ -610,12 +612,12 @@ function createHotspotSprite(label) {
     ctx.lineTo(cx, cy + 27);
     ctx.lineTo(cx - 24, cy);
     ctx.closePath();
-    ctx.strokeStyle = '#fff';
+    ctx.strokeStyle = mColor;
     ctx.lineWidth = 8;
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(cx, cy, 8, 0, Math.PI * 2);
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = mColor;
     ctx.fill();
   }
 
@@ -1034,7 +1036,6 @@ function applySettings() {
 }
 
 const STYLE_NAMES = ['Круги', 'Точка', 'Квадрат', 'Ромб'];
-const SPEED_NAMES = { 2500: 'Медленно', 1200: 'Быстро' };
 
 function buildSettingsPanel() {
   if (settingsPanelBuilt) return;
@@ -1114,7 +1115,20 @@ function buildSettingsPanel() {
     });
   });
 
-  // 4. Mouse sensitivity
+  // 4. Marker color
+  addGroup('Цвет меток', (g) => {
+    const input = document.createElement('input');
+    input.type = 'color';
+    input.value = settings.markerColor;
+    g.appendChild(input);
+    input.addEventListener('input', () => {
+      settings.markerColor = input.value;
+      saveSettings();
+      applySettings();
+    });
+  });
+
+  // 5. Mouse sensitivity
   addGroup('Чувствительность мыши', (g) => {
     const input = document.createElement('input');
     input.type = 'range';
@@ -1137,7 +1151,7 @@ function buildSettingsPanel() {
     });
   });
 
-  // 5. Animations toggle
+  // 7. Animations toggle
   addGroup('Анимации между точками', (g) => {
     const wrap = document.createElement('div');
     wrap.className = 'setting-toggle';
@@ -1157,19 +1171,25 @@ function buildSettingsPanel() {
     });
   });
 
-  // 6. Transition speed (my addition)
+  // 8. Transition speed (slider)
   addGroup('Скорость перехода', (g) => {
-    const sel = document.createElement('select');
-    for (const [val, name] of Object.entries(SPEED_NAMES)) {
-      const opt = document.createElement('option');
-      opt.value = val;
-      opt.textContent = name;
-      if (parseInt(val) === settings.transitionSpeed) opt.selected = true;
-      sel.appendChild(opt);
-    }
-    g.appendChild(sel);
-    sel.addEventListener('change', () => {
-      settings.transitionSpeed = parseInt(sel.value);
+    const input = document.createElement('input');
+    input.type = 'range';
+    input.min = 500;
+    input.max = 3000;
+    input.step = 100;
+    input.value = settings.transitionSpeed;
+    const val = document.createElement('span');
+    val.style.cssText = 'color:#aaa;font-size:0.72rem;margin-left:6px';
+    val.textContent = (settings.transitionSpeed / 1000).toFixed(1) + 'с';
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;align-items:center';
+    wrap.appendChild(input);
+    wrap.appendChild(val);
+    g.appendChild(wrap);
+    input.addEventListener('input', () => {
+      settings.transitionSpeed = parseInt(input.value);
+      val.textContent = (settings.transitionSpeed / 1000).toFixed(1) + 'с';
       saveSettings();
     });
   });
