@@ -427,8 +427,6 @@ function animateHotspotTransition(hs) {
   isTransitioning = true;
   crossfadeStarted = false;
 
-  fov = 120;
-  targetFov = 120;
   const startFov = fov;
   const startYaw = yaw;
   const startPitch = pitch;
@@ -459,22 +457,24 @@ function animateHotspotTransition(hs) {
     const stepPitch = (climb ? 1 : descend ? -1 : 0) * 0.025 * Math.sin(t * Math.PI * 10 + 1.2) * Math.min(t * 4, 1);
     const lean = climb ? t * 0.08 : descend ? -t * 0.08 : 0;
     const bob = climb || descend ? 0 : Math.sin(t * Math.PI * 7) * 0.012 * Math.min(t * 4, 1);
-    const fovTarget = startFov + (75 - startFov) * Math.pow(t, 1.5);
 
     if (crossfadeStarted) {
       yaw = hs.returnYaw;
       pitch = (hs.returnPitch || 0) + lean + stepPitch + bob;
+      const postT = Math.min((t - 0.65) / 0.35, 1);
+      fov = 120 + (75 - 120) * Math.pow(postT, 1.5);
     } else {
       yaw = startYaw + deltaYaw * (1 - Math.pow(1 - t, 2));
       pitch = startPitch + (targetHsPitch - startPitch) * t + lean + stepPitch + bob;
+      fov = startFov;
       if (t >= 0.65) {
         crossfadeStarted = true;
+        fov = 120;
         doCrossfadeTransition(hs.target, hs.returnYaw, hs.returnPitch);
       }
     }
     targetYaw = yaw;
     targetPitch = pitch;
-    fov = fovTarget;
     targetFov = fov;
 
     if (t < 1) {
