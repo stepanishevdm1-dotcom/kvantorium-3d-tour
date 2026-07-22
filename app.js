@@ -517,17 +517,12 @@ async function doCrossfadeTransition(targetId, returnYaw, returnPitch) {
 
   const imgUrl = aiMode && s.variants[1] ? s.variants[1].image : s.variants[0].image;
 
-  const crossfadeEl = document.createElement('div');
-  crossfadeEl.style.cssText = 'position:fixed;inset:0;z-index:150;background:#000;opacity:0;transition:opacity 0.06s ease;pointer-events:none;';
-  document.body.appendChild(crossfadeEl);
-  requestAnimationFrame(() => { crossfadeEl.style.opacity = '1'; });
-
-  await new Promise(r => setTimeout(r, 70));
-
   try {
     const tex = await loadTexture(imgUrl);
-    sphere.material.map = tex;
-    sphere.material.needsUpdate = true;
+
+    const mat2 = new THREE.MeshBasicMaterial({ side: THREE.BackSide, map: tex, transparent: true, opacity: 0 });
+    const sphere2 = new THREE.Mesh(sphereGeo, mat2);
+    scene.add(sphere2);
 
     if (returnYaw !== undefined) {
       yaw = returnYaw;
@@ -542,14 +537,25 @@ async function doCrossfadeTransition(targetId, returnYaw, returnPitch) {
     buildHotspots();
     buildSidebar();
 
-    crossfadeEl.style.opacity = '0';
-    await new Promise(r => setTimeout(r, 70));
-    crossfadeEl.remove();
+    sphere.material.transparent = true;
+    const cfStart = performance.now();
+    const cfDur = 400;
+    function cfStep(now) {
+      const t = Math.min((now - cfStart) / cfDur, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      sphere.material.opacity = Math.max(1 - ease, 0);
+      sphere2.material.opacity = Math.min(ease, 1);
+      if (t < 1) { requestAnimationFrame(cfStep); return; }
+      scene.remove(sphere);
+      sphere.material.dispose();
+      sphere2.material.transparent = false;
+      sphere2.material.opacity = 1;
+      sphere = sphere2;
+    }
+    requestAnimationFrame(cfStep);
   } catch (e) {
     console.error(e);
-    crossfadeEl.remove();
   }
-  // isTransitioning сбрасывается в конце анимации FOV, не здесь
 }
 
 /* ============================================================
