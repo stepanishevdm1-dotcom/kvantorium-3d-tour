@@ -457,7 +457,7 @@ function animateHotspotTransition(hs) {
     const stepPitch = (climb ? 1 : descend ? -1 : 0) * 0.025 * Math.sin(t * Math.PI * 10 + 1.2) * Math.min(t * 4, 1);
     const lean = climb ? t * 0.08 : descend ? -t * 0.08 : 0;
     const bob = climb || descend ? 0 : Math.sin(t * Math.PI * 7) * 0.012 * Math.min(t * 4, 1);
-    const fovTarget = startFov + (35 - startFov) * Math.pow(t, 1.5);
+    const fovTarget = startFov + (20 - startFov) * Math.pow(t, 1.5);
 
     if (crossfadeStarted) {
       yaw = hs.returnYaw;
