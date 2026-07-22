@@ -55,8 +55,8 @@ const scenes = {
       { label: 'Обычная', image: '3 этаж.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Охрана', target: 'security',
-        returnYaw: 3.278, returnPitch: 0.1 }
+      { yaw: 3.2, pitch: -0.1, label: 'Охрана', target: 'security',
+        returnYaw: 0.136, returnPitch: -0.054 }
     ]
   }
 };
@@ -271,6 +271,7 @@ function createHotspotSprite(label) {
   const ctx = canvas.getContext('2d');
   canvas.width = 1024;
   canvas.height = 256;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   const cx = 100, cy = 128;
   ctx.beginPath();
@@ -366,13 +367,6 @@ function onPointerDown(e) {
   draggedDistance = 0;
   prevPointer.x = x;
   prevPointer.y = y;
-
-  const hs = pickHotspot(x, y);
-  if (hs) {
-    animateHotspotTransition(hs);
-    return;
-  }
-
   isDragging = true;
 }
 
@@ -424,6 +418,10 @@ function animateHotspotTransition(hs) {
   const targetHsYaw = hs.yaw;
   const targetHsPitch = hs.pitch;
 
+  let deltaYaw = targetHsYaw - startYaw;
+  while (deltaYaw > Math.PI) deltaYaw -= 2 * Math.PI;
+  while (deltaYaw < -Math.PI) deltaYaw += 2 * Math.PI;
+
   if (hs.stairs) {
     const stairsDuration = 2800;
     const stairsStart = performance.now();
@@ -433,7 +431,7 @@ function animateHotspotTransition(hs) {
       const bob = Math.sin(t * Math.PI * 6) * 0.015;
       const lookUp = t * 0.12;
 
-      yaw = startYaw + (targetHsYaw - startYaw) * (1 - Math.pow(1 - t, 2));
+      yaw = startYaw + deltaYaw * (1 - Math.pow(1 - t, 2));
       pitch = startPitch + (targetHsPitch - startPitch) * t + lookUp + bob;
       targetYaw = yaw;
       targetPitch = pitch;
@@ -473,7 +471,7 @@ function animateHotspotTransition(hs) {
     const t = Math.min((now - startTime) / duration, 1);
     const ease = 1 - Math.pow(1 - t, 3);
 
-    yaw = startYaw + (targetHsYaw - startYaw) * ease;
+    yaw = startYaw + deltaYaw * ease;
     pitch = startPitch + (targetHsPitch - startPitch) * ease;
     targetYaw = yaw;
     targetPitch = pitch;
@@ -838,5 +836,7 @@ animate();
 preloadAll();
 buildSidebar();
 updateDebugHUD();
+
+setInterval(() => { if (isTransitioning) isTransitioning = false; }, 10000);
 
 window.__debug = { scenes, yaw, pitch, fov };
