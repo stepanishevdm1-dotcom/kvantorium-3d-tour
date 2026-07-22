@@ -482,19 +482,11 @@ function animateHotspotTransition(hs) {
         climbTextEl.style.opacity = '0';
         setTimeout(() => climbTextEl.remove(), 500);
       }
-      const fovStart = 120;
-      fov = fovStart;
-      targetFov = fovStart;
+      const fovStart = fov;
       setTimeout(() => {
-        const fovDuration = 500;
+        const fovDuration = 400;
         const fovStartTime = performance.now();
-        function fovStep(now2) {
-          const ft = Math.min((now2 - fovStartTime) / fovDuration, 1);
-          fov = fovStart + (75 - fovStart) * (1 - Math.pow(1 - ft, 3));
-          targetFov = fov;
-          if (ft < 1) requestAnimationFrame(fovStep);
-          else isTransitioning = false;
-        }
+        function fovStep(now2) { const ft = Math.min((now2 - fovStartTime) / fovDuration, 1); fov = fovStart + (75 - fovStart) * (1 - Math.pow(1 - ft, 3)); targetFov = fov; if (ft < 1) requestAnimationFrame(fovStep); else isTransitioning = false; }
         requestAnimationFrame(fovStep);
       }, 50);
     }
