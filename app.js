@@ -168,8 +168,10 @@ const scenes = {
       { label: 'Обычная', image: 'Промышленный дизайн 2.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Промышленный дизайн', target: 'industrial_design',
-        returnYaw: 1.621, returnPitch: 0 }
+      { yaw: 4.732, pitch: -0.059, label: 'Промышленный дизайн', target: 'industrial_design',
+        returnYaw: 1.621, returnPitch: 0 },
+      { yaw: 4.018, pitch: -0.070, label: 'Третий этаж 7', target: 'floor3_7',
+        returnYaw: 3.142, returnPitch: 0 }
     ]
   },
   'robo': {
@@ -178,8 +180,10 @@ const scenes = {
       { label: 'Обычная', image: 'Robo.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Третий этаж 7', target: 'floor3_7',
-        returnYaw: 1.681, returnPitch: 0 }
+      { yaw: 0.702, pitch: -0.075, label: 'Третий этаж 7', target: 'floor3_7',
+        returnYaw: 1.671, returnPitch: 0 },
+      { yaw: 2.262, pitch: -0.080, label: 'Третий этаж 6', target: 'floor3_6',
+        returnYaw: 3.142, returnPitch: 0 }
     ]
   },
   'floor3_8': {
@@ -188,11 +192,19 @@ const scenes = {
       { label: 'Обычная', image: '3 этаж 8.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Третий этаж 7', target: 'floor3_7',
-        returnYaw: 3.046, returnPitch: 0 }
+      { yaw: 3.206, pitch: -0.075, label: 'Третий этаж 7', target: 'floor3_7',
+        returnYaw: 3.062, returnPitch: 0 },
+      { yaw: 4.573, pitch: -0.099, label: 'Кабинет робоквантум', target: 'robo',
+        returnYaw: 3.142, returnPitch: 0 }
     ]
   }
 };
+
+const sidebarGroups = [
+  { label: null, scenes: ['main_entrance', 'security'] },
+  { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8'] },
+  { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo'] }
+];
 
 const DEFAULT_SCENE = 'main_entrance';
 const SMOOTH = 0.18;
@@ -868,21 +880,31 @@ const overlay = document.getElementById('overlay');
 
 function buildSidebar() {
   sidebarList.innerHTML = '';
-  for (const id in scenes) {
-    const s = scenes[id];
-    const item = document.createElement('div');
-    item.className = 'sidebar-item' + (id === currentSceneId ? ' active' : '');
-    const dot = document.createElement('span');
-    dot.className = 'dot';
-    item.appendChild(dot);
-    const label = document.createTextNode(s.name);
-    item.appendChild(label);
-    item.addEventListener('click', () => {
-      closeSidebar();
-      const vi = aiMode && s.variants[1] ? 1 : 0;
-      navigateTo(id, vi);
-    });
-    sidebarList.appendChild(item);
+  for (const group of sidebarGroups) {
+    if (group.label) {
+      const header = document.createElement('div');
+      header.style.cssText = 'padding:8px 16px 4px;font-size:0.72rem;color:#888;text-transform:uppercase;letter-spacing:0.5px;';
+      header.textContent = group.label;
+      sidebarList.appendChild(header);
+    }
+    for (const id of group.scenes) {
+      const s = scenes[id];
+      if (!s) continue;
+      const item = document.createElement('div');
+      item.className = 'sidebar-item' + (id === currentSceneId ? ' active' : '');
+      if (group.label) item.style.paddingLeft = '28px';
+      const dot = document.createElement('span');
+      dot.className = 'dot';
+      item.appendChild(dot);
+      const label = document.createTextNode(s.name);
+      item.appendChild(label);
+      item.addEventListener('click', () => {
+        closeSidebar();
+        const vi = aiMode && s.variants[1] ? 1 : 0;
+        navigateTo(id, vi);
+      });
+      sidebarList.appendChild(item);
+    }
   }
 }
 
