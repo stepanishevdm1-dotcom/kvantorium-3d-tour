@@ -509,14 +509,14 @@ function animateHotspotTransition(hs) {
     if (crossfadeStarted) {
       yaw = hs.returnYaw;
       pitch = (hs.returnPitch || 0) + lean + stepPitch + bob;
-      fov = 75;
+      const postT = Math.min((t - 0.65) / 0.35, 1);
+      fov = 120 + (75 - 120) * Math.pow(postT, 1.5);
     } else {
       yaw = startYaw + deltaYaw * (1 - Math.pow(1 - t, 2));
       pitch = startPitch + (targetHsPitch - startPitch) * t + lean + stepPitch + bob;
-      fov = 120 + (75 - 120) * Math.pow(t / 0.65, 1.5);
+      fov = startFov;
       if (t >= 0.65) {
         crossfadeStarted = true;
-        fov = 75;
         doCrossfadeTransition(hs.target, hs.returnYaw, hs.returnPitch);
       }
     }
@@ -620,8 +620,6 @@ async function navigateTo(id, variantIdx) {
     buildSidebar();
 
     sphere.material.transparent = true;
-    fov = 120;
-    targetFov = 120;
     const cfStart = performance.now();
     const cfDur = 400;
     function step(now) {
@@ -629,15 +627,23 @@ async function navigateTo(id, variantIdx) {
       const ease = 1 - Math.pow(1 - t, 3);
       sphere.material.opacity = Math.max(1 - ease, 0);
       sphere2.material.opacity = Math.min(ease, 1);
-      fov = 120 + (75 - 120) * Math.pow(t, 0.8);
-      targetFov = fov;
       if (t < 1) { requestAnimationFrame(step); return; }
       scene.remove(sphere);
       sphere.material.dispose();
       sphere2.material.transparent = false;
       sphere2.material.opacity = 1;
       sphere = sphere2;
-      isTransitioning = false;
+      fov = 120;
+      targetFov = 120;
+      const zStart = performance.now();
+      function zoomStep(now2) {
+        const zt = Math.min((now2 - zStart) / 500, 1);
+        fov = 120 + (75 - 120) * (1 - Math.pow(1 - zt, 3));
+        targetFov = fov;
+        if (zt < 1) { requestAnimationFrame(zoomStep); return; }
+        isTransitioning = false;
+      }
+      requestAnimationFrame(zoomStep);
     }
     requestAnimationFrame(step);
   } catch (e) {
