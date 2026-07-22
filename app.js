@@ -575,7 +575,7 @@ async function doCrossfadeTransition(targetId, returnYaw, returnPitch) {
 /* ============================================================
    SIDEBAR NAVIGATION
    ============================================================ */
-function navigateTo(id, variantIdx) {
+async function navigateTo(id, variantIdx) {
   if (id === currentSceneId && variantIdx === currentVariantIdx) return;
   if (isTransitioning) return;
   isTransitioning = true;
@@ -585,40 +585,53 @@ function navigateTo(id, variantIdx) {
 
   const imgUrl = s.variants[variantIdx].image;
 
-  const fadeEl = document.createElement('div');
-  fadeEl.style.cssText = 'position:fixed;inset:0;z-index:150;background:#000;opacity:0;transition:opacity 0.3s ease;pointer-events:none;';
-  document.body.appendChild(fadeEl);
-  requestAnimationFrame(() => { fadeEl.style.opacity = '1'; });
+  try {
+    const tex = await loadTexture(imgUrl);
 
-  setTimeout(async () => {
-    try {
-      const tex = await loadTexture(imgUrl);
-      sphere.material.map = tex;
-      sphere.material.needsUpdate = true;
+    const mat2 = new THREE.MeshBasicMaterial({ side: THREE.BackSide, map: tex, transparent: true, opacity: 0 });
+    const sphere2 = new THREE.Mesh(sphereGeo, mat2);
+    scene.add(sphere2);
 
-      const h = s.hotspots[0];
-      if (h) {
-        yaw = h.yaw + Math.PI;
-        pitch = h.pitch || 0;
-        if (yaw > Math.PI * 2) yaw -= Math.PI * 2;
-        targetYaw = yaw;
-        targetPitch = pitch;
-      }
-
-      currentSceneId = id;
-      currentVariantIdx = variantIdx;
-      updateUI();
-      buildHotspots();
-      buildSidebar();
-
-      fadeEl.style.opacity = '0';
-      setTimeout(() => fadeEl.remove(), 300);
-    } catch (e) {
-      console.error(e);
-      fadeEl.remove();
+    const h = s.hotspots[0];
+    if (h) {
+      yaw = h.yaw + Math.PI;
+      pitch = h.pitch || 0;
+      if (yaw > Math.PI * 2) yaw -= Math.PI * 2;
+      targetYaw = yaw;
+      targetPitch = pitch;
     }
+
+    currentSceneId = id;
+    currentVariantIdx = variantIdx;
+    updateUI();
+    buildHotspots();
+    buildSidebar();
+
+    sphere.material.transparent = true;
+    fov = 120;
+    targetFov = 120;
+    const cfStart = performance.now();
+    const cfDur = 400;
+    function step(now) {
+      const t = Math.min((now - cfStart) / cfDur, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      sphere.material.opacity = Math.max(1 - ease, 0);
+      sphere2.material.opacity = Math.min(ease, 1);
+      fov = 120 + (75 - 120) * Math.pow(t, 0.8);
+      targetFov = fov;
+      if (t < 1) { requestAnimationFrame(step); return; }
+      scene.remove(sphere);
+      sphere.material.dispose();
+      sphere2.material.transparent = false;
+      sphere2.material.opacity = 1;
+      sphere = sphere2;
+      isTransitioning = false;
+    }
+    requestAnimationFrame(step);
+  } catch (e) {
+    console.error(e);
     isTransitioning = false;
-  }, 350);
+  }
 }
 
 /* ============================================================
