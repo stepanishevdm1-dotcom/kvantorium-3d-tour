@@ -196,7 +196,7 @@ const scenes = {
       { yaw: 4.573, pitch: -0.099, label: 'Кабинет робоквантум', target: 'robo',
         returnYaw: 3.850, returnPitch: 0 },
       { yaw: 0.019, pitch: -0.056, label: 'Третий этаж 9', target: 'floor3_9',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 6.278, returnPitch: 0 }
     ]
   },
   'floor3_9': {
@@ -205,16 +205,40 @@ const scenes = {
       { label: 'Обычная', image: '3 этаж 9.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Третий этаж 8', target: 'floor3_8',
-        returnYaw: 3.161, returnPitch: 0 }
+      { yaw: 3.136, pitch: -0.075, label: 'Третий этаж 8', target: 'floor3_8',
+        returnYaw: 3.161, returnPitch: 0 },
+      { yaw: 6.257, pitch: -0.040, label: 'Третий этаж 10', target: 'floor3_10',
+        returnYaw: 3.142, returnPitch: 0 },
+      { yaw: 4.732, pitch: -0.145, label: 'Кабинет 304', target: 'kabinet_304',
+        returnYaw: 3.142, returnPitch: 0 }
+    ]
+  },
+  'floor3_10': {
+    name: 'Третий этаж 10',
+    variants: [
+      { label: 'Обычная', image: '3 этаж 10.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Третий этаж 9', target: 'floor3_9',
+        returnYaw: 3.099, returnPitch: 0 }
+    ]
+  },
+  'kabinet_304': {
+    name: 'Кабинет 304',
+    variants: [
+      { label: 'Обычная', image: 'Кабинет 304.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Третий этаж 9', target: 'floor3_9',
+        returnYaw: 1.388, returnPitch: 0 }
     ]
   }
 };
 
 const sidebarGroups = [
   { label: null, scenes: ['main_entrance', 'security'] },
-  { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9'] },
-  { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo'] }
+  { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10'] },
+  { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo', 'kabinet_304'] }
 ];
 
 const DEFAULT_SCENE = 'main_entrance';
