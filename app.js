@@ -299,7 +299,7 @@ function createHotspotSprite(label) {
   tex.needsUpdate = true;
   const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
   const sprite = new THREE.Sprite(mat);
-  sprite.scale.set(4, 1.25, 1);
+  sprite.scale.set(8, 2.5, 1);
   return sprite;
 }
 
