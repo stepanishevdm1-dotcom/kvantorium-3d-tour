@@ -143,7 +143,7 @@ const scenes = {
     hotspots: [
       { yaw: 3.162, pitch: -0.040, label: 'Третий этаж 6', target: 'floor3_6',
         returnYaw: 6.304, returnPitch: 0 },
-      { yaw: 4.812, pitch: -0.126, label: 'Кабинет робоквантум', target: 'robo',
+      { yaw: 4.812, pitch: -0.126, label: 'Кабинет Робоквантум', target: 'robo',
         returnYaw: 5.385, returnPitch: 0 },
       { yaw: 6.202, pitch: -0.091, label: 'Третий этаж 8', target: 'floor3_8',
         returnYaw: 3.062, returnPitch: 0 }
@@ -157,12 +157,12 @@ const scenes = {
     hotspots: [
       { yaw: 6.251, pitch: -0.035, label: 'Третий этаж 6', target: 'floor3_6',
         returnYaw: 1.491, returnPitch: 0 },
-      { yaw: 4.762, pitch: -0.030, label: 'Промышленный дизайн 2', target: 'industrial_design_2',
+      { yaw: 4.762, pitch: -0.030, label: 'Кабинет Промышленный дизайн 2', target: 'industrial_design_2',
         returnYaw: 3.142, returnPitch: 0 }
     ]
   },
   'industrial_design_2': {
-    name: 'Промышленный дизайн 2',
+    name: 'Кабинет Промышленный дизайн 2',
     variants: [
       { label: 'Обычная', image: 'Промышленный дизайн 2.jpg' }
     ],
@@ -174,7 +174,7 @@ const scenes = {
     ]
   },
   'robo': {
-    name: 'Кабинет робоквантум',
+    name: 'Кабинет Робоквантум',
     variants: [
       { label: 'Обычная', image: 'Robo.jpg' }
     ],
@@ -193,7 +193,7 @@ const scenes = {
     hotspots: [
       { yaw: 3.206, pitch: -0.075, label: 'Третий этаж 7', target: 'floor3_7',
         returnYaw: 3.062, returnPitch: 0 },
-      { yaw: 4.573, pitch: -0.099, label: 'Кабинет робоквантум', target: 'robo',
+      { yaw: 4.573, pitch: -0.099, label: 'Кабинет Робоквантум', target: 'robo',
         returnYaw: 3.850, returnPitch: 0 },
       { yaw: 0.019, pitch: -0.056, label: 'Третий этаж 9', target: 'floor3_9',
         returnYaw: 6.278, returnPitch: 0 }
@@ -272,7 +272,7 @@ const scenes = {
     ]
   },
   'energikvantum_2': {
-    name: 'Энерджиквантум 2',
+    name: 'Кабинет Энерджиквантум 2',
     variants: [
       { label: 'Обычная', image: 'Энерджиквантум 2.jpg' }
     ],
@@ -328,8 +328,149 @@ const SETTINGS_DEFAULTS = {
   markerColor: '#ffffff',
   mouseSensitivity: 1,
   animations: true,
-  transitionSpeed: 2500
+  transitionSpeed: 2500,
+  language: 'ru'
 };
+
+const translations = {
+  ru: {
+    loading: 'Загрузка… ',
+    loading_initial: 'Загрузка панорам…',
+    error: 'Ошибка',
+    vpn_hint: 'Если скорость скачивания медленная — выключите VPN и проверьте сигнал сети',
+    bg_load: 'Загружать в фоне',
+    settings_title: 'Настройки',
+    rooms_title: 'Комнаты',
+    back: '\u2190 Назад',
+    hotspot_style: 'Внешность меток',
+    text_size: 'Размер текста',
+    text_color: 'Цвет текста',
+    marker_color: 'Цвет меток',
+    mouse_sensitivity: 'Чувствительность мыши',
+    animations: 'Анимации между точками',
+    transition_speed: 'Скорость перехода',
+    on: 'Вкл',
+    off: 'Выкл',
+    debug_on: 'Отладка включена',
+    copied: 'Скопировано: ',
+    language: 'Язык / Language',
+    px: 'px',
+    s: 'с',
+  },
+  en: {
+    loading: 'Loading\u2026 ',
+    loading_initial: 'Loading panoramas\u2026',
+    error: 'Error',
+    vpn_hint: 'If download speed is slow \u2014 disable VPN and check your network signal',
+    bg_load: 'Load in Background',
+    settings_title: 'Settings',
+    rooms_title: 'Rooms',
+    back: '\u2190 Back',
+    hotspot_style: 'Hotspot Style',
+    text_size: 'Text Size',
+    text_color: 'Text Color',
+    marker_color: 'Marker Color',
+    mouse_sensitivity: 'Mouse Sensitivity',
+    animations: 'Transition Animations',
+    transition_speed: 'Transition Speed',
+    on: 'On',
+    off: 'Off',
+    debug_on: 'Debug enabled',
+    copied: 'Copied: ',
+    language: 'Language / Язык',
+    px: 'px',
+    s: 's',
+  }
+};
+
+const sceneNamesEn = {
+  'main_entrance': 'Main Entrance',
+  'security': 'Security Office',
+  'floor3': 'Floor 3',
+  'floor3_1': 'Floor 3 \u2014 1',
+  'floor3_2': 'Floor 3 \u2014 2',
+  'floor3_3': 'Floor 3 \u2014 3',
+  'floor3_4': 'Floor 3 \u2014 4',
+  'floor3_5': 'Floor 3 \u2014 5',
+  'floor3_6': 'Floor 3 \u2014 6',
+  'floor3_7': 'Floor 3 \u2014 7',
+  'floor3_8': 'Floor 3 \u2014 8',
+  'floor3_9': 'Floor 3 \u2014 9',
+  'floor3_10': 'Floor 3 \u2014 10',
+  'floor3_11': 'Floor 3 \u2014 11',
+  'industrial_design': 'Industrial Design Room',
+  'industrial_design_2': 'Industrial Design Room 2',
+  'robo': 'Roboquantum Room',
+  'kabinet_304': 'Room 304',
+  'radio_station': 'Collective Radio Station',
+  'energikvantum': 'Energiquantom Room',
+  'energikvantum_2': 'Energiquantom Room 2',
+};
+
+const hotspotLabelEn = {
+  '\u041e\u0445\u0440\u0430\u043d\u0430': 'Security',
+  '\u0413\u043b\u0430\u0432\u043d\u044b\u0439 \u0432\u0445\u043e\u0434': 'Main Entrance',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436': 'Floor 3',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 1': 'Floor 3 \u2014 1',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 2': 'Floor 3 \u2014 2',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 3': 'Floor 3 \u2014 3',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 4': 'Floor 3 \u2014 4',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 5': 'Floor 3 \u2014 5',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 6': 'Floor 3 \u2014 6',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 7': 'Floor 3 \u2014 7',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 8': 'Floor 3 \u2014 8',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 9': 'Floor 3 \u2014 9',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 10': 'Floor 3 \u2014 10',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 11': 'Floor 3 \u2014 11',
+  '\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u041f\u0440\u043e\u043c\u044b\u0448\u043b\u0435\u043d\u043d\u044b\u0439 \u0434\u0438\u0437\u0430\u0439\u043d': 'Industrial Design Room',
+  '\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u041f\u0440\u043e\u043c\u044b\u0448\u043b\u0435\u043d\u043d\u044b\u0439 \u0434\u0438\u0437\u0430\u0439\u043d 2': 'Industrial Design Room 2',
+  '\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u0420\u043e\u0431\u043e\u043a\u0432\u0430\u043d\u0442\u0443\u043c': 'Roboquantum Room',
+  '\u041a\u0430\u0431\u0438\u043d\u0435\u0442 304': 'Room 304',
+  '\u041a\u043e\u043b\u043b\u0435\u043a\u0442\u0438\u0432\u043d\u0430\u044f \u0440\u0430\u0434\u0438\u043e\u0441\u0442\u0430\u043d\u0446\u0438\u044f': 'Collective Radio Station',
+  '\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u042d\u043d\u0435\u0440\u0434\u0436\u0438\u043a\u0432\u0430\u043d\u0442\u0443\u043c': 'Energiquantom Room',
+  '\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u042d\u043d\u0435\u0440\u0434\u0436\u0438\u043a\u0432\u0430\u043d\u0442\u0443\u043c 2': 'Energiquantom Room 2',
+  '\u041f\u0440\u043e\u043c\u044b\u0448\u043b\u0435\u043d\u043d\u044b\u0439 \u0434\u0438\u0437\u0430\u0439\u043d': 'Industrial Design',
+  '\u042d\u043d\u0435\u0440\u0434\u0436\u0438\u043a\u0432\u0430\u043d\u0442\u0443\u043c': 'Energiquantom',
+  '\u042d\u043d\u0435\u0440\u0434\u0436\u0438\u043a\u0432\u0430\u043d\u0442\u0443\u043c 2': 'Energiquantom 2',
+  '\u041f\u043e\u0434\u043d\u0438\u043c\u0430\u0435\u043c\u0441\u044f \u043d\u0430 3 \u044d\u0442\u0430\u0436': 'Going up to Floor 3',
+  '\u0421\u043f\u0443\u0441\u043a\u0430\u0435\u043c\u0441\u044f \u043d\u0430 1 \u044d\u0442\u0430\u0436': 'Going down to Floor 1',
+};
+
+const variantLabelEn = {
+  '\u041e\u0431\u044b\u0447\u043d\u0430\u044f': 'Normal',
+};
+
+const sidebarGroupLabelEn = {
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436': 'Floor 3',
+  '\u041a\u0430\u0431\u0438\u043d\u0435\u0442\u044b': 'Rooms',
+};
+
+function t(key) {
+  const lang = settings.language || 'ru';
+  return (translations[lang] && translations[lang][key]) || (translations.ru && translations.ru[key]) || key;
+}
+
+function getSceneName(id) {
+  const s = scenes[id];
+  if (!s) return '';
+  if (settings.language === 'en' && sceneNamesEn[id]) return sceneNamesEn[id];
+  return s.name;
+}
+
+function getHSLabel(rus) {
+  if (settings.language === 'en' && hotspotLabelEn[rus]) return hotspotLabelEn[rus];
+  return rus;
+}
+
+function getVariantLabel(rus) {
+  if (settings.language === 'en' && variantLabelEn[rus]) return variantLabelEn[rus];
+  return rus;
+}
+
+function getSidebarGroupLabel(rus) {
+  if (settings.language === 'en' && sidebarGroupLabelEn[rus]) return sidebarGroupLabelEn[rus];
+  return rus;
+}
 
 let settings = {};
 
@@ -380,13 +521,18 @@ const hotspotVec = new THREE.Vector3(0, 0, -1);
 const preloadList = document.getElementById('preload-list');
 const loadingStatus = document.getElementById('loading-status');
 const loadingEl = document.getElementById('loading');
+const loadingHint = document.getElementById('loading-hint');
+const bgLoadBtn = document.getElementById('bg-load-btn');
+loadingStatus.textContent = t('loading_initial');
+loadingHint.textContent = t('vpn_hint');
+bgLoadBtn.textContent = t('bg_load');
 
 function getAllImages() {
   const imgs = [];
   for (const id in scenes) {
     const s = scenes[id];
     for (const v of s.variants) {
-      if (v.image) imgs.push({ id, label: s.name, file: v.image, variant: v.label || '' });
+      if (v.image) imgs.push({ id, label: getSceneName(id), file: v.image, variant: getVariantLabel(v.label || '') });
     }
   }
   return imgs;
@@ -451,14 +597,14 @@ function preloadAll() {
             const filePct = fileSize ? Math.round((recv / fileSize) * 100) : 0;
             progSpan.textContent = humanSize(recv) + '/' + humanSize(fileSize) + ' ' + filePct + '%';
             loadedBytes += value.length;
-            loadingStatus.textContent = 'Загрузка… ' + humanSize(loadedBytes) + '/' + humanSize(totalBytes) + ' ' + (totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 0) + '%';
+            loadingStatus.textContent = t('loading') + humanSize(loadedBytes) + '/' + humanSize(totalBytes) + ' ' + (totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 0) + '%';
           }
 
           loadedFiles++;
           progSpan.textContent = humanSize(fileSize) + '/' + humanSize(fileSize) + ' 100%';
 
           if (loadedFiles === total) {
-            loadingStatus.textContent = 'Загрузка… ' + humanSize(totalBytes) + '/' + humanSize(totalBytes) + ' 100%';
+            loadingStatus.textContent = t('loading') + humanSize(totalBytes) + '/' + humanSize(totalBytes) + ' 100%';
             setTimeout(() => {
               loadingEl.classList.add('hidden');
               if (!viewerStarted) startViewer();
@@ -466,7 +612,7 @@ function preloadAll() {
           }
         } catch (e) {
           loadedFiles++;
-          progSpan.textContent = 'Ошибка';
+          progSpan.textContent = t('error');
           if (loadedFiles === total) {
             setTimeout(() => {
               loadingEl.classList.add('hidden');
@@ -480,8 +626,6 @@ function preloadAll() {
 }
 
 let viewerStarted = false;
-
-const bgLoadBtn = document.getElementById('bg-load-btn');
 
 bgLoadBtn.addEventListener('click', () => {
   bgLoadBtn.remove();
@@ -664,7 +808,7 @@ function buildHotspots() {
   for (const hs of s.hotspots) {
     const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(hs.pitch, hs.yaw, 0, 'YXZ'));
     const pos = hotspotVec.clone().applyQuaternion(q).multiplyScalar(HOTSPOT_DISTANCE);
-    const sprite = createHotspotSprite(hs.label);
+    const sprite = createHotspotSprite(getHSLabel(hs.label));
     sprite.position.copy(pos);
     sprite.userData = hs;
     scene.add(sprite);
@@ -781,7 +925,7 @@ function animateHotspotTransition(hs) {
   let climbTextEl = null;
   if (hs.climbText) {
     climbTextEl = document.createElement('div');
-    climbTextEl.textContent = hs.climbText;
+    climbTextEl.textContent = getHSLabel(hs.climbText);
     climbTextEl.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:200;color:#fff;font:bold 32px -apple-system,sans-serif;text-shadow:0 0 20px rgba(0,0,0,0.8);pointer-events:none;opacity:0;transition:opacity 0.5s';
     document.body.appendChild(climbTextEl);
     requestAnimationFrame(() => { climbTextEl.style.opacity = '1'; });
@@ -952,13 +1096,13 @@ const variantsEl = document.getElementById('variants');
 function updateUI() {
   const s = scenes[currentSceneId];
   if (!s) return;
-  sceneNameEl.textContent = s.name;
+  sceneNameEl.textContent = getSceneName(currentSceneId);
 
   variantsEl.innerHTML = '';
   if (s.variants.length > 1) {
     for (let i = 0; i < s.variants.length; i++) {
       const btn = document.createElement('button');
-      btn.textContent = s.variants[i].label;
+      btn.textContent = getVariantLabel(s.variants[i].label);
       if (i === currentVariantIdx) btn.classList.add('active');
       btn.addEventListener('click', () => switchVariant(i));
       variantsEl.appendChild(btn);
@@ -992,7 +1136,7 @@ function buildSidebar() {
     if (group.label) {
       const header = document.createElement('div');
       header.style.cssText = 'padding:8px 16px 4px;font-size:0.72rem;color:#888;text-transform:uppercase;letter-spacing:0.5px;';
-      header.textContent = group.label;
+      header.textContent = getSidebarGroupLabel(group.label);
       sidebarList.appendChild(header);
     }
     for (const id of group.scenes) {
@@ -1004,7 +1148,7 @@ function buildSidebar() {
       const dot = document.createElement('span');
       dot.className = 'dot';
       item.appendChild(dot);
-      const label = document.createTextNode(s.name);
+      const label = document.createTextNode(getSceneName(id));
       item.appendChild(label);
       item.addEventListener('click', () => {
         closeSidebar();
@@ -1041,6 +1185,7 @@ overlay.addEventListener('click', closeSidebar);
 const settingsBtn = document.getElementById('settings-btn');
 const settingsPanel = document.getElementById('settings-panel');
 const sidebarTitle = document.getElementById('sidebar-title');
+settingsBtn.title = t('settings_title');
 let settingsPanelBuilt = false;
 
 function rebuildHotspots() {
@@ -1051,7 +1196,22 @@ function applySettings() {
   rebuildHotspots();
 }
 
+function rebuildLanguageUI() {
+  settingsPanelBuilt = false;
+  settingsPanel.innerHTML = '';
+  buildSettingsPanel();
+  if (!sidebarList.classList.contains('hidden')) {
+    buildSidebar();
+  } else {
+    sidebarTitle.textContent = t('settings_title');
+  }
+  settingsBtn.title = t('settings_title');
+  updateUI();
+  buildHotspots();
+}
+
 const STYLE_NAMES = ['Круги', 'Точка', 'Квадрат', 'Ромб'];
+const STYLE_NAMES_EN = ['Circles', 'Dot', 'Square', 'Diamond'];
 
 function buildSettingsPanel() {
   if (settingsPanelBuilt) return;
@@ -1059,7 +1219,7 @@ function buildSettingsPanel() {
 
   const back = document.createElement('div');
   back.id = 'settings-back';
-  back.textContent = '← Назад';
+  back.textContent = t('back');
   back.addEventListener('click', showSceneList);
   settingsPanel.appendChild(back);
 
@@ -1076,13 +1236,13 @@ function buildSettingsPanel() {
   }
 
   // 1. Hotspot style
-  addGroup('Внешность меток', (g) => {
+  addGroup(t('hotspot_style'), (g) => {
     const div = document.createElement('div');
     div.className = 'setting-style-options';
     STYLE_NAMES.forEach((name, i) => {
       const btn = document.createElement('div');
       btn.className = 'setting-style-btn' + (i === settings.hotspotStyle ? ' active' : '');
-      btn.textContent = name;
+      btn.textContent = settings.language === 'en' ? STYLE_NAMES_EN[i] : name;
       btn.addEventListener('click', () => {
         settings.hotspotStyle = i;
         saveSettings();
@@ -1096,7 +1256,7 @@ function buildSettingsPanel() {
   });
 
   // 2. Text size
-  addGroup('Размер текста', (g) => {
+  addGroup(t('text_size'), (g) => {
     const input = document.createElement('input');
     input.type = 'range';
     input.min = 24;
@@ -1104,7 +1264,7 @@ function buildSettingsPanel() {
     input.value = settings.textSize;
     const val = document.createElement('span');
     val.style.cssText = 'color:#aaa;font-size:0.72rem;margin-left:6px';
-    val.textContent = settings.textSize + 'px';
+    val.textContent = settings.textSize + t('px');
     const wrap = document.createElement('div');
     wrap.style.cssText = 'display:flex;align-items:center';
     wrap.appendChild(input);
@@ -1112,14 +1272,14 @@ function buildSettingsPanel() {
     g.appendChild(wrap);
     input.addEventListener('input', () => {
       settings.textSize = parseInt(input.value);
-      val.textContent = settings.textSize + 'px';
+      val.textContent = settings.textSize + t('px');
       saveSettings();
       applySettings();
     });
   });
 
   // 3. Text color
-  addGroup('Цвет текста', (g) => {
+  addGroup(t('text_color'), (g) => {
     const input = document.createElement('input');
     input.type = 'color';
     input.value = settings.textColor;
@@ -1132,7 +1292,7 @@ function buildSettingsPanel() {
   });
 
   // 4. Marker color
-  addGroup('Цвет меток', (g) => {
+  addGroup(t('marker_color'), (g) => {
     const input = document.createElement('input');
     input.type = 'color';
     input.value = settings.markerColor;
@@ -1145,7 +1305,7 @@ function buildSettingsPanel() {
   });
 
   // 5. Mouse sensitivity
-  addGroup('Чувствительность мыши', (g) => {
+  addGroup(t('mouse_sensitivity'), (g) => {
     const input = document.createElement('input');
     input.type = 'range';
     input.min = 0.25;
@@ -1168,12 +1328,12 @@ function buildSettingsPanel() {
   });
 
   // 7. Animations toggle
-  addGroup('Анимации между точками', (g) => {
+  addGroup(t('animations'), (g) => {
     const wrap = document.createElement('div');
     wrap.className = 'setting-toggle';
     const l = document.createElement('span');
     l.className = 'setting-toggle-label';
-    l.textContent = settings.animations ? 'Вкл' : 'Выкл';
+    l.textContent = settings.animations ? t('on') : t('off');
     const input = document.createElement('input');
     input.type = 'checkbox';
     input.checked = settings.animations;
@@ -1182,13 +1342,13 @@ function buildSettingsPanel() {
     g.appendChild(wrap);
     input.addEventListener('change', () => {
       settings.animations = input.checked;
-      l.textContent = settings.animations ? 'Вкл' : 'Выкл';
+      l.textContent = settings.animations ? t('on') : t('off');
       saveSettings();
     });
   });
 
   // 8. Transition speed (slider)
-  addGroup('Скорость перехода', (g) => {
+  addGroup(t('transition_speed'), (g) => {
     const input = document.createElement('input');
     input.type = 'range';
     input.min = 500;
@@ -1197,7 +1357,7 @@ function buildSettingsPanel() {
     input.value = settings.transitionSpeed;
     const val = document.createElement('span');
     val.style.cssText = 'color:#aaa;font-size:0.72rem;margin-left:6px';
-    val.textContent = (settings.transitionSpeed / 1000).toFixed(1) + 'с';
+    val.textContent = (settings.transitionSpeed / 1000).toFixed(1) + t('s');
     const wrap = document.createElement('div');
     wrap.style.cssText = 'display:flex;align-items:center';
     wrap.appendChild(input);
@@ -1205,9 +1365,31 @@ function buildSettingsPanel() {
     g.appendChild(wrap);
     input.addEventListener('input', () => {
       settings.transitionSpeed = parseInt(input.value);
-      val.textContent = (settings.transitionSpeed / 1000).toFixed(1) + 'с';
+      val.textContent = (settings.transitionSpeed / 1000).toFixed(1) + t('s');
       saveSettings();
     });
+  });
+
+  // 9. Language selector
+  addGroup(t('language'), (g) => {
+    const div = document.createElement('div');
+    div.className = 'setting-style-options';
+    ['RU', 'EN'].forEach((code, i) => {
+      const btn = document.createElement('div');
+      const lang = i === 0 ? 'ru' : 'en';
+      btn.className = 'setting-style-btn' + (settings.language === lang ? ' active' : '');
+      btn.textContent = code;
+      btn.addEventListener('click', () => {
+        if (settings.language === lang) return;
+        settings.language = lang;
+        saveSettings();
+        div.querySelectorAll('.setting-style-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        rebuildLanguageUI();
+      });
+      div.appendChild(btn);
+    });
+    g.appendChild(div);
   });
 }
 
@@ -1215,13 +1397,13 @@ function showSettings() {
   buildSettingsPanel();
   sidebarList.classList.add('hidden');
   settingsPanel.classList.remove('hidden');
-  sidebarTitle.textContent = 'Настройки';
+  sidebarTitle.textContent = t('settings_title');
 }
 
 function showSceneList() {
   sidebarList.classList.remove('hidden');
   settingsPanel.classList.add('hidden');
-  sidebarTitle.textContent = 'Комнаты';
+  sidebarTitle.textContent = t('rooms_title');
 }
 
 settingsBtn.addEventListener('click', (e) => {
@@ -1294,7 +1476,7 @@ window.addEventListener('keydown', e => {
   if (code === 'KeyD') {
     debugVisible = !debugVisible;
     updateDebugHUD();
-    if (debugVisible) showDebug('Отладка включена');
+    if (debugVisible) showDebug(t('debug_on'));
     return;
   }
 
@@ -1304,7 +1486,7 @@ window.addEventListener('keydown', e => {
     const pitchDeg = pitch * 180 / Math.PI;
     const str = yawDeg.toFixed(1) + ',' + pitchDeg.toFixed(1);
     navigator.clipboard.writeText(str).catch(() => {});
-    showDebug('Скопировано: ' + str);
+    showDebug(t('copied') + str);
     return;
   }
 
