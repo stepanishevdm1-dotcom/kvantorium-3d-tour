@@ -425,7 +425,7 @@ function animateHotspotTransition(hs) {
   while (deltaYaw > Math.PI) deltaYaw -= 2 * Math.PI;
   while (deltaYaw < -Math.PI) deltaYaw += 2 * Math.PI;
 
-  const duration = 4000;
+  const duration = 2500;
   const climb = hs.stairs;
   const descend = hs.descend;
   let climbTextEl = null;
@@ -472,7 +472,7 @@ function animateHotspotTransition(hs) {
       setTimeout(() => {
         fov = fovEnd;
         targetFov = fovEnd;
-        const fovDuration = 500;
+        const fovDuration = 350;
         const fovStartTime = performance.now();
         function fovStep(now2) {
           const ft = Math.min((now2 - fovStartTime) / fovDuration, 1);
