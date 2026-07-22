@@ -33,8 +33,8 @@ const scenes = {
       { label: 'Обычная', image: 'Главный вход.jpg' }
     ],
     hotspots: [
-      { yaw: 2.810, pitch: 0.016, label: 'Охрана', target: 'security',
-        returnYaw: 5.952, returnPitch: 0.016 }
+      { yaw: 2.822, pitch: -0.002, label: 'Охрана', target: 'security',
+        returnYaw: 5.964, returnPitch: -0.002 }
     ]
   },
   'security': {
