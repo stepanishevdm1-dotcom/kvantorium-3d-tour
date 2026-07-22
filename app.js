@@ -444,7 +444,7 @@ function preloadAll() {
             loadingStatus.textContent = 'Загрузка… ' + humanSize(totalBytes) + '/' + humanSize(totalBytes) + ' 100%';
             setTimeout(() => {
               loadingEl.classList.add('hidden');
-              startViewer();
+              if (!viewerStarted) startViewer();
             }, 400);
           }
         } catch (e) {
@@ -453,7 +453,7 @@ function preloadAll() {
           if (loadedFiles === total) {
             setTimeout(() => {
               loadingEl.classList.add('hidden');
-              startViewer();
+              if (!viewerStarted) startViewer();
             }, 400);
           }
         }
@@ -461,6 +461,8 @@ function preloadAll() {
     }
   });
 }
+
+let viewerStarted = false;
 
 const bgLoadBtn = document.getElementById('bg-load-btn');
 
@@ -519,6 +521,7 @@ async function setScene(id, variantIdx, preserveRotation = false) {
 }
 
 function startViewer() {
+  viewerStarted = true;
   setScene(DEFAULT_SCENE, 0);
 }
 
