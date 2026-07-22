@@ -315,6 +315,7 @@ let sidebarOpen = false;
 let debugVisible = false;
 let draggedDistance = 0;
 let imageCache = {};
+let loadingRotate = true;
 
 /* ============================================================
    SETTINGS
@@ -513,6 +514,12 @@ scene.add(sphere);
 const euler = new THREE.Euler(0, 0, 0, 'YXZ');
 const hotspotVec = new THREE.Vector3(0, 0, -1);
 
+// Фон для экрана загрузки — медленно вращающийся Главный вход
+loadTexture(scenes.main_entrance.variants[0].image).then(tex => {
+  sphere.material.map = tex;
+  sphere.material.needsUpdate = true;
+});
+
 /* ============================================================
    LOADING / PRELOAD
    ============================================================ */
@@ -680,6 +687,7 @@ async function setScene(id, variantIdx, preserveRotation = false) {
 }
 
 function startViewer() {
+  loadingRotate = false;
   viewerStarted = true;
   setScene(DEFAULT_SCENE, 0);
 }
@@ -1558,6 +1566,7 @@ window.addEventListener('resize', () => {
    ============================================================ */
 function animate() {
   requestAnimationFrame(animate);
+  if (loadingRotate) targetYaw += 0.002;
 
   yaw += (targetYaw - yaw) * SMOOTH;
   pitch += (targetPitch - pitch) * SMOOTH;
