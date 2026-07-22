@@ -222,7 +222,7 @@ const scenes = {
       { yaw: 4.768, pitch: -0.084, label: 'Третий этаж 9', target: 'floor3_9',
         returnYaw: 3.099, returnPitch: 0 },
       { yaw: 0.096, pitch: -0.084, label: 'Третий этаж 11', target: 'floor3_11',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 6.302, returnPitch: 0 }
     ]
   },
   'floor3_11': {
@@ -231,7 +231,7 @@ const scenes = {
       { label: 'Обычная', image: '3 этаж 11.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Третий этаж 10', target: 'floor3_10',
+      { yaw: 3.161, pitch: -0.070, label: 'Третий этаж 10', target: 'floor3_10',
         returnYaw: 3.238, returnPitch: 0 }
     ]
   },
