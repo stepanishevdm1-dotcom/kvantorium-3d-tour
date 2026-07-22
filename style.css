@@ -68,7 +68,17 @@ canvas:active {
 #loading-status {
   font-size: 0.85rem;
   color: #aaa;
+  margin-bottom: 8px;
+}
+
+#loading-hint {
+  font-size: 0.72rem;
+  color: #666;
   margin-bottom: 16px;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.4;
 }
 
 #preload-list {
