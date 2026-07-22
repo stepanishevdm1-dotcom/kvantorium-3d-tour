@@ -210,7 +210,7 @@ const scenes = {
       { yaw: 6.257, pitch: -0.040, label: 'Третий этаж 10', target: 'floor3_10',
         returnYaw: 1.628, returnPitch: 0 },
       { yaw: 4.732, pitch: -0.145, label: 'Кабинет 304', target: 'kabinet_304',
-        returnYaw: 6.150, returnPitch: 0 }
+        returnYaw: 6.168, returnPitch: 0 }
     ]
   },
   'floor3_10': {
@@ -229,7 +229,7 @@ const scenes = {
       { label: 'Обычная', image: 'Кабинет 304.jpg' }
     ],
     hotspots: [
-      { yaw: 3.008, pitch: -0.257, label: 'Третий этаж 9', target: 'floor3_9',
+      { yaw: 3.027, pitch: -0.209, label: 'Третий этаж 9', target: 'floor3_9',
         returnYaw: 1.388, returnPitch: 0 },
       { yaw: 0.243, pitch: -0.269, label: 'Коллективная радиостанция', target: 'radio_station',
         returnYaw: 3.142, returnPitch: 0 },
