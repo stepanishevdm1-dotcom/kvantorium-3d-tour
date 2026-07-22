@@ -343,7 +343,7 @@ function onPointerMove(e) {
   if (!isDragging) return;
 
   const sens = 0.005 * (fov / 75);
-  targetYaw -= dx * sens;
+  targetYaw += dx * sens;
   targetPitch -= dy * sens;
   targetPitch = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, targetPitch));
 
