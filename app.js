@@ -252,7 +252,7 @@ const scenes = {
   'radio_station': {
     name: 'Коллективная радиостанция',
     variants: [
-      { label: 'Обычная', image: 'Коллективная радиостанция.jpg' }
+      { label: 'Обычная', image: 'Коллективная радиостанция 4.jpg' }
     ],
     hotspots: [
       { yaw: 0, pitch: 0, label: 'Кабинет 304', target: 'kabinet_304',
