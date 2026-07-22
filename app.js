@@ -445,7 +445,9 @@ function animateHotspotTransition(hs) {
     const stepPitch = (climb ? 1 : descend ? -1 : 0) * 0.025 * Math.sin(t * Math.PI * 10 + 1.2) * Math.min(t * 4, 1);
     const lean = climb ? t * 0.08 : descend ? -t * 0.08 : 0;
     const bob = climb || descend ? 0 : Math.sin(t * Math.PI * 7) * 0.012 * Math.min(t * 4, 1);
-    const fovTarget = startFov + 18 * Math.sin(t * Math.PI * 0.65) * (1 - t) + (75 - startFov) * Math.pow(t, 2);
+    const fovTarget = t < 0.12
+      ? startFov + (85 - startFov) * (t / 0.12)
+      : 85 + (climb || descend ? 35 : 25 - 85) * (1 - Math.pow(1 - (t - 0.12) / 0.88, 2));
 
     yaw = startYaw + deltaYaw * (1 - Math.pow(1 - t, 2));
     pitch = startPitch + (targetHsPitch - startPitch) * t + lean + stepPitch + bob;
@@ -466,7 +468,21 @@ function animateHotspotTransition(hs) {
         climbTextEl.style.opacity = '0';
         setTimeout(() => climbTextEl.remove(), 500);
       }
-      isTransitioning = false;
+      const fovEnd = fov;
+      setTimeout(() => {
+        fov = fovEnd;
+        targetFov = fovEnd;
+        const fovDuration = 500;
+        const fovStartTime = performance.now();
+        function fovStep(now2) {
+          const ft = Math.min((now2 - fovStartTime) / fovDuration, 1);
+          fov = fovEnd + (75 - fovEnd) * (1 - Math.pow(1 - ft, 3));
+          targetFov = fov;
+          if (ft < 1) requestAnimationFrame(fovStep);
+          else isTransitioning = false;
+        }
+        requestAnimationFrame(fovStep);
+      }, 50);
     }
   }
   requestAnimationFrame(step);
