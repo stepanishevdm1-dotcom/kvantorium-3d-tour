@@ -144,7 +144,7 @@ const scenes = {
       { yaw: 3.162, pitch: -0.040, label: 'Третий этаж 6', target: 'floor3_6',
         returnYaw: 6.304, returnPitch: 0 },
       { yaw: 4.812, pitch: -0.126, label: 'Кабинет робоквантум', target: 'robo',
-        returnYaw: 5.400, returnPitch: 0 },
+        returnYaw: 5.385, returnPitch: 0 },
       { yaw: 6.202, pitch: -0.091, label: 'Третий этаж 8', target: 'floor3_8',
         returnYaw: 3.062, returnPitch: 0 }
     ]
@@ -179,9 +179,9 @@ const scenes = {
       { label: 'Обычная', image: 'Robo.jpg' }
     ],
     hotspots: [
-      { yaw: 2.258, pitch: -0.099, label: 'Третий этаж 7', target: 'floor3_7',
+      { yaw: 2.243, pitch: -0.059, label: 'Третий этаж 7', target: 'floor3_7',
         returnYaw: 1.671, returnPitch: 0 },
-      { yaw: 0.705, pitch: -0.106, label: 'Третий этаж 8', target: 'floor3_8',
+      { yaw: 0.708, pitch: -0.106, label: 'Третий этаж 8', target: 'floor3_8',
         returnYaw: 3.142, returnPitch: 0 }
     ]
   },
@@ -194,7 +194,7 @@ const scenes = {
       { yaw: 3.206, pitch: -0.075, label: 'Третий этаж 7', target: 'floor3_7',
         returnYaw: 3.062, returnPitch: 0 },
       { yaw: 4.573, pitch: -0.099, label: 'Кабинет робоквантум', target: 'robo',
-        returnYaw: 3.847, returnPitch: 0 },
+        returnYaw: 3.850, returnPitch: 0 },
       { yaw: 0.019, pitch: -0.056, label: 'Третий этаж 9', target: 'floor3_9',
         returnYaw: 3.142, returnPitch: 0 }
     ]
