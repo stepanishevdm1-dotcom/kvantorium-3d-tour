@@ -32,7 +32,7 @@ canvas:active {
   border: 1px solid rgba(255,255,255,0.12);
 }
 
-/* Loading */
+/* ===== Loading ===== */
 #loading {
   position: fixed;
   inset: 0;
@@ -574,6 +574,8 @@ canvas:active {
     font-size: 1.2rem;
   }
 }
+
+  #loading-hint { font-size: 0.65rem; }
 
 @media (max-width: 480px) {
   #sidebar {
