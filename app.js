@@ -130,9 +130,9 @@ const scenes = {
       { yaw: 3.096, pitch: -0.059, label: 'Третий этаж 5', target: 'floor3_5',
         returnYaw: 3.107, returnPitch: 0 },
       { yaw: 6.282, pitch: -0.056, label: 'Третий этаж 7', target: 'floor3_7',
-        returnYaw: 3.142, returnPitch: 0 },
+        returnYaw: 6.304, returnPitch: 0 },
       { yaw: 4.632, pitch: -0.150, label: 'Кабинет Промышленный дизайн', target: 'industrial_design',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 3.110, returnPitch: 0 }
     ]
   },
   'floor3_7': {
@@ -141,18 +141,55 @@ const scenes = {
       { label: 'Обычная', image: '3 этаж 7.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Третий этаж 6', target: 'floor3_6',
-        returnYaw: 3.141, returnPitch: 0 }
+      { yaw: 3.162, pitch: -0.040, label: 'Третий этаж 6', target: 'floor3_6',
+        returnYaw: 6.304, returnPitch: 0 },
+      { yaw: 4.812, pitch: -0.126, label: 'Кабинет робоквантум', target: 'robo',
+        returnYaw: 1.671, returnPitch: 0 },
+      { yaw: 6.202, pitch: -0.091, label: 'Третий этаж 8', target: 'floor3_8',
+        returnYaw: 3.062, returnPitch: 0 }
     ]
   },
   'industrial_design': {
     name: 'Кабинет Промышленный дизайн',
     variants: [
-      { label: 'Обычная', image: 'Промышленный дизайн.jpg' }
+      { label: 'Обычная', image: 'Промышленный дизайн.jpg' },
+      { label: 'Вторая', image: 'Промышленный дизайн 2.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Третий этаж 6', target: 'floor3_6',
-        returnYaw: 1.491, returnPitch: 0 }
+      { yaw: 6.251, pitch: -0.035, label: 'Третий этаж 6', target: 'floor3_6',
+        returnYaw: 1.491, returnPitch: 0 },
+      { yaw: 4.762, pitch: -0.030, label: 'Промышленный дизайн 2', target: 'industrial_design_2',
+        returnYaw: 3.142, returnPitch: 0 }
+    ]
+  },
+  'industrial_design_2': {
+    name: 'Промышленный дизайн 2',
+    variants: [
+      { label: 'Обычная', image: 'Промышленный дизайн 2.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Промышленный дизайн', target: 'industrial_design',
+        returnYaw: 1.621, returnPitch: 0 }
+    ]
+  },
+  'robo': {
+    name: 'Кабинет робоквантум',
+    variants: [
+      { label: 'Обычная', image: 'Robo.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Третий этаж 7', target: 'floor3_7',
+        returnYaw: 1.681, returnPitch: 0 }
+    ]
+  },
+  'floor3_8': {
+    name: 'Третий этаж 8',
+    variants: [
+      { label: 'Обычная', image: '3 этаж 8.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Третий этаж 7', target: 'floor3_7',
+        returnYaw: 3.046, returnPitch: 0 }
     ]
   }
 };
@@ -183,6 +220,42 @@ let sidebarOpen = false;
 let debugVisible = false;
 let draggedDistance = 0;
 let imageCache = {};
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+const SETTINGS_DEFAULTS = {
+  hotspotStyle: 0,
+  textSize: 44,
+  textColor: '#ffffff',
+  mouseSensitivity: 1,
+  animations: true,
+  transitionSpeed: 2500
+};
+
+let settings = {};
+
+function loadSettings() {
+  try {
+    const raw = localStorage.getItem('kvantorium_settings');
+    if (raw) {
+      settings = JSON.parse(raw);
+      for (const k in SETTINGS_DEFAULTS) {
+        if (settings[k] === undefined) settings[k] = SETTINGS_DEFAULTS[k];
+      }
+    } else {
+      settings = { ...SETTINGS_DEFAULTS };
+    }
+  } catch {
+    settings = { ...SETTINGS_DEFAULTS };
+  }
+}
+
+function saveSettings() {
+  try { localStorage.setItem('kvantorium_settings', JSON.stringify(settings)); } catch {}
+}
+
+loadSettings();
 
 /* ============================================================
    THREE.JS
@@ -373,29 +446,89 @@ function createHotspotSprite(label) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   const cx = 512, cy = 180;
-  ctx.beginPath();
-  ctx.arc(cx, cy, 60, 0, Math.PI * 2);
-  ctx.strokeStyle = '#000';
-  ctx.lineWidth = 30;
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(cx, cy, 46, 0, Math.PI * 2);
-  ctx.strokeStyle = '#fff';
-  ctx.lineWidth = 12;
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(cx, cy, 24, 0, Math.PI * 2);
-  ctx.strokeStyle = '#000';
-  ctx.lineWidth = 24;
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(cx, cy, 10, 0, Math.PI * 2);
-  ctx.strokeStyle = '#fff';
-  ctx.lineWidth = 6;
-  ctx.stroke();
+  const style = settings.hotspotStyle;
+  const tColor = settings.textColor;
+  const tSize = settings.textSize;
 
-  ctx.fillStyle = '#fff';
-  ctx.font = 'bold 44px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  if (style === 0) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, 60, 0, Math.PI * 2);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 30;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 46, 0, Math.PI * 2);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 12;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 24, 0, Math.PI * 2);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 24;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 6;
+    ctx.stroke();
+  } else if (style === 1) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, 28, 0, Math.PI * 2);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 18;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 16, 0, Math.PI * 2);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 8;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+  } else if (style === 2) {
+    const r = 28;
+    ctx.beginPath();
+    ctx.roundRect(cx - r, cy - r, r * 2, r * 2, 10);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 18;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.roundRect(cx - r + 4, cy - r + 4, (r - 4) * 2, (r - 4) * 2, 8);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 8;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.roundRect(cx - 8, cy - 8, 16, 16, 4);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+  } else {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - 35);
+    ctx.lineTo(cx + 30, cy);
+    ctx.lineTo(cx, cy + 35);
+    ctx.lineTo(cx - 30, cy);
+    ctx.closePath();
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 18;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - 27);
+    ctx.lineTo(cx + 24, cy);
+    ctx.lineTo(cx, cy + 27);
+    ctx.lineTo(cx - 24, cy);
+    ctx.closePath();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 8;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+  }
+
+  ctx.fillStyle = tColor;
+  ctx.font = 'bold ' + tSize + 'px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'center';
   ctx.shadowColor = '#000';
@@ -475,7 +608,11 @@ function onPointerUp(e) {
   if (draggedDistance < 5) {
     const hs = pickHotspot(x, y);
     if (hs) {
-      animateHotspotTransition(hs);
+      if (settings.animations && settings.transitionSpeed > 0) {
+        animateHotspotTransition(hs);
+      } else {
+        doCrossfadeTransition(hs.target, hs.returnYaw, hs.returnPitch);
+      }
       isDragging = false;
       return;
     }
@@ -491,7 +628,7 @@ function onPointerMove(e) {
 
   if (!isDragging) return;
 
-  const sens = 0.005 * (fov / 75);
+  const sens = 0.005 * (fov / 75) * settings.mouseSensitivity;
   targetYaw += dx * sens;
   targetPitch += dy * sens;
   targetPitch = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, targetPitch));
@@ -521,7 +658,7 @@ function animateHotspotTransition(hs) {
   while (deltaYaw > Math.PI) deltaYaw -= 2 * Math.PI;
   while (deltaYaw < -Math.PI) deltaYaw += 2 * Math.PI;
 
-  const duration = 2500;
+  const duration = settings.transitionSpeed || 2500;
   const climb = hs.stairs;
   const descend = hs.descend;
   let climbTextEl = null;
@@ -601,7 +738,7 @@ async function doCrossfadeTransition(targetId, returnYaw, returnPitch) {
 
     sphere.material.transparent = true;
     const cfStart = performance.now();
-    const cfDur = 150;
+    const cfDur = 500;
     function cfStep(now) {
       const t = Math.min((now - cfStart) / cfDur, 1);
       sphere.material.opacity = 1 - t;
@@ -656,7 +793,7 @@ async function navigateTo(id, variantIdx) {
 
     sphere.material.transparent = true;
     const cfStart = performance.now();
-    const cfDur = 150;
+    const cfDur = 500;
     function step(now) {
       const t = Math.min((now - cfStart) / cfDur, 1);
       sphere.material.opacity = 1 - t;
@@ -767,6 +904,186 @@ sidebarBtn.addEventListener('click', (e) => {
 });
 
 overlay.addEventListener('click', closeSidebar);
+
+/* ============================================================
+   SETTINGS PANEL
+   ============================================================ */
+const settingsBtn = document.getElementById('settings-btn');
+const settingsPanel = document.getElementById('settings-panel');
+const sidebarTitle = document.getElementById('sidebar-title');
+let settingsPanelBuilt = false;
+
+function rebuildHotspots() {
+  buildHotspots();
+}
+
+function applySettings() {
+  rebuildHotspots();
+}
+
+const STYLE_NAMES = ['Круги', 'Точка', 'Квадрат', 'Ромб'];
+const SPEED_NAMES = { 2500: 'Медленно', 1200: 'Быстро' };
+
+function buildSettingsPanel() {
+  if (settingsPanelBuilt) return;
+  settingsPanelBuilt = true;
+
+  const back = document.createElement('div');
+  back.id = 'settings-back';
+  back.textContent = '← Назад';
+  back.addEventListener('click', showSceneList);
+  settingsPanel.appendChild(back);
+
+  function addGroup(label, content) {
+    const g = document.createElement('div');
+    g.className = 'setting-group';
+    const l = document.createElement('label');
+    l.className = 'setting-label';
+    l.textContent = label;
+    g.appendChild(l);
+    if (typeof content === 'function') content(g);
+    else g.appendChild(content);
+    settingsPanel.appendChild(g);
+  }
+
+  // 1. Hotspot style
+  addGroup('Внешность меток', (g) => {
+    const div = document.createElement('div');
+    div.className = 'setting-style-options';
+    STYLE_NAMES.forEach((name, i) => {
+      const btn = document.createElement('div');
+      btn.className = 'setting-style-btn' + (i === settings.hotspotStyle ? ' active' : '');
+      btn.textContent = name;
+      btn.addEventListener('click', () => {
+        settings.hotspotStyle = i;
+        saveSettings();
+        div.querySelectorAll('.setting-style-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applySettings();
+      });
+      div.appendChild(btn);
+    });
+    g.appendChild(div);
+  });
+
+  // 2. Text size
+  addGroup('Размер текста', (g) => {
+    const input = document.createElement('input');
+    input.type = 'range';
+    input.min = 24;
+    input.max = 60;
+    input.value = settings.textSize;
+    const val = document.createElement('span');
+    val.style.cssText = 'color:#aaa;font-size:0.72rem;margin-left:6px';
+    val.textContent = settings.textSize + 'px';
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;align-items:center';
+    wrap.appendChild(input);
+    wrap.appendChild(val);
+    g.appendChild(wrap);
+    input.addEventListener('input', () => {
+      settings.textSize = parseInt(input.value);
+      val.textContent = settings.textSize + 'px';
+      saveSettings();
+      applySettings();
+    });
+  });
+
+  // 3. Text color
+  addGroup('Цвет текста', (g) => {
+    const input = document.createElement('input');
+    input.type = 'color';
+    input.value = settings.textColor;
+    g.appendChild(input);
+    input.addEventListener('input', () => {
+      settings.textColor = input.value;
+      saveSettings();
+      applySettings();
+    });
+  });
+
+  // 4. Mouse sensitivity
+  addGroup('Чувствительность мыши', (g) => {
+    const input = document.createElement('input');
+    input.type = 'range';
+    input.min = 0.25;
+    input.max = 3;
+    input.step = 0.25;
+    input.value = settings.mouseSensitivity;
+    const val = document.createElement('span');
+    val.style.cssText = 'color:#aaa;font-size:0.72rem;margin-left:6px';
+    val.textContent = settings.mouseSensitivity.toFixed(2) + 'x';
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;align-items:center';
+    wrap.appendChild(input);
+    wrap.appendChild(val);
+    g.appendChild(wrap);
+    input.addEventListener('input', () => {
+      settings.mouseSensitivity = parseFloat(input.value);
+      val.textContent = settings.mouseSensitivity.toFixed(2) + 'x';
+      saveSettings();
+    });
+  });
+
+  // 5. Animations toggle
+  addGroup('Анимации между точками', (g) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'setting-toggle';
+    const l = document.createElement('span');
+    l.className = 'setting-toggle-label';
+    l.textContent = settings.animations ? 'Вкл' : 'Выкл';
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.checked = settings.animations;
+    wrap.appendChild(l);
+    wrap.appendChild(input);
+    g.appendChild(wrap);
+    input.addEventListener('change', () => {
+      settings.animations = input.checked;
+      l.textContent = settings.animations ? 'Вкл' : 'Выкл';
+      saveSettings();
+    });
+  });
+
+  // 6. Transition speed (my addition)
+  addGroup('Скорость перехода', (g) => {
+    const sel = document.createElement('select');
+    for (const [val, name] of Object.entries(SPEED_NAMES)) {
+      const opt = document.createElement('option');
+      opt.value = val;
+      opt.textContent = name;
+      if (parseInt(val) === settings.transitionSpeed) opt.selected = true;
+      sel.appendChild(opt);
+    }
+    g.appendChild(sel);
+    sel.addEventListener('change', () => {
+      settings.transitionSpeed = parseInt(sel.value);
+      saveSettings();
+    });
+  });
+}
+
+function showSettings() {
+  buildSettingsPanel();
+  sidebarList.classList.add('hidden');
+  settingsPanel.classList.remove('hidden');
+  sidebarTitle.textContent = 'Настройки';
+}
+
+function showSceneList() {
+  sidebarList.classList.remove('hidden');
+  settingsPanel.classList.add('hidden');
+  sidebarTitle.textContent = 'Комнаты';
+}
+
+settingsBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (sidebarList.classList.contains('hidden')) {
+    showSceneList();
+  } else {
+    showSettings();
+  }
+});
 
 /* ============================================================
    WHEEL ZOOM
