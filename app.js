@@ -32,6 +32,16 @@ const scenes = {
     variants: [
       { label: 'Обычная', image: 'Главный вход.jpg' }
     ],
+    hotspots: [
+      { yaw: 2.810, pitch: 0.016, label: 'Охрана', target: 'security',
+        returnYaw: 5.952, returnPitch: 0.016 }
+    ]
+  },
+  'security': {
+    name: 'Охрана',
+    variants: [
+      { label: 'Обычная', image: 'у охраны.jpg' }
+    ],
     hotspots: []
   }
 };
