@@ -210,7 +210,7 @@ const scenes = {
       { yaw: 6.257, pitch: -0.040, label: 'Третий этаж 10', target: 'floor3_10',
         returnYaw: 3.142, returnPitch: 0 },
       { yaw: 4.732, pitch: -0.145, label: 'Кабинет 304', target: 'kabinet_304',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 6.150, returnPitch: 0 }
     ]
   },
   'floor3_10': {
@@ -229,8 +229,33 @@ const scenes = {
       { label: 'Обычная', image: 'Кабинет 304.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Третий этаж 9', target: 'floor3_9',
-        returnYaw: 1.388, returnPitch: 0 }
+      { yaw: 3.008, pitch: -0.257, label: 'Третий этаж 9', target: 'floor3_9',
+        returnYaw: 1.388, returnPitch: 0 },
+      { yaw: 0.243, pitch: -0.269, label: 'Коллективная радиостанция', target: 'radio_station',
+        returnYaw: 3.142, returnPitch: 0 },
+      { yaw: 4.743, pitch: -0.257, label: 'Кабинет Энерджиквантум', target: 'energikvantum',
+        returnYaw: 3.142, returnPitch: 0 }
+    ]
+  },
+  'radio_station': {
+    name: 'Коллективная радиостанция',
+    variants: [
+      { label: 'Обычная', image: 'Коллективная радиостанция.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Кабинет 304', target: 'kabinet_304',
+        returnYaw: 3.385, returnPitch: 0 }
+    ]
+  },
+  'energikvantum': {
+    name: 'Кабинет Энерджиквантум',
+    variants: [
+      { label: 'Обычная', image: 'Энерджиквантум.jpg' },
+      { label: 'Вторая', image: 'Энерджиквантум 2.jpg' }
+    ],
+    hotspots: [
+      { yaw: 0, pitch: 0, label: 'Кабинет 304', target: 'kabinet_304',
+        returnYaw: 1.602, returnPitch: 0 }
     ]
   }
 };
@@ -238,7 +263,7 @@ const scenes = {
 const sidebarGroups = [
   { label: null, scenes: ['main_entrance', 'security'] },
   { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10'] },
-  { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo', 'kabinet_304'] }
+  { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo', 'kabinet_304', 'radio_station', 'energikvantum'] }
 ];
 
 const DEFAULT_SCENE = 'main_entrance';
