@@ -268,7 +268,7 @@ const scenes = {
       { yaw: 4.737, pitch: -0.140, label: 'Кабинет 304', target: 'kabinet_304',
         returnYaw: 1.602, returnPitch: 0 },
       { yaw: 3.013, pitch: -0.070, label: 'Энерджиквантум 2', target: 'energikvantum_2',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 4.659, returnPitch: 0 }
     ]
   },
   'energikvantum_2': {
@@ -279,7 +279,7 @@ const scenes = {
     hotspots: [
       { yaw: 0, pitch: 0, label: 'Кабинет 304', target: 'kabinet_304',
         returnYaw: 1.602, returnPitch: 0 },
-      { yaw: 0, pitch: 0, label: 'Энерджиквантум', target: 'energikvantum',
+      { yaw: 1.517, pitch: -0.080, label: 'Энерджиквантум', target: 'energikvantum',
         returnYaw: 6.155, returnPitch: 0 }
     ]
   }
