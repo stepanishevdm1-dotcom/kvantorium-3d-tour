@@ -278,22 +278,22 @@ function createHotspotSprite(label) {
 
   const cx = 100, cy = 128;
   ctx.beginPath();
-  ctx.arc(cx, cy, 80, 0, Math.PI * 2);
+  ctx.arc(cx, cy, 60, 0, Math.PI * 2);
   ctx.strokeStyle = '#000';
-  ctx.lineWidth = 60;
+  ctx.lineWidth = 30;
   ctx.stroke();
   ctx.beginPath();
-  ctx.arc(cx, cy, 54, 0, Math.PI * 2);
+  ctx.arc(cx, cy, 46, 0, Math.PI * 2);
   ctx.strokeStyle = '#fff';
   ctx.lineWidth = 12;
   ctx.stroke();
   ctx.beginPath();
-  ctx.arc(cx, cy, 32, 0, Math.PI * 2);
+  ctx.arc(cx, cy, 24, 0, Math.PI * 2);
   ctx.strokeStyle = '#000';
-  ctx.lineWidth = 48;
+  ctx.lineWidth = 24;
   ctx.stroke();
   ctx.beginPath();
-  ctx.arc(cx, cy, 12, 0, Math.PI * 2);
+  ctx.arc(cx, cy, 10, 0, Math.PI * 2);
   ctx.strokeStyle = '#fff';
   ctx.lineWidth = 6;
   ctx.stroke();
