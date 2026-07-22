@@ -462,6 +462,14 @@ function preloadAll() {
   });
 }
 
+const bgLoadBtn = document.getElementById('bg-load-btn');
+
+bgLoadBtn.addEventListener('click', () => {
+  bgLoadBtn.remove();
+  loadingEl.classList.add('hidden');
+  startViewer();
+});
+
 /* ============================================================
    TEXTURE LOADING
    ============================================================ */

@@ -553,7 +553,24 @@ canvas:active {
   #crosshair {
     font-size: 1.3rem;
   }
-  #loading-content h1 {
+#bg-load-btn {
+  margin-top: 16px;
+  padding: 10px 24px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#bg-load-btn:hover {
+  background: rgba(255,255,255,0.10);
+}
+
+#loading-content h1 {
     font-size: 1.2rem;
   }
 }
