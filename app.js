@@ -606,6 +606,7 @@ function getClientXY(e) {
 }
 
 function onPointerDown(e) {
+  if (isTransitioning) return;
   const { x, y } = getClientXY(e);
   draggedDistance = 0;
   prevPointer.x = x;
@@ -614,17 +615,21 @@ function onPointerDown(e) {
 }
 
 function onPointerUp(e) {
+  if (isTransitioning) return;
+  if (!e.target || !renderer.domElement.contains(e.target)) return;
   const { x, y } = getClientXY(e);
-  // Если мышь не двигалась — это клик, проверяем хотспот
   if (draggedDistance < 5) {
     const hs = pickHotspot(x, y);
     if (hs) {
+      isDragging = false;
       if (settings.animations && settings.transitionSpeed > 0) {
         animateHotspotTransition(hs);
       } else {
-        doCrossfadeTransition(hs.target, hs.returnYaw, hs.returnPitch);
+        isTransitioning = true;
+        doCrossfadeTransition(hs.target, hs.returnYaw, hs.returnPitch).then(() => {
+          isTransitioning = false;
+        });
       }
-      isDragging = false;
       return;
     }
   }
@@ -635,6 +640,8 @@ function onPointerMove(e) {
   const { x, y } = getClientXY(e);
   const dx = x - prevPointer.x;
   const dy = y - prevPointer.y;
+  draggedDistance += Math.abs(dx) + Math.abs(dy);
+  if (!isDragging) return;
   draggedDistance += Math.abs(dx) + Math.abs(dy);
 
   if (!isDragging) return;
@@ -750,18 +757,21 @@ async function doCrossfadeTransition(targetId, returnYaw, returnPitch) {
     sphere.material.transparent = true;
     const cfStart = performance.now();
     const cfDur = 500;
-    function cfStep(now) {
-      const t = Math.min((now - cfStart) / cfDur, 1);
-      sphere.material.opacity = 1 - t;
-      sphere2.material.opacity = t;
-      if (t < 1) { requestAnimationFrame(cfStep); return; }
-      scene.remove(sphere);
-      sphere.material.dispose();
-      sphere2.material.transparent = false;
-      sphere2.material.opacity = 1;
-      sphere = sphere2;
-    }
-    requestAnimationFrame(cfStep);
+    await new Promise(resolve => {
+      function cfStep(now) {
+        const t = Math.min((now - cfStart) / cfDur, 1);
+        sphere.material.opacity = 1 - t;
+        sphere2.material.opacity = t;
+        if (t < 1) { requestAnimationFrame(cfStep); return; }
+        scene.remove(sphere);
+        sphere.material.dispose();
+        sphere2.material.transparent = false;
+        sphere2.material.opacity = 1;
+        sphere = sphere2;
+        resolve();
+      }
+      requestAnimationFrame(cfStep);
+    });
   } catch (e) {
     console.error(e);
   }
