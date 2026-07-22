@@ -528,8 +528,8 @@ scene.add(sphere);
 const euler = new THREE.Euler(0, 0, 0, 'YXZ');
 const hotspotVec = new THREE.Vector3(0, 0, -1);
 
-// Фон для экрана загрузки — медленно вращающийся Главный вход
-loadTexture(scenes.main_entrance.variants[0].image).then(tex => {
+// Фон для экрана загрузки — Главный вход грузится сразу
+let mainTexPromise = loadTexture(scenes.main_entrance.variants[0].image).then(tex => {
   sphere.material.map = tex;
   sphere.material.needsUpdate = true;
 });
@@ -538,6 +538,8 @@ loadTexture(scenes.main_entrance.variants[0].image).then(tex => {
    LOADING / PRELOAD
    ============================================================ */
 const preloadList = document.getElementById('preload-list');
+const bgProgress = document.getElementById('bg-progress');
+const bgProgressList = document.getElementById('bg-progress-list');
 const loadingStatus = document.getElementById('loading-status');
 const loadingEl = document.getElementById('loading');
 const loadingHint = document.getElementById('loading-hint');
@@ -584,21 +586,32 @@ function preloadAll() {
   )).then(sizes => {
     totalBytes = sizes.reduce((a, b) => a + b, 0);
 
+    // Главный вход уже загружен для фона — не качаем повторно
+    const mainFile = scenes.main_entrance.variants[0].image;
+
     for (let i = 0; i < images.length; i++) {
       const img = images[i];
+      if (img.file === mainFile) { loadedFiles++; continue; }
       const fileSize = sizes[i];
 
-      const item = document.createElement('div');
-      item.className = 'preload-item' + (img.variant ? ' variant' : '');
-      const nameSpan = document.createElement('span');
-      nameSpan.className = 'name';
-      nameSpan.textContent = img.label + (img.variant ? ' (' + img.variant + ')' : '');
-      const progSpan = document.createElement('span');
-      progSpan.className = 'progress';
-      progSpan.textContent = '0B/' + humanSize(fileSize) + ' 0%';
-      item.appendChild(nameSpan);
-      item.appendChild(progSpan);
+      function createItem() {
+        const el = document.createElement('div');
+        el.className = 'preload-item' + (img.variant ? ' variant' : '');
+        const ns = document.createElement('span');
+        ns.className = 'name';
+        ns.textContent = img.label + (img.variant ? ' (' + img.variant + ')' : '');
+        const ps = document.createElement('span');
+        ps.className = 'progress';
+        ps.textContent = '0B/' + humanSize(fileSize) + ' 0%';
+        el.appendChild(ns);
+        el.appendChild(ps);
+        return el;
+      }
+      const item = createItem();
       preloadList.appendChild(item);
+      const bgItem = createItem();
+      bgProgressList.appendChild(bgItem);
+      const progSpans = [item.querySelector('.progress'), bgItem.querySelector('.progress')];
 
       const url = encodeURI(img.file);
       const cacheKey = img.file;
@@ -614,16 +627,19 @@ function preloadAll() {
             if (done) break;
             recv += value.length;
             const filePct = fileSize ? Math.round((recv / fileSize) * 100) : 0;
-            progSpan.textContent = humanSize(recv) + '/' + humanSize(fileSize) + ' ' + filePct + '%';
+            const txt = humanSize(recv) + '/' + humanSize(fileSize) + ' ' + filePct + '%';
+            for (const ps of progSpans) ps.textContent = txt;
             loadedBytes += value.length;
             loadingStatus.textContent = t('loading') + humanSize(loadedBytes) + '/' + humanSize(totalBytes) + ' ' + (totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 0) + '%';
           }
 
           loadedFiles++;
-          progSpan.textContent = humanSize(fileSize) + '/' + humanSize(fileSize) + ' 100%';
+          const doneTxt = humanSize(fileSize) + '/' + humanSize(fileSize) + ' 100%';
+          for (const ps of progSpans) ps.textContent = doneTxt;
 
           if (loadedFiles === total) {
             loadingStatus.textContent = t('loading') + humanSize(totalBytes) + '/' + humanSize(totalBytes) + ' 100%';
+            bgProgress.classList.add('hidden');
             setTimeout(() => {
               loadingEl.classList.add('hidden');
               if (!viewerStarted) startViewer();
@@ -631,8 +647,9 @@ function preloadAll() {
           }
         } catch (e) {
           loadedFiles++;
-          progSpan.textContent = t('error');
+          for (const ps of progSpans) ps.textContent = t('error');
           if (loadedFiles === total) {
+            bgProgress.classList.add('hidden');
             setTimeout(() => {
               loadingEl.classList.add('hidden');
               if (!viewerStarted) startViewer();
@@ -649,6 +666,7 @@ let viewerStarted = false;
 bgLoadBtn.addEventListener('click', () => {
   bgLoadBtn.remove();
   loadingEl.classList.add('hidden');
+  bgProgress.classList.remove('hidden');
   startViewer();
 });
 
@@ -1600,9 +1618,13 @@ function animate() {
    INIT
    ============================================================ */
 animate();
-preloadAll();
 buildSidebar();
 updateDebugHUD();
+
+// После intro-анимации (~4.5 с) запускаем загрузку остальных панорам
+setTimeout(() => {
+  preloadAll();
+}, 4200);
 
 setInterval(() => { if (isTransitioning) isTransitioning = false; }, 10000);
 
