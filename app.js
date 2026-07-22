@@ -182,7 +182,7 @@ const scenes = {
       { yaw: 2.243, pitch: -0.059, label: 'Третий этаж 7', target: 'floor3_7',
         returnYaw: 1.671, returnPitch: 0 },
       { yaw: 0.708, pitch: -0.106, label: 'Третий этаж 8', target: 'floor3_8',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 1.432, returnPitch: 0 }
     ]
   },
   'floor3_8': {
