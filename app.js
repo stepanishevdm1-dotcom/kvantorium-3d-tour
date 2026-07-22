@@ -232,6 +232,18 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 3.161, pitch: -0.070, label: 'Третий этаж 10', target: 'floor3_10',
+        returnYaw: 3.238, returnPitch: 0 },
+      { yaw: 6.276, pitch: -0.070, label: 'Третий этаж 12', target: 'floor3_12',
+        returnYaw: 3.135, returnPitch: 0 }
+    ]
+  },
+  'floor3_12': {
+    name: 'Третий этаж 12',
+    variants: [
+      { label: 'Обычная', image: '3 этаж 12.jpg' }
+    ],
+    hotspots: [
+      { yaw: 3.135, pitch: 0, label: 'Третий этаж 11', target: 'floor3_11',
         returnYaw: 3.238, returnPitch: 0 }
     ]
   },
@@ -285,7 +297,7 @@ const scenes = {
 
 const sidebarGroups = [
   { label: null, scenes: ['main_entrance', 'security'] },
-  { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10', 'floor3_11'] },
+  { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10', 'floor3_11', 'floor3_12'] },
   { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo', 'kabinet_304', 'radio_station', 'energikvantum', 'energikvantum_2'] }
 ];
 
@@ -397,6 +409,7 @@ const sceneNamesEn = {
   'floor3_9': 'Floor 3 \u2014 9',
   'floor3_10': 'Floor 3 \u2014 10',
   'floor3_11': 'Floor 3 \u2014 11',
+  'floor3_12': 'Floor 3 \u2014 12',
   'industrial_design': 'Industrial Design Room',
   'industrial_design_2': 'Industrial Design Room 2',
   'robo': 'Roboquantum Room',
@@ -421,6 +434,7 @@ const hotspotLabelEn = {
   '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 9': 'Floor 3 \u2014 9',
   '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 10': 'Floor 3 \u2014 10',
   '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 11': 'Floor 3 \u2014 11',
+  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 12': 'Floor 3 \u2014 12',
   '\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u041f\u0440\u043e\u043c\u044b\u0448\u043b\u0435\u043d\u043d\u044b\u0439 \u0434\u0438\u0437\u0430\u0439\u043d': 'Industrial Design Room',
   '\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u041f\u0440\u043e\u043c\u044b\u0448\u043b\u0435\u043d\u043d\u044b\u0439 \u0434\u0438\u0437\u0430\u0439\u043d 2': 'Industrial Design Room 2',
   '\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u0420\u043e\u0431\u043e\u043a\u0432\u0430\u043d\u0442\u0443\u043c': 'Roboquantum Room',
