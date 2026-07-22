@@ -277,8 +277,6 @@ const scenes = {
       { label: 'Обычная', image: 'Энерджиквантум 2.jpg' }
     ],
     hotspots: [
-      { yaw: 0, pitch: 0, label: 'Кабинет 304', target: 'kabinet_304',
-        returnYaw: 1.602, returnPitch: 0 },
       { yaw: 1.517, pitch: -0.080, label: 'Энерджиквантум', target: 'energikvantum',
         returnYaw: 6.155, returnPitch: 0 }
     ]
