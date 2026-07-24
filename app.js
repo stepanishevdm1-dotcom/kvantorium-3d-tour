@@ -914,7 +914,7 @@ function createHotspotSprite(label) {
   const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
   const sprite = new THREE.Sprite(mat);
   const ms = settings.markerSize / 100;
-  sprite.scale.set(300 * ms * 1.15, 75 * ms * 1.15, 1);
+  sprite.scale.set(300 * ms, 75 * ms, 1);
   return sprite;
 }
 
