@@ -250,77 +250,91 @@ canvas:active {
 #intro-letters span {
   display: inline-block;
   background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   opacity: 0;
   will-change: transform, filter, opacity;
+  animation: colorDrift 3s ease-in-out infinite;
+}
 
-
-/* К — вылетает слева-сверху, крутится, сильное размытие */
+/* К — вылетает слева-сверху, крутится */
 #intro-letters span:nth-child(1) {
   animation: letterK 1s 0s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-             sway 2.5s 2.8s ease-in-out infinite;
+             pulseWave 2s 2s ease-in-out infinite,
+             sway 2.5s 2.8s ease-in-out infinite,
+             colorDrift 3s 0s ease-in-out infinite;
 }
 
 @keyframes letterK {
   0%   { opacity: 0; filter: blur(50px); transform: translate(-300px, -150px) rotate(-60deg) scale(0.2); }
-  50%  { opacity: 0.8; filter: blur(8px); transform: translate(20px, -20px) rotate(10deg) scale(1.15); }
+  50%  { opacity: 0.8; filter: blur(8px); transform: translate(20px, -20px) rotate(10deg) scale(1.2); }
   100% { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0deg) scale(1); }
 }
 
-/* в — справа, с горизонтальным размытием */
+/* в */
 #intro-letters span:nth-child(2) {
   animation: letterV 0.9s 0.1s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-             sway 2.5s 2.8s ease-in-out infinite;
+             pulseWave 2s 2.1s ease-in-out infinite,
+             sway 2.5s 2.8s ease-in-out infinite,
+             colorDrift 3s 0.15s ease-in-out infinite;
 }
 
 @keyframes letterV {
   0%   { opacity: 0; filter: blur(35px); transform: translate(250px, -60px) rotate(40deg) scale(0.3); }
-  55%  { opacity: 0.9; filter: blur(5px); transform: translate(-10px, 10px) rotate(-5deg) scale(1.1); }
+  55%  { opacity: 0.9; filter: blur(5px); transform: translate(-10px, 10px) rotate(-5deg) scale(1.15); }
   100% { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0deg) scale(1); }
 }
 
-/* а — снизу, вертикальное размытие */
+/* а */
 #intro-letters span:nth-child(3) {
   animation: letterA 0.95s 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-             sway 2.5s 3s ease-in-out infinite;
+             pulseWave 2s 2.2s ease-in-out infinite,
+             sway 2.5s 3s ease-in-out infinite,
+             colorDrift 3s 0.3s ease-in-out infinite;
 }
 
 @keyframes letterA {
   0%   { opacity: 0; filter: blur(40px); transform: translate(40px, 200px) rotate(-25deg) scale(0.25); }
-  60%  { opacity: 0.85; filter: blur(6px); transform: translate(-5px, -10px) rotate(5deg) scale(1.12); }
+  60%  { opacity: 0.85; filter: blur(6px); transform: translate(-5px, -10px) rotate(5deg) scale(1.15); }
   100% { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0deg) scale(1); }
 }
 
-/* н — падает сверху с размытием по Y */
+/* н */
 #intro-letters span:nth-child(4) {
   animation: letterN 0.85s 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-             sway 2.5s 3.1s ease-in-out infinite;
+             pulseWave 2s 2.3s ease-in-out infinite,
+             sway 2.5s 3.1s ease-in-out infinite,
+             colorDrift 3s 0.45s ease-in-out infinite;
 }
 
 @keyframes letterN {
   0%   { opacity: 0; filter: blur(30px); transform: translate(-50px, -250px) rotate(15deg) scale(0.35); }
-  55%  { opacity: 0.9; filter: blur(4px); transform: translate(8px, 5px) rotate(-3deg) scale(1.08); }
+  55%  { opacity: 0.9; filter: blur(4px); transform: translate(8px, 5px) rotate(-3deg) scale(1.1); }
   100% { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0deg) scale(1); }
 }
 
-/* т — слева, длинное размытие по диагонали */
+/* т */
 #intro-letters span:nth-child(5) {
   animation: letterT 1.05s 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-             sway 2.5s 3.2s ease-in-out infinite;
+             pulseWave 2s 2.4s ease-in-out infinite,
+             sway 2.5s 3.2s ease-in-out infinite,
+             colorDrift 3s 0.6s ease-in-out infinite;
 }
 
 @keyframes letterT {
   0%   { opacity: 0; filter: blur(45px); transform: translate(-280px, 80px) rotate(55deg) scale(0.2); }
-  50%  { opacity: 0.8; filter: blur(10px); transform: translate(15px, -5px) rotate(-8deg) scale(1.2); }
+  50%  { opacity: 0.8; filter: blur(10px); transform: translate(15px, -5px) rotate(-8deg) scale(1.25); }
   100% { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0deg) scale(1); }
 }
 
-/* о — из центра, scale + blur */
+/* о */
 #intro-letters span:nth-child(6) {
   animation: letterO 0.8s 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3) forwards,
-             sway 2.5s 3.3s ease-in-out infinite;
+             pulseWave 2s 2.5s ease-in-out infinite,
+             sway 2.5s 3.3s ease-in-out infinite,
+             colorDrift 3s 0.75s ease-in-out infinite;
 }
 
 @keyframes letterO {
@@ -329,46 +343,54 @@ canvas:active {
   100% { opacity: 1; filter: blur(0); transform: scale(1); }
 }
 
-/* р — справа-снизу, диагональный вылет */
+/* р */
 #intro-letters span:nth-child(7) {
   animation: letterR 0.9s 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-             sway 2.5s 3.4s ease-in-out infinite;
+             pulseWave 2s 2.6s ease-in-out infinite,
+             sway 2.5s 3.4s ease-in-out infinite,
+             colorDrift 3s 0.9s ease-in-out infinite;
 }
 
 @keyframes letterR {
   0%   { opacity: 0; filter: blur(35px); transform: translate(200px, 150px) rotate(-45deg) scale(0.3); }
-  55%  { opacity: 0.85; filter: blur(5px); transform: translate(-12px, -8px) rotate(6deg) scale(1.1); }
+  55%  { opacity: 0.85; filter: blur(5px); transform: translate(-12px, -8px) rotate(6deg) scale(1.15); }
   100% { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0deg) scale(1); }
 }
 
-/* и — сверху-справа, спираль */
+/* и */
 #intro-letters span:nth-child(8) {
   animation: letterI 1s 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-             sway 2.5s 3.5s ease-in-out infinite;
+             pulseWave 2s 2.7s ease-in-out infinite,
+             sway 2.5s 3.5s ease-in-out infinite,
+             colorDrift 3s 1.05s ease-in-out infinite;
 }
 
 @keyframes letterI {
   0%   { opacity: 0; filter: blur(30px); transform: translate(180px, -200px) rotate(70deg) scale(0.3); }
-  50%  { opacity: 0.8; filter: blur(8px); transform: translate(-20px, 15px) rotate(-10deg) scale(1.15); }
+  50%  { opacity: 0.8; filter: blur(8px); transform: translate(-20px, 15px) rotate(-10deg) scale(1.2); }
   100% { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0deg) scale(1); }
 }
 
-/* у — слева-снизу, дуга */
+/* у */
 #intro-letters span:nth-child(9) {
   animation: letterU 0.95s 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-             sway 2.5s 3.6s ease-in-out infinite;
+             pulseWave 2s 2.8s ease-in-out infinite,
+             sway 2.5s 3.6s ease-in-out infinite,
+             colorDrift 3s 1.2s ease-in-out infinite;
 }
 
 @keyframes letterU {
   0%   { opacity: 0; filter: blur(40px); transform: translate(-220px, 180px) rotate(30deg) scale(0.25); }
-  55%  { opacity: 0.85; filter: blur(6px); transform: translate(10px, -10px) rotate(-4deg) scale(1.12); }
+  55%  { opacity: 0.85; filter: blur(6px); transform: translate(10px, -10px) rotate(-4deg) scale(1.15); }
   100% { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0deg) scale(1); }
 }
 
-/* м — издалека, огромный scale+blur */
+/* м */
 #intro-letters span:nth-child(10) {
   animation: letterM 1.1s 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-             sway 2.5s 3.7s ease-in-out infinite;
+             pulseWave 2s 2.9s ease-in-out infinite,
+             sway 2.5s 3.7s ease-in-out infinite,
+             colorDrift 3s 1.35s ease-in-out infinite;
 }
 
 @keyframes letterM {
@@ -377,11 +399,27 @@ canvas:active {
   100% { opacity: 1; filter: blur(0); transform: scale(1); }
 }
 
-/* --- Покачивание букв после сборки --- */
+/* --- Волновой пульс после сборки --- */
+@keyframes pulseWave {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25%  { transform: scale(1.12) rotate(-3deg); }
+  75%  { transform: scale(1.12) rotate(3deg); }
+}
+
+/* --- Покачивание букв --- */
 @keyframes sway {
   0%, 100% { transform: rotate(0deg) translateY(0); }
-  25%  { transform: rotate(-2deg) translateY(-3px); }
-  75%  { transform: rotate(2deg) translateY(-3px); }
+  20%  { transform: rotate(-3deg) translateY(-5px); }
+  40%  { transform: rotate(2deg) translateY(-2px); }
+  60%  { transform: rotate(-1deg) translateY(-6px); }
+  80%  { transform: rotate(3deg) translateY(-3px); }
+}
+
+/* --- Дрифт градиента (цвет переливается) --- */
+@keyframes colorDrift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* --- Subtitle --- */

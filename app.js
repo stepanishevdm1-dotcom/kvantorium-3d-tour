@@ -1662,13 +1662,18 @@ buildSidebar();
 updateDebugHUD();
 
 // Главный вход грузится первым — после него запускается introOut
+const INTRO_ANIM_DURATION = 4800; // мс — время на анимацию букв
 mainTexPromise.then(() => {
   const intro = document.getElementById('intro');
-  intro.classList.add('out');
-  // После завершения анимации интро — загрузка остальных текстур
-  intro.addEventListener('animationend', () => {
-    preloadAll();
-  }, { once: true });
+  // Ждём, пока анимация букв отыграет полностью
+  const elapsed = performance.now();
+  const delay = Math.max(0, INTRO_ANIM_DURATION - elapsed);
+  setTimeout(() => {
+    intro.classList.add('out');
+    intro.addEventListener('animationend', () => {
+      preloadAll();
+    }, { once: true });
+  }, delay);
 });
 
 setInterval(() => { if (isTransitioning) isTransitioning = false; }, 10000);
