@@ -699,7 +699,6 @@ async function setScene(id, variantIdx, preserveRotation = false) {
 }
 
 function startViewer() {
-  loadingRotate = false;
   viewerStarted = true;
   setScene(DEFAULT_SCENE, 0);
 }
@@ -1628,11 +1627,14 @@ animate();
 buildSidebar();
 updateDebugHUD();
 
-// После intro-анимации (~4.5 с) показываем сцену и качаем остальное
+// Прогресс загрузки — сразу после появления букв (1.5 с)
+setTimeout(() => {
+  preloadAll();
+}, 1500);
+
+// Зритель запускается после анимации intro
 setTimeout(() => {
   if (!viewerStarted) startViewer();
-  loadingRotate = true;
-  preloadAll();
 }, 4200);
 
 setInterval(() => { if (isTransitioning) isTransitioning = false; }, 10000);
