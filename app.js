@@ -319,6 +319,21 @@ const scenes = {
   }
 };
 
+// Авто-фикс returnYaw: при входе в сцену смотрим на обратную метку + π
+for (const id in scenes) {
+  const s = scenes[id];
+  if (!s.hotspots) continue;
+  for (const hs of s.hotspots) {
+    const tgt = scenes[hs.target];
+    if (!tgt) continue;
+    const back = tgt.hotspots.find(h => h.target === id);
+    if (back) {
+      hs.returnYaw = (back.yaw + Math.PI) % (Math.PI * 2);
+      hs.returnPitch = back.pitch || 0;
+    }
+  }
+}
+
 const sidebarGroups = [
   { label: null, scenes: ['main_entrance', 'security'] },
   { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10', 'floor3_11', 'floor3_12', 'floor3_13'] },
@@ -1148,9 +1163,8 @@ async function navigateTo(id, variantIdx) {
 
     const h = s.hotspots[0];
     if (h) {
-      yaw = h.yaw + Math.PI;
-      pitch = h.pitch || 0;
-      if (yaw > Math.PI * 2) yaw -= Math.PI * 2;
+      yaw = h.returnYaw;
+      pitch = h.returnPitch || 0;
       targetYaw = yaw;
       targetPitch = pitch;
     }
