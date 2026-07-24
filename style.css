@@ -41,12 +41,17 @@ canvas:active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.25);
+  background: rgba(0,0,0,0.5);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   pointer-events: none;
-  animation: introOut 1.2s ease 4.2s forwards;
+  animation: introOut 1.2s ease forwards;
+  animation-play-state: paused;
   overflow: hidden;
+}
+
+#intro.out {
+  animation-play-state: running;
 }
 
 @keyframes introOut {
@@ -893,6 +898,29 @@ canvas:active {
   opacity: 0;
   transition: opacity 0.3s;
   line-height: 1.6;
+}
+
+/* Speed display */
+#speed-display {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1200;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  color: #8f8;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+#speed-display.hidden {
+  opacity: 0;
 }
 
 /* Mobile */

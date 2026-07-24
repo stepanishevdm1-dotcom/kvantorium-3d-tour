@@ -58,7 +58,7 @@ const scenes = {
       { yaw: 0.873, pitch: -0.169, label: 'Охрана', target: 'security',
         returnYaw: 3.248, returnPitch: 0, descend: true, climbText: 'Спускаемся на 1 этаж' },
       { yaw: 4.684, pitch: -0.124, label: 'Третий этаж 1', target: 'floor3_1',
-        returnYaw: 1.604, returnPitch: 0 }
+        returnYaw: 1.543, returnPitch: -0.124 }
     ]
   },
   'floor3_1': {
@@ -68,9 +68,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 4.745, pitch: -0.084, label: 'Третий этаж', target: 'floor3',
-        returnYaw: 1.543, returnPitch: 0 },
+        returnYaw: 1.604, returnPitch: -0.084 },
       { yaw: 1.429, pitch: -0.065, label: 'Третий этаж 2', target: 'floor3_2',
-        returnYaw: 4.744, returnPitch: 0 }
+        returnYaw: 4.571, returnPitch: -0.065 }
     ]
   },
   'floor3_2': {
@@ -80,9 +80,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 1.602, pitch: -0.045, label: 'Третий этаж 1', target: 'floor3_1',
-        returnYaw: 4.571, returnPitch: 0 },
+        returnYaw: 4.744, returnPitch: -0.045 },
       { yaw: 4.660, pitch: -0.080, label: 'Третий этаж 3', target: 'floor3_3',
-        returnYaw: 6.234, returnPitch: 0 }
+        returnYaw: 1.519, returnPitch: -0.080 }
     ]
   },
   'floor3_3': {
@@ -92,9 +92,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 3.092, pitch: -0.056, label: 'Третий этаж 2', target: 'floor3_2',
-        returnYaw: 1.519, returnPitch: 0 },
+        returnYaw: 6.234, returnPitch: -0.056 },
       { yaw: 6.262, pitch: -0.075, label: 'Третий этаж 4', target: 'floor3_4',
-        returnYaw: 4.799, returnPitch: 0 }
+        returnYaw: 3.121, returnPitch: -0.075 }
     ]
   },
   'floor3_4': {
@@ -104,9 +104,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 1.657, pitch: -0.094, label: 'Третий этаж 3', target: 'floor3_3',
-        returnYaw: 3.121, returnPitch: 0 },
+        returnYaw: 4.799, returnPitch: -0.094 },
       { yaw: 3.257, pitch: -0.070, label: 'Третий этаж 5', target: 'floor3_5',
-        returnYaw: 0.030, returnPitch: 0 }
+        returnYaw: 0.116, returnPitch: -0.070 }
     ]
   },
   'floor3_5': {
@@ -116,9 +116,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 3.171, pitch: -0.065, label: 'Третий этаж 4', target: 'floor3_4',
-        returnYaw: 0.116, returnPitch: 0 },
+        returnYaw: 0.030, returnPitch: -0.065 },
       { yaw: 6.248, pitch: -0.105, label: 'Третий этаж 6', target: 'floor3_6',
-        returnYaw: 6.238, returnPitch: 0 }
+        returnYaw: 3.107, returnPitch: -0.105 }
     ]
   },
   'floor3_6': {
@@ -128,11 +128,11 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 3.096, pitch: -0.059, label: 'Третий этаж 5', target: 'floor3_5',
-        returnYaw: 3.107, returnPitch: 0 },
+        returnYaw: 6.238, returnPitch: -0.059 },
       { yaw: 6.282, pitch: -0.056, label: 'Третий этаж 7', target: 'floor3_7',
-        returnYaw: 6.304, returnPitch: 0 },
+        returnYaw: 3.141, returnPitch: -0.056 },
       { yaw: 4.632, pitch: -0.150, label: 'Кабинет Промышленный дизайн', target: 'industrial_design',
-        returnYaw: 3.110, returnPitch: 0 }
+        returnYaw: 1.491, returnPitch: -0.150 }
     ]
   },
   'floor3_7': {
@@ -142,11 +142,11 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 3.162, pitch: -0.040, label: 'Третий этаж 6', target: 'floor3_6',
-        returnYaw: 6.304, returnPitch: 0 },
+        returnYaw: 6.304, returnPitch: -0.040 },
       { yaw: 4.812, pitch: -0.126, label: 'Кабинет Робоквантум', target: 'robo',
-        returnYaw: 5.385, returnPitch: 0 },
+        returnYaw: 1.671, returnPitch: -0.126 },
       { yaw: 6.202, pitch: -0.091, label: 'Третий этаж 8', target: 'floor3_8',
-        returnYaw: 3.062, returnPitch: 0 }
+        returnYaw: 3.061, returnPitch: -0.091 }
     ]
   },
   'industrial_design': {
@@ -156,9 +156,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 6.251, pitch: -0.035, label: 'Третий этаж 6', target: 'floor3_6',
-        returnYaw: 1.491, returnPitch: 0 },
+        returnYaw: 3.110, returnPitch: -0.035 },
       { yaw: 4.762, pitch: -0.030, label: 'Кабинет Промышленный дизайн 2', target: 'industrial_design_2',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 1.621, returnPitch: -0.030 }
     ]
   },
   'industrial_design_2': {
@@ -168,9 +168,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 4.732, pitch: -0.059, label: 'Промышленный дизайн', target: 'industrial_design',
-        returnYaw: 1.621, returnPitch: 0 },
+        returnYaw: 1.591, returnPitch: -0.059 },
       { yaw: 4.018, pitch: -0.101, label: 'Третий этаж 6', target: 'floor3_6',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 0.877, returnPitch: -0.101 }
     ]
   },
   'robo': {
@@ -180,9 +180,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 2.243, pitch: -0.059, label: 'Третий этаж 7', target: 'floor3_7',
-        returnYaw: 1.671, returnPitch: 0 },
+        returnYaw: 5.385, returnPitch: -0.059 },
       { yaw: 0.708, pitch: -0.106, label: 'Третий этаж 8', target: 'floor3_8',
-        returnYaw: 1.432, returnPitch: 0 }
+        returnYaw: 3.850, returnPitch: -0.106 }
     ]
   },
   'floor3_8': {
@@ -192,11 +192,11 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 3.206, pitch: -0.075, label: 'Третий этаж 7', target: 'floor3_7',
-        returnYaw: 3.062, returnPitch: 0 },
+        returnYaw: 6.348, returnPitch: -0.075 },
       { yaw: 4.573, pitch: -0.099, label: 'Кабинет Робоквантум', target: 'robo',
-        returnYaw: 3.850, returnPitch: 0 },
+        returnYaw: 1.432, returnPitch: -0.099 },
       { yaw: 0.019, pitch: -0.056, label: 'Третий этаж 9', target: 'floor3_9',
-        returnYaw: 6.278, returnPitch: 0 }
+        returnYaw: 3.161, returnPitch: -0.056 }
     ]
   },
   'floor3_9': {
@@ -206,11 +206,11 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 3.136, pitch: -0.075, label: 'Третий этаж 8', target: 'floor3_8',
-        returnYaw: 3.161, returnPitch: 0 },
+        returnYaw: 6.278, returnPitch: -0.075 },
       { yaw: 6.257, pitch: -0.040, label: 'Третий этаж 10', target: 'floor3_10',
-        returnYaw: 1.628, returnPitch: 0 },
+        returnYaw: 3.116, returnPitch: -0.040 },
       { yaw: 4.732, pitch: -0.145, label: 'Кабинет 304', target: 'kabinet_304',
-        returnYaw: 6.168, returnPitch: 0 }
+        returnYaw: 1.591, returnPitch: -0.145 }
     ]
   },
   'floor3_10': {
@@ -220,9 +220,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 4.768, pitch: -0.084, label: 'Третий этаж 9', target: 'floor3_9',
-        returnYaw: 3.099, returnPitch: 0 },
+        returnYaw: 1.627, returnPitch: -0.084 },
       { yaw: 0.096, pitch: -0.084, label: 'Третий этаж 11', target: 'floor3_11',
-        returnYaw: 6.302, returnPitch: 0 }
+        returnYaw: 3.238, returnPitch: -0.084 }
     ]
   },
   'floor3_11': {
@@ -232,9 +232,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 3.161, pitch: -0.070, label: 'Третий этаж 10', target: 'floor3_10',
-        returnYaw: 3.238, returnPitch: 0 },
+        returnYaw: 6.303, returnPitch: -0.070 },
       { yaw: 6.276, pitch: -0.070, label: 'Третий этаж 12', target: 'floor3_12',
-        returnYaw: 3.135, returnPitch: 0 }
+        returnYaw: 3.135, returnPitch: -0.070 }
     ]
   },
   'floor3_12': {
@@ -244,9 +244,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 3.135, pitch: 0, label: 'Третий этаж 11', target: 'floor3_11',
-        returnYaw: 3.238, returnPitch: 0 },
+        returnYaw: 6.277, returnPitch: 0 },
       { yaw: 6.222, pitch: -0.126, label: 'Шахматная гостиная', target: 'chess',
-        returnYaw: 0.762, returnPitch: 0 }
+        returnYaw: 3.081, returnPitch: -0.126 }
     ]
   },
   'kabinet_304': {
@@ -256,11 +256,11 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 3.027, pitch: -0.209, label: 'Третий этаж 9', target: 'floor3_9',
-        returnYaw: 1.388, returnPitch: 0 },
+        returnYaw: 6.169, returnPitch: -0.209 },
       { yaw: 0.243, pitch: -0.269, label: 'Коллективная радиостанция', target: 'radio_station',
-        returnYaw: 3.142, returnPitch: 0 },
+        returnYaw: 3.385, returnPitch: -0.269 },
       { yaw: 4.743, pitch: -0.257, label: 'Кабинет Энерджиквантум', target: 'energikvantum',
-        returnYaw: 3.142, returnPitch: 0 }
+        returnYaw: 1.602, returnPitch: -0.257 }
     ]
   },
   'radio_station': {
@@ -270,7 +270,7 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 0, pitch: 0, label: 'Кабинет 304', target: 'kabinet_304',
-        returnYaw: 3.385, returnPitch: 0 }
+        returnYaw: 3.142, returnPitch: 0 }
     ]
   },
   'energikvantum': {
@@ -280,9 +280,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 4.737, pitch: -0.140, label: 'Кабинет 304', target: 'kabinet_304',
-        returnYaw: 1.602, returnPitch: 0 },
+        returnYaw: 1.596, returnPitch: -0.140 },
       { yaw: 3.013, pitch: -0.070, label: 'Энерджиквантум 2', target: 'energikvantum_2',
-        returnYaw: 4.659, returnPitch: 0 }
+        returnYaw: 6.155, returnPitch: -0.070 }
     ]
   },
   'energikvantum_2': {
@@ -292,7 +292,7 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 1.517, pitch: -0.080, label: 'Энерджиквантум', target: 'energikvantum',
-        returnYaw: 6.155, returnPitch: 0 }
+        returnYaw: 4.659, returnPitch: -0.080 }
     ]
   },
   'chess': {
@@ -301,6 +301,8 @@ const scenes = {
       { label: 'Обычная', image: 'шахматная гостиная.jpg' }
     ],
     hotspots: [
+      { yaw: 3.112, pitch: -0.120, label: 'Третий этаж 12', target: 'floor3_12',
+        returnYaw: 6.254, returnPitch: -0.120 }
     ]
   }
 };
@@ -339,6 +341,10 @@ let draggedDistance = 0;
 let imageCache = {};
 let loadingRotate = true;
 let loadingBlocked = true;
+let speedElement = document.getElementById('speed-display');
+let speedBytes = 0;
+let speedLastBytes = 0;
+let speedTimer = 0;
 
 /* ============================================================
    SETTINGS
@@ -590,6 +596,10 @@ function preloadAll() {
 
   progressOverlay.classList.remove('hidden');
   progressFiles.innerHTML = '';
+  speedElement.classList.remove('hidden');
+  speedBytes = 0;
+  speedLastBytes = 0;
+  speedTimer = performance.now();
 
   Promise.all(images.map(img =>
     fetch(encodeURI(img.file), { method: 'HEAD' })
@@ -629,6 +639,14 @@ function preloadAll() {
             if (done) break;
             fileRecv += value.length;
             loadedBytes += value.length;
+            speedBytes += value.length;
+            const now = performance.now();
+            if (now - speedTimer >= 1000) {
+              const mbps = (speedBytes / (1024 * 1024)) / ((now - speedTimer) / 1000);
+              speedElement.textContent = mbps.toFixed(1) + ' MB/s';
+              speedBytes = 0;
+              speedTimer = now;
+            }
             const filePct = fileSize ? Math.round((fileRecv / fileSize) * 100) : 0;
             progSpan.textContent = humanSize(fileRecv) + '/' + humanSize(fileSize) + ' ' + filePct + '%';
             const totalPct = totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 0;
@@ -660,6 +678,7 @@ let viewerStarted = false;
 function onLoadComplete() {
   loadingRotate = false;
   loadingBlocked = false;
+  speedElement.classList.add('hidden');
   document.getElementById('intro')?.style.setProperty('display', 'none');
   progressOverlay.classList.add('done');
   setTimeout(() => {
@@ -1641,6 +1660,11 @@ function animate() {
 animate();
 buildSidebar();
 updateDebugHUD();
+
+// Интро замирает на последнем кадре, пока не загрузится главный вход
+mainTexPromise.then(() => {
+  document.getElementById('intro').classList.add('out');
+});
 
 // Прогресс загрузки — сразу после появления букв (1.5 с)
 setTimeout(() => {
