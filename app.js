@@ -255,6 +255,8 @@ const scenes = {
       { label: 'Обычная', image: '3 этаж 13.jpg' }
     ],
     hotspots: [
+      { yaw: 0.021, pitch: -0.122, label: 'Шахматная гостиная', target: 'chess',
+        returnYaw: 3.163, returnPitch: -0.122 }
     ]
   },
   'kabinet_304': {
