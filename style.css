@@ -291,6 +291,39 @@ canvas:active {
   transition: width 0.3s ease;
 }
 
+#progress-files {
+  width: 100%;
+  max-height: 140px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pfile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  color: #bbb;
+  padding: 2px 0;
+}
+
+.pfile-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  padding-right: 8px;
+}
+
+.pfile-progress {
+  font-family: 'Courier New', monospace;
+  color: #8f8;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 /* ===== UI — сверху ===== */
 #ui {
   position: fixed;
@@ -730,8 +763,11 @@ canvas:active {
   }
   #progress-overlay {
     bottom: 24px;
-    padding: 10px 20px;
+    padding: 10px 16px;
     min-width: 160px;
+  }
+  #progress-files {
+    max-height: 100px;
   }
 }
 

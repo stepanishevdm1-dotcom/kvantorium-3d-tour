@@ -542,6 +542,7 @@ let mainTexPromise = loadTexture(scenes.main_entrance.variants[0].image).then(te
 const progressOverlay = document.getElementById('progress-overlay');
 const progressText = document.getElementById('progress-text');
 const progressBar = document.getElementById('progress-bar');
+const progressFiles = document.getElementById('progress-files');
 
 function updateProgress(pct, loaded, total) {
   progressText.textContent = t('loading') + pct + '% (' + humanSize(loaded) + '/' + humanSize(total) + ')';
@@ -575,6 +576,7 @@ function preloadAll() {
   if (total === 0) return;
 
   progressOverlay.classList.remove('hidden');
+  progressFiles.innerHTML = '';
 
   Promise.all(images.map(img =>
     fetch(encodeURI(img.file), { method: 'HEAD' })
@@ -588,24 +590,42 @@ function preloadAll() {
     for (let i = 0; i < images.length; i++) {
       const img = images[i];
       if (img.file === mainFile) { loadedFiles++; continue; }
+      const fileSize = sizes[i];
       const url = encodeURI(img.file);
+
+      const row = document.createElement('div');
+      row.className = 'pfile';
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'pfile-name';
+      nameSpan.textContent = img.label;
+      const progSpan = document.createElement('span');
+      progSpan.className = 'pfile-progress';
+      progSpan.textContent = '0/' + humanSize(fileSize) + ' 0%';
+      row.appendChild(nameSpan);
+      row.appendChild(progSpan);
+      progressFiles.appendChild(row);
 
       (async () => {
         try {
           const response = await fetch(url);
           const reader = response.body.getReader();
+          let fileRecv = 0;
 
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
+            fileRecv += value.length;
             loadedBytes += value.length;
-            const pct = totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 0;
-            updateProgress(pct, loadedBytes, totalBytes);
+            const filePct = fileSize ? Math.round((fileRecv / fileSize) * 100) : 0;
+            progSpan.textContent = humanSize(fileRecv) + '/' + humanSize(fileSize) + ' ' + filePct + '%';
+            const totalPct = totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 0;
+            updateProgress(totalPct, loadedBytes, totalBytes);
           }
 
           loadedFiles++;
-          const pct = totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 100;
-          updateProgress(pct, loadedBytes, totalBytes);
+          progSpan.textContent = humanSize(fileSize) + '/' + humanSize(fileSize) + ' 100%';
+          const totalPct = totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 100;
+          updateProgress(totalPct, loadedBytes, totalBytes);
 
           if (loadedFiles === total) {
             loadingRotate = false;
@@ -615,6 +635,7 @@ function preloadAll() {
           }
         } catch (e) {
           loadedFiles++;
+          progSpan.textContent = 'Ошибка';
           if (loadedFiles === total) {
             loadingRotate = false;
             setTimeout(() => {
