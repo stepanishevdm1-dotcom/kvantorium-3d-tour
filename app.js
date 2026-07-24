@@ -256,33 +256,7 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 0.021, pitch: -0.122, label: 'Шахматная гостиная', target: 'chess',
-        returnYaw: 3.163, returnPitch: -0.122 },
-      { yaw: 3.117, pitch: -0.072, label: 'Третий этаж 14', target: 'floor3_14',
-        returnYaw: 0, returnPitch: 0 }
-    ]
-  },
-  'floor3_14': {
-    name: 'Третий этаж 14',
-    variants: [
-      { label: 'Обычная', image: '3 этаж 14.jpg' }
-    ],
-    hotspots: [
-    ]
-  },
-  'lecture_hall': {
-    name: 'Кабинет Лекторий',
-    variants: [
-      { label: 'Обычная', image: 'Кабинет Лекторий.jpg' }
-    ],
-    hotspots: [
-    ]
-  },
-  'lecture_hall_2': {
-    name: 'Кабинет Лекторий 2',
-    variants: [
-      { label: 'Обычная', image: 'Кабинет Лекторий 2.jpg' }
-    ],
-    hotspots: [
+        returnYaw: 3.163, returnPitch: -0.122 }
     ]
   },
   'kabinet_304': {
@@ -362,8 +336,8 @@ for (const id in scenes) {
 
 const sidebarGroups = [
   { label: null, scenes: ['main_entrance', 'security'] },
-  { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10', 'floor3_11', 'floor3_12', 'floor3_13', 'floor3_14'] },
-  { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo', 'kabinet_304', 'radio_station', 'energikvantum', 'energikvantum_2', 'chess', 'lecture_hall', 'lecture_hall_2'] }
+  { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10', 'floor3_11', 'floor3_12', 'floor3_13'] },
+  { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo', 'kabinet_304', 'radio_station', 'energikvantum', 'energikvantum_2', 'chess'] }
 ];
 
 const DEFAULT_SCENE = 'main_entrance';
@@ -501,9 +475,6 @@ const sceneNamesEn = {
   'floor3_11': 'Floor 3 \u2014 11',
   'floor3_12': 'Floor 3 \u2014 12',
   'floor3_13': 'Floor 3 \u2014 13',
-  'floor3_14': 'Floor 3 \u2014 14',
-  'lecture_hall': 'Lecture Hall',
-  'lecture_hall_2': 'Lecture Hall 2',
   'industrial_design': 'Industrial Design Room',
   'industrial_design_2': 'Industrial Design Room 2',
   'robo': 'Roboquantum Room',
@@ -543,10 +514,6 @@ const hotspotLabelEn = {
   '\u041f\u043e\u0434\u043d\u0438\u043c\u0430\u0435\u043c\u0441\u044f \u043d\u0430 3 \u044d\u0442\u0430\u0436': 'Going up to Floor 3',
   '\u0421\u043f\u0443\u0441\u043a\u0430\u0435\u043c\u0441\u044f \u043d\u0430 1 \u044d\u0442\u0430\u0436': 'Going down to Floor 1',
   '\u0428\u0430\u0445\u043c\u0430\u0442\u043d\u0430\u044f \u0433\u043e\u0441\u0442\u0438\u043d\u0430\u044f': 'Chess Lounge',
-  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 13': 'Floor 3 \u2014 13',
-  '\u0422\u0440\u0435\u0442\u0438\u0439 \u044d\u0442\u0430\u0436 14': 'Floor 3 \u2014 14',
-  '\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u041b\u0435\u043a\u0442\u043e\u0440\u0438\u0439': 'Lecture Hall',
-  '\u041a\u0430\u0431\u0438\u043d\u0435\u0442 \u041b\u0435\u043a\u0442\u043e\u0440\u0438\u0439 2': 'Lecture Hall 2',
 };
 
 const variantLabelEn = {
