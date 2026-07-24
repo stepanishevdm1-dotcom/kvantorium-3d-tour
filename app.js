@@ -788,6 +788,7 @@ async function setScene(id, variantIdx, preserveRotation = false) {
 
 function startViewer() {
   viewerStarted = true;
+  applySceneFilters();
   // Плавное проявление первой сцены
   setScene(DEFAULT_SCENE, 0).then(() => {
     sphere.material.transparent = true;
@@ -809,6 +810,7 @@ function startViewer() {
    HOTSPOTS
    ============================================================ */
 let hotspotMeshes = [];
+let hotspotSprites = [];
 
 function createHotspotSprite(label) {
   const canvas = document.createElement('canvas');
@@ -921,6 +923,8 @@ function createHotspotSprite(label) {
 function buildHotspots() {
   for (const m of hotspotMeshes) scene.remove(m);
   hotspotMeshes = [];
+  for (const s of hotspotSprites) scene.remove(s);
+  hotspotSprites = [];
 
   const s = scenes[currentSceneId];
   if (!s) return;
@@ -933,6 +937,7 @@ function buildHotspots() {
     const sprite = createHotspotSprite(getHSLabel(hs.label));
     sprite.position.copy(pos);
     scene.add(sprite);
+    hotspotSprites.push(sprite);
 
     // Hit mesh по форме метки
     const style = settings.hotspotStyle;
@@ -1037,6 +1042,7 @@ function onPointerMove(e) {
   const { x, y } = getClientXY(e);
   const dx = x - prevPointer.x;
   const dy = y - prevPointer.y;
+  draggedDistance += Math.abs(dx) + Math.abs(dy);
   const sens = 0.005 * (fov / 75) * settings.mouseSensitivity;
   targetYaw += dx * sens;
   targetPitch += dy * sens;
