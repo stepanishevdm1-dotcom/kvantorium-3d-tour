@@ -367,6 +367,7 @@ const translations = {
     language: 'Язык / Language',
     px: 'px',
     s: 'с',
+    fullscreen: 'Полноэкранный режим',
   },
   en: {
     loading: 'Loading\u2026 ',
@@ -391,6 +392,7 @@ const translations = {
     language: 'Language / Язык',
     px: 'px',
     s: 's',
+    fullscreen: 'Fullscreen',
   }
 };
 
@@ -537,16 +539,14 @@ let mainTexPromise = loadTexture(scenes.main_entrance.variants[0].image).then(te
 /* ============================================================
    LOADING / PRELOAD
    ============================================================ */
-const preloadList = document.getElementById('preload-list');
-const bgProgress = document.getElementById('bg-progress');
-const bgProgressList = document.getElementById('bg-progress-list');
-const loadingStatus = document.getElementById('loading-status');
-const loadingEl = document.getElementById('loading');
-const loadingHint = document.getElementById('loading-hint');
-const bgLoadBtn = document.getElementById('bg-load-btn');
-loadingStatus.textContent = t('loading_initial');
-loadingHint.textContent = t('vpn_hint');
-bgLoadBtn.textContent = t('bg_load');
+const progressOverlay = document.getElementById('progress-overlay');
+const progressText = document.getElementById('progress-text');
+const progressBar = document.getElementById('progress-bar');
+
+function updateProgress(pct, loaded, total) {
+  progressText.textContent = t('loading') + pct + '% (' + humanSize(loaded) + '/' + humanSize(total) + ')';
+  progressBar.style.width = pct + '%';
+}
 
 function getAllImages() {
   const imgs = [];
@@ -572,13 +572,10 @@ function preloadAll() {
   let totalBytes = 0;
   let loadedBytes = 0;
 
-  if (total === 0) {
-    loadingEl.classList.add('hidden');
-    setTimeout(startViewer, 100);
-    return;
-  }
+  if (total === 0) return;
 
-  // Узнаём размеры всех файлов перед загрузкой
+  progressOverlay.classList.remove('hidden');
+
   Promise.all(images.map(img =>
     fetch(encodeURI(img.file), { method: 'HEAD' })
       .then(r => parseInt(r.headers.get('content-length') || 0))
@@ -586,74 +583,43 @@ function preloadAll() {
   )).then(sizes => {
     totalBytes = sizes.reduce((a, b) => a + b, 0);
 
-    // Главный вход уже загружен для фона — не качаем повторно
     const mainFile = scenes.main_entrance.variants[0].image;
 
     for (let i = 0; i < images.length; i++) {
       const img = images[i];
       if (img.file === mainFile) { loadedFiles++; continue; }
-      const fileSize = sizes[i];
-
-      function createItem() {
-        const el = document.createElement('div');
-        el.className = 'preload-item' + (img.variant ? ' variant' : '');
-        const ns = document.createElement('span');
-        ns.className = 'name';
-        ns.textContent = img.label + (img.variant ? ' (' + img.variant + ')' : '');
-        const ps = document.createElement('span');
-        ps.className = 'progress';
-        ps.textContent = '0B/' + humanSize(fileSize) + ' 0%';
-        el.appendChild(ns);
-        el.appendChild(ps);
-        return el;
-      }
-      const item = createItem();
-      preloadList.appendChild(item);
-      const bgItem = createItem();
-      bgProgressList.appendChild(bgItem);
-      const progSpans = [item.querySelector('.progress'), bgItem.querySelector('.progress')];
-
       const url = encodeURI(img.file);
-      const cacheKey = img.file;
 
       (async () => {
         try {
           const response = await fetch(url);
           const reader = response.body.getReader();
-          let recv = 0;
 
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
-            recv += value.length;
-            const filePct = fileSize ? Math.round((recv / fileSize) * 100) : 0;
-            const txt = humanSize(recv) + '/' + humanSize(fileSize) + ' ' + filePct + '%';
-            for (const ps of progSpans) ps.textContent = txt;
             loadedBytes += value.length;
-            loadingStatus.textContent = t('loading') + humanSize(loadedBytes) + '/' + humanSize(totalBytes) + ' ' + (totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 0) + '%';
+            const pct = totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 0;
+            updateProgress(pct, loadedBytes, totalBytes);
           }
 
           loadedFiles++;
-          const doneTxt = humanSize(fileSize) + '/' + humanSize(fileSize) + ' 100%';
-          for (const ps of progSpans) ps.textContent = doneTxt;
+          const pct = totalBytes ? Math.round((loadedBytes / totalBytes) * 100) : 100;
+          updateProgress(pct, loadedBytes, totalBytes);
 
           if (loadedFiles === total) {
-            loadingStatus.textContent = t('loading') + humanSize(totalBytes) + '/' + humanSize(totalBytes) + ' 100%';
-            bgProgress.classList.add('hidden');
+            loadingRotate = false;
             setTimeout(() => {
-              loadingEl.classList.add('hidden');
-              if (!viewerStarted) startViewer();
-            }, 400);
+              progressOverlay.classList.add('hidden');
+            }, 500);
           }
         } catch (e) {
           loadedFiles++;
-          for (const ps of progSpans) ps.textContent = t('error');
           if (loadedFiles === total) {
-            bgProgress.classList.add('hidden');
+            loadingRotate = false;
             setTimeout(() => {
-              loadingEl.classList.add('hidden');
-              if (!viewerStarted) startViewer();
-            }, 400);
+              progressOverlay.classList.add('hidden');
+            }, 500);
           }
         }
       })();
@@ -662,13 +628,6 @@ function preloadAll() {
 }
 
 let viewerStarted = false;
-
-bgLoadBtn.addEventListener('click', () => {
-  bgLoadBtn.remove();
-  loadingEl.classList.add('hidden');
-  bgProgress.classList.remove('hidden');
-  startViewer();
-});
 
 /* ============================================================
    TEXTURE LOADING
@@ -888,6 +847,7 @@ function getClientXY(e) {
 
 function onPointerDown(e) {
   if (isTransitioning) return;
+  loadingRotate = false;
   const { x, y } = getClientXY(e);
   draggedDistance = 0;
   prevPointer.x = x;
@@ -1429,6 +1389,32 @@ function buildSettingsPanel() {
     });
     g.appendChild(div);
   });
+
+  // 10. Fullscreen
+  addGroup(t('fullscreen'), (g) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'setting-toggle';
+    const l = document.createElement('span');
+    l.className = 'setting-toggle-label';
+    l.textContent = document.fullscreenElement ? t('on') : t('off');
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.checked = !!document.fullscreenElement;
+    wrap.appendChild(l);
+    wrap.appendChild(input);
+    g.appendChild(wrap);
+    input.addEventListener('change', () => {
+      if (input.checked) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+      }
+    });
+    document.addEventListener('fullscreenchange', () => {
+      input.checked = !!document.fullscreenElement;
+      l.textContent = input.checked ? t('on') : t('off');
+    });
+  });
 }
 
 function showSettings() {
@@ -1621,8 +1607,10 @@ animate();
 buildSidebar();
 updateDebugHUD();
 
-// После intro-анимации (~4.5 с) запускаем загрузку остальных панорам
+// После intro-анимации (~4.5 с) показываем сцену и качаем остальное
 setTimeout(() => {
+  if (!viewerStarted) startViewer();
+  loadingRotate = true;
   preloadAll();
 }, 4200);
 
