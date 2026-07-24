@@ -41,22 +41,50 @@ canvas:active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.82);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
   pointer-events: none;
-  animation: introOut 1.6s cubic-bezier(0.65,0,0.35,1) forwards;
-  animation-play-state: paused;
   overflow: hidden;
 }
 
-#intro.out {
+/* Затемнение/блюр фона — анимируется, буквы остаются видимы */
+#intro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  animation: introOut 1.6s cubic-bezier(0.65,0,0.35,1) forwards;
+  animation-play-state: paused;
+  z-index: 1;
+}
+
+#intro.out::before {
   animation-play-state: running;
+}
+
+/* Буквы и субтитр ПОВЕРХ затемнения */
+#intro-letters,
+#intro-sub,
+#intro-effects {
+  position: relative;
+  z-index: 2;
 }
 
 @keyframes introOut {
   0%   { opacity: 1; backdrop-filter: blur(2px); }
   100% { opacity: 0; backdrop-filter: blur(0); }
+}
+
+/* Буквы остаются после introOut, пока не скроет onLoadComplete */
+#intro-letters.hidden,
+#intro-sub.hidden {
+  opacity: 0 !important;
+  transition: opacity 0.4s ease;
+}
+
+#intro-gradient,
+.bg-shape {
+  z-index: 2;
 }
 
 #intro-gradient,

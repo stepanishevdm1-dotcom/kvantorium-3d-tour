@@ -357,7 +357,11 @@ const SETTINGS_DEFAULTS = {
   mouseSensitivity: 1,
   animations: true,
   transitionSpeed: 2500,
-  language: 'ru'
+  language: 'ru',
+  sceneBrightness: 100,
+  sceneContrast: 100,
+  sceneSaturation: 100,
+  sceneSharpness: 100
 };
 
 const translations = {
@@ -377,6 +381,10 @@ const translations = {
     mouse_sensitivity: 'Чувствительность мыши',
     animations: 'Анимации между точками',
     transition_speed: 'Скорость перехода',
+    scene_brightness: 'Яркость',
+    scene_contrast: 'Контрастность',
+    scene_saturation: 'Насыщенность',
+    scene_sharpness: 'Резкость',
     on: 'Вкл',
     off: 'Выкл',
     debug_on: 'Отладка включена',
@@ -402,6 +410,10 @@ const translations = {
     mouse_sensitivity: 'Mouse Sensitivity',
     animations: 'Transition Animations',
     transition_speed: 'Transition Speed',
+    scene_brightness: 'Brightness',
+    scene_contrast: 'Contrast',
+    scene_saturation: 'Saturation',
+    scene_sharpness: 'Sharpness',
     on: 'On',
     off: 'Off',
     debug_on: 'Debug enabled',
@@ -679,12 +691,17 @@ function onLoadComplete() {
   loadingRotate = false;
   loadingBlocked = false;
   speedElement.classList.add('hidden');
-  document.getElementById('intro')?.style.setProperty('display', 'none');
-  progressOverlay.classList.add('done');
+  // Гасим буквы (они висели всю загрузку)
+  document.getElementById('intro-letters')?.classList.add('hidden');
+  document.getElementById('intro-sub')?.classList.add('hidden');
   setTimeout(() => {
-    progressOverlay.classList.add('hidden');
-    if (!viewerStarted) startViewer();
-  }, 600);
+    document.getElementById('intro')?.style.setProperty('display', 'none');
+    progressOverlay.classList.add('done');
+    setTimeout(() => {
+      progressOverlay.classList.add('hidden');
+      if (!viewerStarted) startViewer();
+    }, 600);
+  }, 500);
 }
 
 /* ============================================================
@@ -1244,6 +1261,14 @@ function rebuildHotspots() {
 
 function applySettings() {
   rebuildHotspots();
+  const canvas = renderer.domElement;
+  const b = settings.sceneBrightness / 100;
+  const c = settings.sceneContrast / 100;
+  const s = settings.sceneSaturation / 100;
+  const sh = settings.sceneSharpness / 100;
+  canvas.style.filter =
+    `brightness(${b}) contrast(${c}) saturate(${s})` +
+    (sh !== 1 ? ` contrast(${1 + (sh - 1) * 0.3}) brightness(${1 + (sh - 1) * 0.1})` : '');
 }
 
 function rebuildLanguageUI() {
@@ -1420,7 +1445,39 @@ function buildSettingsPanel() {
     });
   });
 
-  // 9. Language selector
+  // 9. Scene filters
+  const filterKeys = [
+    { key: 'sceneBrightness', label: 'scene_brightness', min: 20, max: 200, step: 5, unit: '%' },
+    { key: 'sceneContrast', label: 'scene_contrast', min: 20, max: 200, step: 5, unit: '%' },
+    { key: 'sceneSaturation', label: 'scene_saturation', min: 0, max: 300, step: 5, unit: '%' },
+    { key: 'sceneSharpness', label: 'scene_sharpness', min: 0, max: 200, step: 5, unit: '%' }
+  ];
+  filterKeys.forEach(fk => {
+    addGroup(t(fk.label), (g) => {
+      const input = document.createElement('input');
+      input.type = 'range';
+      input.min = fk.min;
+      input.max = fk.max;
+      input.step = fk.step;
+      input.value = settings[fk.key];
+      const val = document.createElement('span');
+      val.style.cssText = 'color:#aaa;font-size:0.72rem;margin-left:6px';
+      val.textContent = settings[fk.key] + fk.unit;
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'display:flex;align-items:center';
+      wrap.appendChild(input);
+      wrap.appendChild(val);
+      g.appendChild(wrap);
+      input.addEventListener('input', () => {
+        settings[fk.key] = parseInt(input.value);
+        val.textContent = settings[fk.key] + fk.unit;
+        saveSettings();
+        applySettings();
+      });
+    });
+  });
+
+  // 10. Language selector
   addGroup(t('language'), (g) => {
     const div = document.createElement('div');
     div.className = 'setting-style-options';
