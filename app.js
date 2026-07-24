@@ -1235,11 +1235,10 @@ const sidebar = document.getElementById('sidebar');
 const sidebarList = document.getElementById('sidebar-list');
 const overlay = document.getElementById('overlay');
 
-// Колёсико над списком сцен крутит панораму (даже во время загрузки)
-sidebarList.addEventListener('wheel', e => {
-  e.preventDefault();
-  e.stopPropagation();
+// Колёсико над боковой панелью вращает панораму (не скроллит список)
+sidebar.addEventListener('wheel', e => {
   targetYaw += e.deltaY * 0.004;
+  e.preventDefault();
 }, { passive: false });
 
 function buildSidebar() {
