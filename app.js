@@ -771,7 +771,21 @@ async function setScene(id, variantIdx, preserveRotation = false) {
 
 function startViewer() {
   viewerStarted = true;
-  setScene(DEFAULT_SCENE, 0);
+  // Плавное проявление первой сцены
+  setScene(DEFAULT_SCENE, 0).then(() => {
+    sphere.material.transparent = true;
+    sphere.material.opacity = 0;
+    const start = performance.now();
+    const dur = 1000;
+    function fadeIn(now) {
+      const t = Math.min((now - start) / dur, 1);
+      sphere.material.opacity = t;
+      sphere.material.needsUpdate = true;
+      if (t < 1) requestAnimationFrame(fadeIn);
+      else sphere.material.transparent = false;
+    }
+    requestAnimationFrame(fadeIn);
+  });
 }
 
 /* ============================================================
@@ -1215,6 +1229,13 @@ const sidebarBtn = document.getElementById('sidebar-btn');
 const sidebar = document.getElementById('sidebar');
 const sidebarList = document.getElementById('sidebar-list');
 const overlay = document.getElementById('overlay');
+
+// Колёсико над списком сцен крутит панораму
+sidebarList.addEventListener('wheel', e => {
+  if (loadingBlocked) return;
+  e.preventDefault();
+  targetYaw += e.deltaY * 0.004;
+}, { passive: false });
 
 function buildSidebar() {
   sidebarList.innerHTML = '';
