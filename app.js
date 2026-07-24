@@ -249,6 +249,14 @@ const scenes = {
         returnYaw: 3.081, returnPitch: -0.126 }
     ]
   },
+  'floor3_13': {
+    name: 'Третий этаж 13',
+    variants: [
+      { label: 'Обычная', image: '3 этаж 13.jpg' }
+    ],
+    hotspots: [
+    ]
+  },
   'kabinet_304': {
     name: 'Кабинет 304',
     variants: [
@@ -302,14 +310,16 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 3.112, pitch: -0.120, label: 'Третий этаж 12', target: 'floor3_12',
-        returnYaw: 6.254, returnPitch: -0.120 }
+        returnYaw: 6.254, returnPitch: -0.120 },
+      { yaw: 4.736, pitch: -0.037, label: 'Третий этаж 13', target: 'floor3_13',
+        returnYaw: 1.596, returnPitch: -0.037 }
     ]
   }
 };
 
 const sidebarGroups = [
   { label: null, scenes: ['main_entrance', 'security'] },
-  { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10', 'floor3_11', 'floor3_12'] },
+  { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10', 'floor3_11', 'floor3_12', 'floor3_13'] },
   { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo', 'kabinet_304', 'radio_station', 'energikvantum', 'energikvantum_2', 'chess'] }
 ];
 
@@ -447,6 +457,7 @@ const sceneNamesEn = {
   'floor3_10': 'Floor 3 \u2014 10',
   'floor3_11': 'Floor 3 \u2014 11',
   'floor3_12': 'Floor 3 \u2014 12',
+  'floor3_13': 'Floor 3 \u2014 13',
   'industrial_design': 'Industrial Design Room',
   'industrial_design_2': 'Industrial Design Room 2',
   'robo': 'Roboquantum Room',
