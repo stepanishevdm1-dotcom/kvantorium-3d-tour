@@ -32,7 +32,7 @@ canvas:active {
   border: 1px solid rgba(255,255,255,0.12);
 }
 
-/* ===== Intro — стеклянный оверлей ===== */
+/* ===== Intro ===== */
 #intro {
   position: fixed;
   inset: 0;
@@ -41,11 +41,11 @@ canvas:active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: transparent;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   pointer-events: none;
-  animation: introOut 1.2s ease forwards;
+  animation: introOut 1.6s cubic-bezier(0.65,0,0.35,1) forwards;
   animation-play-state: paused;
   overflow: hidden;
 }
@@ -54,9 +54,39 @@ canvas:active {
   animation-play-state: running;
 }
 
+/* Vignette + dark overlay поверх панорамы */
+#intro::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.75) 100%),
+    rgba(0,0,0,0.25);
+  pointer-events: none;
+}
+
 @keyframes introOut {
-  0%   { opacity: 1; backdrop-filter: blur(6px); }
+  0%   { opacity: 1; backdrop-filter: blur(4px); }
   100% { opacity: 0; backdrop-filter: blur(0); }
+}
+
+/* Intro particles */
+#particles-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Intro content above particles */
+#intro > *:not(#particles-canvas):not(#intro-gradient):not([class^="bg-shape"]) {
+  position: relative;
+  z-index: 2;
+}
+
+#intro-gradient,
+.bg-shape {
+  z-index: 1;
 }
 
 /* --- Анимированный градиент --- */
@@ -233,6 +263,7 @@ canvas:active {
   letter-spacing: 0.04em;
   line-height: 1;
   animation: floatUp 1.2s ease 2s forwards;
+  filter: drop-shadow(0 0 20px rgba(102,126,234,0.3));
 }
 
 @keyframes floatUp {
@@ -249,7 +280,7 @@ canvas:active {
   background-clip: text;
   opacity: 0;
   will-change: transform, filter, opacity;
-}
+
 
 /* К — вылетает слева-сверху, крутится, сильное размытие */
 #intro-letters span:nth-child(1) {
@@ -381,12 +412,18 @@ canvas:active {
 /* --- Subtitle --- */
 #intro-sub {
   font-size: clamp(0.8rem, 2.5vw, 1.1rem);
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.6);
   margin-top: 24px;
   letter-spacing: 0.4em;
   text-transform: uppercase;
   opacity: 0;
-  animation: subIn 0.8s ease 1.8s forwards;
+  animation: subFadeIn 0.8s ease 1.2s forwards;
+  text-shadow: 0 0 30px rgba(102,126,234,0.2);
+}
+
+@keyframes subFadeIn {
+  0%   { opacity: 0; transform: translateY(12px); filter: blur(6px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
 @keyframes subIn {
