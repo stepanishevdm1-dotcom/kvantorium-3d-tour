@@ -1655,57 +1655,6 @@ function animate() {
 }
 
 /* ============================================================
-   PARTICLES
-   ============================================================ */
-(function initParticles() {
-  const canvas = document.getElementById('particles-canvas');
-  const ctx = canvas.getContext('2d');
-  let w, h, particles = [];
-  const COUNT = 80;
-
-  function resize() {
-    w = canvas.width = canvas.offsetWidth;
-    h = canvas.height = canvas.offsetHeight;
-  }
-  window.addEventListener('resize', resize);
-  resize();
-
-  for (let i = 0; i < COUNT; i++) {
-    particles.push({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      r: Math.random() * 1.5 + 0.5,
-      dx: (Math.random() - 0.5) * 0.3,
-      dy: (Math.random() - 0.5) * 0.3,
-      o: Math.random() * 0.5 + 0.2
-    });
-  }
-
-  let running = true;
-  const intro = document.getElementById('intro');
-  const obs = new MutationObserver(() => {
-    if (intro.style.display === 'none') { running = false; obs.disconnect(); }
-  });
-  obs.observe(intro, { attributes: true, attributeFilter: ['style'] });
-
-  function draw() {
-    if (!running) return;
-    ctx.clearRect(0, 0, w, h);
-    for (const p of particles) {
-      p.x += p.dx; p.y += p.dy;
-      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
-      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${p.o})`;
-      ctx.fill();
-    }
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
-
-/* ============================================================
    INIT
    ============================================================ */
 animate();

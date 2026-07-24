@@ -41,9 +41,9 @@ canvas:active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   pointer-events: none;
   animation: introOut 1.6s cubic-bezier(0.65,0,0.35,1) forwards;
   animation-play-state: paused;
@@ -54,34 +54,9 @@ canvas:active {
   animation-play-state: running;
 }
 
-/* Vignette + dark overlay поверх панорамы */
-#intro::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.75) 100%),
-    rgba(0,0,0,0.25);
-  pointer-events: none;
-}
-
 @keyframes introOut {
-  0%   { opacity: 1; backdrop-filter: blur(4px); }
+  0%   { opacity: 1; backdrop-filter: blur(2px); }
   100% { opacity: 0; backdrop-filter: blur(0); }
-}
-
-/* Intro particles */
-#particles-canvas {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* Intro content above particles */
-#intro > *:not(#particles-canvas):not(#intro-gradient):not([class^="bg-shape"]) {
-  position: relative;
-  z-index: 2;
 }
 
 #intro-gradient,
