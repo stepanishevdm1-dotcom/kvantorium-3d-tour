@@ -354,6 +354,7 @@ const SETTINGS_DEFAULTS = {
   textSize: 44,
   textColor: '#ffffff',
   markerColor: '#ffffff',
+  markerSize: 100,
   mouseSensitivity: 1,
   animations: true,
   transitionSpeed: 2500,
@@ -378,6 +379,7 @@ const translations = {
     text_size: 'Размер текста',
     text_color: 'Цвет текста',
     marker_color: 'Цвет меток',
+    marker_size: 'Размер меток',
     mouse_sensitivity: 'Чувствительность мыши',
     animations: 'Анимации между точками',
     transition_speed: 'Скорость перехода',
@@ -388,6 +390,7 @@ const translations = {
     on: 'Вкл',
     off: 'Выкл',
     reset: 'По умолчанию',
+    compare: 'Зажать — оригинал',
     debug_on: 'Отладка включена',
     copied: 'Скопировано: ',
     language: 'Язык / Language',
@@ -408,6 +411,7 @@ const translations = {
     text_size: 'Text Size',
     text_color: 'Text Color',
     marker_color: 'Marker Color',
+    marker_size: 'Marker Size',
     mouse_sensitivity: 'Mouse Sensitivity',
     animations: 'Transition Animations',
     transition_speed: 'Transition Speed',
@@ -776,80 +780,82 @@ function createHotspotSprite(label) {
   const tColor = settings.textColor;
   const tSize = settings.textSize;
   const mColor = settings.markerColor;
+  const ms = settings.markerSize / 100;
+  const mr = (v) => Math.round(v * ms); // scale helper
 
   if (style === 0) {
     ctx.beginPath();
-    ctx.arc(cx, cy, 60, 0, Math.PI * 2);
+    ctx.arc(cx, cy, mr(60), 0, Math.PI * 2);
     ctx.strokeStyle = '#000';
-    ctx.lineWidth = 30;
+    ctx.lineWidth = mr(30);
     ctx.stroke();
     ctx.beginPath();
-    ctx.arc(cx, cy, 46, 0, Math.PI * 2);
+    ctx.arc(cx, cy, mr(46), 0, Math.PI * 2);
     ctx.strokeStyle = mColor;
-    ctx.lineWidth = 12;
+    ctx.lineWidth = mr(12);
     ctx.stroke();
     ctx.beginPath();
-    ctx.arc(cx, cy, 24, 0, Math.PI * 2);
+    ctx.arc(cx, cy, mr(24), 0, Math.PI * 2);
     ctx.strokeStyle = '#000';
-    ctx.lineWidth = 24;
+    ctx.lineWidth = mr(24);
     ctx.stroke();
     ctx.beginPath();
-    ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+    ctx.arc(cx, cy, mr(10), 0, Math.PI * 2);
     ctx.strokeStyle = mColor;
-    ctx.lineWidth = 6;
+    ctx.lineWidth = mr(6);
     ctx.stroke();
   } else if (style === 1) {
     ctx.beginPath();
-    ctx.arc(cx, cy, 28, 0, Math.PI * 2);
+    ctx.arc(cx, cy, mr(28), 0, Math.PI * 2);
     ctx.strokeStyle = '#000';
-    ctx.lineWidth = 18;
+    ctx.lineWidth = mr(18);
     ctx.stroke();
     ctx.beginPath();
-    ctx.arc(cx, cy, 16, 0, Math.PI * 2);
+    ctx.arc(cx, cy, mr(16), 0, Math.PI * 2);
     ctx.strokeStyle = mColor;
-    ctx.lineWidth = 8;
+    ctx.lineWidth = mr(8);
     ctx.stroke();
     ctx.beginPath();
-    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+    ctx.arc(cx, cy, mr(6), 0, Math.PI * 2);
     ctx.fillStyle = mColor;
     ctx.fill();
   } else if (style === 2) {
-    const r = 28;
+    const r = mr(28);
     ctx.beginPath();
-    ctx.roundRect(cx - r, cy - r, r * 2, r * 2, 10);
+    ctx.roundRect(cx - r, cy - r, r * 2, r * 2, mr(10));
     ctx.strokeStyle = '#000';
-    ctx.lineWidth = 18;
+    ctx.lineWidth = mr(18);
     ctx.stroke();
     ctx.beginPath();
-    ctx.roundRect(cx - r + 4, cy - r + 4, (r - 4) * 2, (r - 4) * 2, 8);
+    ctx.roundRect(cx - r + mr(4), cy - r + mr(4), (r - mr(4)) * 2, (r - mr(4)) * 2, mr(8));
     ctx.strokeStyle = mColor;
-    ctx.lineWidth = 8;
+    ctx.lineWidth = mr(8);
     ctx.stroke();
     ctx.beginPath();
-    ctx.roundRect(cx - 8, cy - 8, 16, 16, 4);
+    ctx.roundRect(cx - mr(8), cy - mr(8), mr(16), mr(16), mr(4));
     ctx.fillStyle = mColor;
     ctx.fill();
   } else {
     ctx.beginPath();
-    ctx.moveTo(cx, cy - 35);
-    ctx.lineTo(cx + 30, cy);
-    ctx.lineTo(cx, cy + 35);
-    ctx.lineTo(cx - 30, cy);
+    ctx.moveTo(cx, cy - mr(35));
+    ctx.lineTo(cx + mr(30), cy);
+    ctx.lineTo(cx, cy + mr(35));
+    ctx.lineTo(cx - mr(30), cy);
     ctx.closePath();
     ctx.strokeStyle = '#000';
-    ctx.lineWidth = 18;
+    ctx.lineWidth = mr(18);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(cx, cy - 27);
-    ctx.lineTo(cx + 24, cy);
-    ctx.lineTo(cx, cy + 27);
-    ctx.lineTo(cx - 24, cy);
+    ctx.moveTo(cx, cy - mr(27));
+    ctx.lineTo(cx + mr(24), cy);
+    ctx.lineTo(cx, cy + mr(27));
+    ctx.lineTo(cx - mr(24), cy);
     ctx.closePath();
     ctx.strokeStyle = mColor;
-    ctx.lineWidth = 8;
+    ctx.lineWidth = mr(8);
     ctx.stroke();
     ctx.beginPath();
-    ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+    ctx.arc(cx, cy, mr(8), 0, Math.PI * 2);
     ctx.fillStyle = mColor;
     ctx.fill();
   }
@@ -1261,8 +1267,7 @@ function rebuildHotspots() {
   buildHotspots();
 }
 
-function applySettings() {
-  rebuildHotspots();
+function applySceneFilters() {
   const canvas = renderer.domElement;
   const b = settings.sceneBrightness / 100;
   const c = settings.sceneContrast / 100;
@@ -1271,6 +1276,11 @@ function applySettings() {
   canvas.style.filter =
     `brightness(${b}) contrast(${c}) saturate(${s})` +
     (sh !== 1 ? ` contrast(${1 + (sh - 1) * 0.3}) brightness(${1 + (sh - 1) * 0.1})` : '');
+}
+
+function applySettings() {
+  rebuildHotspots();
+  applySceneFilters();
 }
 
 function rebuildLanguageUI() {
@@ -1376,6 +1386,30 @@ function buildSettingsPanel() {
     g.appendChild(input);
     input.addEventListener('input', () => {
       settings.markerColor = input.value;
+      saveSettings();
+      applySettings();
+    });
+  });
+
+  // 4b. Marker size
+  addGroup(t('marker_size'), (g) => {
+    const input = document.createElement('input');
+    input.type = 'range';
+    input.min = 40;
+    input.max = 200;
+    input.step = 5;
+    input.value = settings.markerSize;
+    const val = document.createElement('span');
+    val.style.cssText = 'color:#aaa;font-size:0.72rem;margin-left:6px';
+    val.textContent = settings.markerSize + '%';
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;align-items:center';
+    wrap.appendChild(input);
+    wrap.appendChild(val);
+    g.appendChild(wrap);
+    input.addEventListener('input', () => {
+      settings.markerSize = parseInt(input.value);
+      val.textContent = settings.markerSize + '%';
       saveSettings();
       applySettings();
     });
@@ -1489,6 +1523,24 @@ function buildSettingsPanel() {
       });
     });
   });
+
+  // Кнопка сравнения: зажать — показать оригинал, отпустить — свои настройки
+  const compareBtn = document.createElement('button');
+  compareBtn.textContent = t('compare');
+  compareBtn.className = 'setting-compare-btn';
+  const canvas = renderer.domElement;
+  let savedFilter = '';
+  compareBtn.addEventListener('pointerdown', () => {
+    savedFilter = canvas.style.filter;
+    canvas.style.filter = 'none';
+  });
+  compareBtn.addEventListener('pointerup', () => {
+    canvas.style.filter = savedFilter;
+  });
+  compareBtn.addEventListener('pointerleave', () => {
+    if (canvas.style.filter === 'none') canvas.style.filter = savedFilter;
+  });
+  settingsPanel.appendChild(compareBtn);
 
   // 10. Language selector
   addGroup(t('language'), (g) => {
