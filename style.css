@@ -784,6 +784,27 @@ canvas:active {
   background: rgba(255,255,255,0.12);
   color: #fff;
 }
+
+.setting-compare-btn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  background: rgba(102,126,234,0.15);
+  border: 1px solid rgba(102,126,234,0.25);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.75rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  pointer-events: auto;
+  text-align: center;
+}
+
+.setting-compare-btn:active {
+  background: rgba(102,126,234,0.3);
+  color: #fff;
+}
   background: rgba(255,255,255,0.15);
   border-radius: 2px;
   outline: none;
