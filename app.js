@@ -954,7 +954,7 @@ function buildHotspots() {
     // Hit mesh по форме метки
     const style = settings.hotspotStyle;
     let hitGeo;
-    const size = 0.12 * ms;
+    const size = 16 * ms;
     if (style === 0) {
       hitGeo = new THREE.CircleGeometry(size * 0.65, 24);
     } else if (style === 1) {
@@ -977,8 +977,8 @@ function buildHotspots() {
     const hitMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
     const hitMesh = new THREE.Mesh(hitGeo, hitMat);
     hitMesh.position.copy(pos);
-    // Смещение вверх — туда, где нарисована метка (центр canvas 512,128 → метка 512,180)
-    hitMesh.position.y += 0.055 * ms;
+    // Смещение к визуальной метке (52px выше центра канваса 256px → 15.2 юнитов)
+    hitMesh.position.y += 15.2 * ms;
     hitMesh.userData = hs;
     scene.add(hitMesh);
     hotspotMeshes.push(hitMesh);
