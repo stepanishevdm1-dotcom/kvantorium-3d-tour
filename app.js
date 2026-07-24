@@ -387,6 +387,7 @@ const translations = {
     scene_sharpness: 'Резкость',
     on: 'Вкл',
     off: 'Выкл',
+    reset: 'По умолчанию',
     debug_on: 'Отладка включена',
     copied: 'Скопировано: ',
     language: 'Язык / Language',
@@ -416,6 +417,7 @@ const translations = {
     scene_sharpness: 'Sharpness',
     on: 'On',
     off: 'Off',
+    reset: 'Reset',
     debug_on: 'Debug enabled',
     copied: 'Copied: ',
     language: 'Language / Язык',
@@ -1447,10 +1449,10 @@ function buildSettingsPanel() {
 
   // 9. Scene filters
   const filterKeys = [
-    { key: 'sceneBrightness', label: 'scene_brightness', min: 20, max: 200, step: 5, unit: '%' },
-    { key: 'sceneContrast', label: 'scene_contrast', min: 20, max: 200, step: 5, unit: '%' },
-    { key: 'sceneSaturation', label: 'scene_saturation', min: 0, max: 300, step: 5, unit: '%' },
-    { key: 'sceneSharpness', label: 'scene_sharpness', min: 0, max: 200, step: 5, unit: '%' }
+    { key: 'sceneBrightness', label: 'scene_brightness', min: 20, max: 200, step: 5, unit: '%', def: 100 },
+    { key: 'sceneContrast', label: 'scene_contrast', min: 20, max: 200, step: 5, unit: '%', def: 100 },
+    { key: 'sceneSaturation', label: 'scene_saturation', min: 0, max: 300, step: 5, unit: '%', def: 100 },
+    { key: 'sceneSharpness', label: 'scene_sharpness', min: 0, max: 200, step: 5, unit: '%', def: 100 }
   ];
   filterKeys.forEach(fk => {
     addGroup(t(fk.label), (g) => {
@@ -1468,6 +1470,17 @@ function buildSettingsPanel() {
       wrap.appendChild(input);
       wrap.appendChild(val);
       g.appendChild(wrap);
+      const resetBtn = document.createElement('button');
+      resetBtn.textContent = t('reset');
+      resetBtn.className = 'setting-reset-btn';
+      resetBtn.addEventListener('click', () => {
+        settings[fk.key] = fk.def;
+        input.value = fk.def;
+        val.textContent = fk.def + fk.unit;
+        saveSettings();
+        applySettings();
+      });
+      g.appendChild(resetBtn);
       input.addEventListener('input', () => {
         settings[fk.key] = parseInt(input.value);
         val.textContent = settings[fk.key] + fk.unit;
