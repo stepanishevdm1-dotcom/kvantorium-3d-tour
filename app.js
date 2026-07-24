@@ -605,11 +605,6 @@ let mainTexPromise = loadTexture(scenes.main_entrance.variants[0].image).then(te
    LOADING / PRELOAD
    ============================================================ */
 const progressOverlay = document.getElementById('progress-overlay');
-// Колёсико над окном загрузки вращает панораму (не скроллит список файлов)
-progressOverlay.addEventListener('wheel', e => {
-  e.preventDefault();
-  targetYaw += e.deltaY * 0.004;
-}, { passive: false });
 const progressText = document.getElementById('progress-text');
 const progressBar = document.getElementById('progress-bar');
 const progressFiles = document.getElementById('progress-files');
