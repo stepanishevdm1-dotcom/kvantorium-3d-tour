@@ -588,6 +588,11 @@ let mainTexPromise = loadTexture(scenes.main_entrance.variants[0].image).then(te
    LOADING / PRELOAD
    ============================================================ */
 const progressOverlay = document.getElementById('progress-overlay');
+// Колёсико над окном загрузки вращает панораму (не скроллит список файлов)
+progressOverlay.addEventListener('wheel', e => {
+  e.preventDefault();
+  targetYaw += e.deltaY * 0.004;
+}, { passive: false });
 const progressText = document.getElementById('progress-text');
 const progressBar = document.getElementById('progress-bar');
 const progressFiles = document.getElementById('progress-files');
@@ -1230,10 +1235,10 @@ const sidebar = document.getElementById('sidebar');
 const sidebarList = document.getElementById('sidebar-list');
 const overlay = document.getElementById('overlay');
 
-// Колёсико над списком сцен крутит панораму
+// Колёсико над списком сцен крутит панораму (даже во время загрузки)
 sidebarList.addEventListener('wheel', e => {
-  if (loadingBlocked) return;
   e.preventDefault();
+  e.stopPropagation();
   targetYaw += e.deltaY * 0.004;
 }, { passive: false });
 
