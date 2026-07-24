@@ -1303,10 +1303,6 @@ canvas:active {
   background: rgba(102,126,234,0.3);
   color: #fff;
 }
-  background: rgba(255,255,255,0.15);
-  border-radius: 2px;
-  outline: none;
-}
 
 .setting-group input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
