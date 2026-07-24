@@ -925,14 +925,46 @@ function buildHotspots() {
   const s = scenes[currentSceneId];
   if (!s) return;
 
+  const ms = settings.markerSize / 100;
+
   for (const hs of s.hotspots) {
     const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(hs.pitch, hs.yaw, 0, 'YXZ'));
     const pos = hotspotVec.clone().applyQuaternion(q).multiplyScalar(HOTSPOT_DISTANCE);
     const sprite = createHotspotSprite(getHSLabel(hs.label));
     sprite.position.copy(pos);
-    sprite.userData = hs;
     scene.add(sprite);
-    hotspotMeshes.push(sprite);
+
+    // Hit mesh по форме метки
+    const style = settings.hotspotStyle;
+    let hitGeo;
+    const size = 0.12 * ms;
+    if (style === 0) {
+      hitGeo = new THREE.CircleGeometry(size * 0.65, 24);
+    } else if (style === 1) {
+      hitGeo = new THREE.CircleGeometry(size * 0.45, 20);
+    } else if (style === 2) {
+      hitGeo = new THREE.ShapeGeometry(new THREE.Shape()
+        .moveTo(-size * 0.5, -size * 0.5)
+        .lineTo(size * 0.5, -size * 0.5)
+        .lineTo(size * 0.5, size * 0.5)
+        .lineTo(-size * 0.5, size * 0.5)
+        .closePath());
+    } else {
+      hitGeo = new THREE.ShapeGeometry(new THREE.Shape()
+        .moveTo(0, -size * 0.6)
+        .lineTo(size * 0.5, 0)
+        .lineTo(0, size * 0.6)
+        .lineTo(-size * 0.5, 0)
+        .closePath());
+    }
+    const hitMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
+    const hitMesh = new THREE.Mesh(hitGeo, hitMat);
+    hitMesh.position.copy(pos);
+    // Смещение вверх — туда, где нарисована метка (центр canvas 512,128 → метка 512,180)
+    hitMesh.position.y += 0.055 * ms;
+    hitMesh.userData = hs;
+    scene.add(hitMesh);
+    hotspotMeshes.push(hitMesh);
   }
 }
 
@@ -1818,6 +1850,11 @@ function animate() {
   camera.updateProjectionMatrix();
 
   renderer.render(scene, camera);
+
+  // Billboard hit-мешей к камере
+  for (const m of hotspotMeshes) {
+    if (m.isMesh) m.lookAt(camera.position);
+  }
 
   if (debugVisible) refreshDebugHUD();
 }
