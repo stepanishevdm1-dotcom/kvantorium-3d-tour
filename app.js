@@ -244,7 +244,9 @@ const scenes = {
     ],
     hotspots: [
       { yaw: 3.135, pitch: 0, label: 'Третий этаж 11', target: 'floor3_11',
-        returnYaw: 3.238, returnPitch: 0 }
+        returnYaw: 3.238, returnPitch: 0 },
+      { yaw: 6.222, pitch: -0.126, label: 'Шахматная гостиная', target: 'chess',
+        returnYaw: 0.762, returnPitch: 0 }
     ]
   },
   'kabinet_304': {
@@ -292,13 +294,21 @@ const scenes = {
       { yaw: 1.517, pitch: -0.080, label: 'Энерджиквантум', target: 'energikvantum',
         returnYaw: 6.155, returnPitch: 0 }
     ]
+  },
+  'chess': {
+    name: 'Шахматная гостиная',
+    variants: [
+      { label: 'Обычная', image: 'шахматная гостиная.jpg' }
+    ],
+    hotspots: [
+    ]
   }
 };
 
 const sidebarGroups = [
   { label: null, scenes: ['main_entrance', 'security'] },
   { label: 'Третий этаж', scenes: ['floor3', 'floor3_1', 'floor3_2', 'floor3_3', 'floor3_4', 'floor3_5', 'floor3_6', 'floor3_7', 'floor3_8', 'floor3_9', 'floor3_10', 'floor3_11', 'floor3_12'] },
-  { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo', 'kabinet_304', 'radio_station', 'energikvantum', 'energikvantum_2'] }
+  { label: 'Кабинеты', scenes: ['industrial_design', 'industrial_design_2', 'robo', 'kabinet_304', 'radio_station', 'energikvantum', 'energikvantum_2', 'chess'] }
 ];
 
 const DEFAULT_SCENE = 'main_entrance';
@@ -328,6 +338,7 @@ let debugVisible = false;
 let draggedDistance = 0;
 let imageCache = {};
 let loadingRotate = true;
+let loadingBlocked = true;
 
 /* ============================================================
    SETTINGS
@@ -419,6 +430,7 @@ const sceneNamesEn = {
   'radio_station': 'Collective Radio Station',
   'energikvantum': 'Energiquantom Room',
   'energikvantum_2': 'Energiquantom Room 2',
+  'chess': 'Chess Lounge',
 };
 
 const hotspotLabelEn = {
@@ -449,6 +461,7 @@ const hotspotLabelEn = {
   '\u042d\u043d\u0435\u0440\u0434\u0436\u0438\u043a\u0432\u0430\u043d\u0442\u0443\u043c 2': 'Energiquantom 2',
   '\u041f\u043e\u0434\u043d\u0438\u043c\u0430\u0435\u043c\u0441\u044f \u043d\u0430 3 \u044d\u0442\u0430\u0436': 'Going up to Floor 3',
   '\u0421\u043f\u0443\u0441\u043a\u0430\u0435\u043c\u0441\u044f \u043d\u0430 1 \u044d\u0442\u0430\u0436': 'Going down to Floor 1',
+  '\u0428\u0430\u0445\u043c\u0430\u0442\u043d\u0430\u044f \u0433\u043e\u0441\u0442\u0438\u043d\u0430\u044f': 'Chess Lounge',
 };
 
 const variantLabelEn = {
@@ -628,19 +641,13 @@ function preloadAll() {
           updateProgress(totalPct, loadedBytes, totalBytes);
 
           if (loadedFiles === total) {
-            loadingRotate = false;
-            setTimeout(() => {
-              progressOverlay.classList.add('hidden');
-            }, 500);
+            onLoadComplete();
           }
         } catch (e) {
           loadedFiles++;
           progSpan.textContent = 'Ошибка';
           if (loadedFiles === total) {
-            loadingRotate = false;
-            setTimeout(() => {
-              progressOverlay.classList.add('hidden');
-            }, 500);
+            onLoadComplete();
           }
         }
       })();
@@ -649,6 +656,17 @@ function preloadAll() {
 }
 
 let viewerStarted = false;
+
+function onLoadComplete() {
+  loadingRotate = false;
+  loadingBlocked = false;
+  document.getElementById('intro')?.style.setProperty('display', 'none');
+  progressOverlay.classList.add('done');
+  setTimeout(() => {
+    progressOverlay.classList.add('hidden');
+    if (!viewerStarted) startViewer();
+  }, 600);
+}
 
 /* ============================================================
    TEXTURE LOADING
@@ -866,7 +884,7 @@ function getClientXY(e) {
 }
 
 function onPointerDown(e) {
-  if (isTransitioning) return;
+  if (isTransitioning || loadingBlocked) return;
   loadingRotate = false;
   const { x, y } = getClientXY(e);
   draggedDistance = 0;
@@ -876,7 +894,7 @@ function onPointerDown(e) {
 }
 
 function onPointerUp(e) {
-  if (isTransitioning) return;
+  if (isTransitioning || loadingBlocked) return;
   if (!e.target || !renderer.domElement.contains(e.target)) return;
   const { x, y } = getClientXY(e);
   if (draggedDistance < 5) {
@@ -898,15 +916,10 @@ function onPointerUp(e) {
 }
 
 function onPointerMove(e) {
+  if (loadingBlocked || !isDragging) return;
   const { x, y } = getClientXY(e);
   const dx = x - prevPointer.x;
   const dy = y - prevPointer.y;
-  draggedDistance += Math.abs(dx) + Math.abs(dy);
-  if (!isDragging) return;
-  draggedDistance += Math.abs(dx) + Math.abs(dy);
-
-  if (!isDragging) return;
-
   const sens = 0.005 * (fov / 75) * settings.mouseSensitivity;
   targetYaw += dx * sens;
   targetPitch += dy * sens;
@@ -1463,6 +1476,7 @@ settingsBtn.addEventListener('click', (e) => {
    WHEEL ZOOM
    ============================================================ */
 renderer.domElement.addEventListener('wheel', e => {
+  if (loadingBlocked) return;
   e.preventDefault();
   targetFov += e.deltaY * 0.08;
   targetFov = Math.max(MIN_FOV, Math.min(MAX_FOV, targetFov));
@@ -1514,6 +1528,7 @@ renderer.domElement.addEventListener('touchend', e => {
    KEYBOARD
    ============================================================ */
 window.addEventListener('keydown', e => {
+  if (loadingBlocked) return;
   const code = e.code;
 
   // D — показать/скрыть отладку
@@ -1631,11 +1646,6 @@ updateDebugHUD();
 setTimeout(() => {
   preloadAll();
 }, 1500);
-
-// Зритель запускается после анимации intro
-setTimeout(() => {
-  if (!viewerStarted) startViewer();
-}, 4200);
 
 setInterval(() => { if (isTransitioning) isTransitioning = false; }, 10000);
 
