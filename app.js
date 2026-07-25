@@ -611,6 +611,10 @@ const hotspotVec = new THREE.Vector3(0, 0, -1);
 let mainTexPromise = loadTexture(scenes.main_entrance.variants[0].image).then(tex => {
   sphere.material.map = tex;
   sphere.material.needsUpdate = true;
+  debugLog('mainTexPromise loaded: ' + (tex.image ? tex.image.width + 'x' + tex.image.height : 'no image'));
+  return tex;
+}).catch(e => {
+  debugLog('mainTexPromise ERROR: ' + e.message);
 });
 
 /* ============================================================
@@ -644,13 +648,15 @@ function humanSize(bytes) {
 }
 
 function preloadAll() {
+  debugLog('preloadAll: starting...');
   const images = getAllImages();
   const total = images.length;
   let loadedFiles = 0;
   let totalBytes = 0;
   let loadedBytes = 0;
 
-  if (total === 0) return;
+  if (total === 0) { debugLog('preloadAll: no images!'); return; }
+  debugLog('preloadAll: ' + total + ' images to load');
 
   progressOverlay.classList.remove('hidden');
   progressFiles.innerHTML = '';
@@ -734,6 +740,7 @@ function preloadAll() {
 let viewerStarted = false;
 
 function onLoadComplete() {
+  debugLog('onLoadComplete: all files loaded');
   loadingRotate = false;
   loadingBlocked = false;
   speedElement.classList.add('hidden');
@@ -769,12 +776,14 @@ function loadTexture(url) {
 }
 
 async function setScene(id, variantIdx, preserveRotation = false) {
-  if (isTransitioning) return;
+  if (isTransitioning) { debugLog('setScene: isTransitioning'); return; }
   const s = scenes[id];
-  if (!s) return;
+  if (!s) { debugLog('setScene: scene not found: ' + id); return; }
 
   const imgUrl = s.variants[variantIdx].image;
-  if (!imgUrl) return;
+  if (!imgUrl) { debugLog('setScene: no image for variant'); return; }
+
+  debugLog('setScene: loading ' + imgUrl + ' (cache: ' + (imageCache[imgUrl] ? 'HIT' : 'MISS') + ')');
 
   if (!preserveRotation) {
     const firstHotspot = s.hotspots[0];
@@ -790,19 +799,36 @@ async function setScene(id, variantIdx, preserveRotation = false) {
     sphere.material.needsUpdate = true;
     currentSceneId = id;
     currentVariantIdx = variantIdx;
+    debugLog('setScene OK: map set, tex=' + (tex ? tex.image.width + 'x' + tex.image.height : 'null'));
     updateUI();
     buildHotspots();
     buildSidebar();
   } catch (e) {
+    debugLog('setScene ERROR: ' + e.message);
     console.error('Failed to load texture:', imgUrl, e);
   }
 }
 
+function debugLog(msg) {
+  const el = document.getElementById('debug-overlay');
+  if (el) el.textContent = msg;
+}
+
 function startViewer() {
   viewerStarted = true;
+  debugLog('startViewer: setting scene...');
   applySceneFilters();
-  // Плавное проявление первой сцены
-  setScene(DEFAULT_SCENE, 0);
+  setScene(DEFAULT_SCENE, 0).then(() => {
+    debugLog('setScene OK, canvas size: ' + renderer.domElement.width + 'x' + renderer.domElement.height);
+    // Проверяем, есть ли текстура
+    if (sphere.material.map) {
+      debugLog('Sphere has texture: ' + sphere.material.map.image.width + 'x' + sphere.material.map.image.height);
+    } else {
+      debugLog('WARNING: sphere has NO texture!');
+    }
+  }).catch(e => {
+    debugLog('ERROR: ' + e.message);
+  });
 }
 
 /* ============================================================
@@ -1840,8 +1866,11 @@ window.addEventListener('resize', () => {
 /* ============================================================
    RENDER LOOP
    ============================================================ */
+let frameCount = 0;
 function animate() {
   requestAnimationFrame(animate);
+  frameCount++;
+  if (frameCount % 60 === 0) debugLog('animating frame ' + frameCount);
   if (loadingRotate) targetYaw += 0.002;
 
   yaw += (targetYaw - yaw) * SMOOTH;
@@ -1866,23 +1895,31 @@ function animate() {
 /* ============================================================
    INIT
    ============================================================ */
+debugLog('init: starting...');
 animate();
+debugLog('init: animate started');
 buildSidebar();
 updateDebugHUD();
 
 // Главный вход грузится первым — после него запускается introOut
 const INTRO_ANIM_DURATION = 4800; // мс — время на анимацию букв
+debugLog('init: mainTexPromise pending...');
 mainTexPromise.then(() => {
+  debugLog('init: mainTexPromise resolved');
   const intro = document.getElementById('intro');
+  if (!intro) { debugLog('ERROR: #intro not found!'); return; }
   // Ждём, пока анимация букв отыграет полностью
   const elapsed = performance.now();
   const delay = Math.max(0, INTRO_ANIM_DURATION - elapsed);
+  debugLog('init: intro out in ' + Math.round(delay) + 'ms');
   setTimeout(() => {
+    debugLog('init: adding .out class');
     intro.classList.add('out');
     let preloadCalled = false;
     const callPreload = () => {
       if (preloadCalled) return;
       preloadCalled = true;
+      debugLog('init: calling preloadAll');
       preloadAll();
     };
     // Ждём окончания introOut (анимация на ::before)
@@ -1890,6 +1927,8 @@ mainTexPromise.then(() => {
     // Резервный таймер — если animationend не сработал
     setTimeout(callPreload, 3000);
   }, delay);
+}).catch(e => {
+  debugLog('mainTexPromise rejected: ' + e.message);
 });
 
 setInterval(() => { if (isTransitioning) isTransitioning = false; }, 10000);
