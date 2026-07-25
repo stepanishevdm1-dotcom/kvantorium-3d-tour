@@ -802,24 +802,7 @@ function startViewer() {
   viewerStarted = true;
   applySceneFilters();
   // Плавное проявление первой сцены
-  setScene(DEFAULT_SCENE, 0).then(() => {
-    sphere.material.transparent = true;
-    sphere.material.needsUpdate = true;
-    sphere.material.opacity = 0;
-    const start = performance.now();
-    const dur = 1000;
-    function fadeIn(now) {
-      const t = Math.min((now - start) / dur, 1);
-      sphere.material.opacity = t;
-      sphere.material.needsUpdate = true;
-      if (t < 1) requestAnimationFrame(fadeIn);
-      else {
-        sphere.material.transparent = false;
-        sphere.material.needsUpdate = true;
-      }
-    }
-    requestAnimationFrame(fadeIn);
-  });
+  setScene(DEFAULT_SCENE, 0);
 }
 
 /* ============================================================
