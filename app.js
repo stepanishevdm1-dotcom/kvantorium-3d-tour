@@ -594,6 +594,7 @@ loadSettings();
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
+console.log('THREE version:', THREE.REVISION);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -661,8 +662,11 @@ function preloadAll() {
   )).then(sizes => {
     totalBytes = sizes.reduce((a, b) => a + b, 0);
 
+    const mainFile = scenes.main_entrance.variants[0].image;
+
     for (let i = 0; i < images.length; i++) {
       const img = images[i];
+      if (img.file === mainFile) { loadedFiles++; continue; }
       const fileSize = sizes[i];
       const url = encodeURI(img.file);
 
@@ -1858,6 +1862,8 @@ function animate() {
    INIT
    ============================================================ */
 animate();
+// Загружаем главную текстуру в imageCache, чтобы setScene нашла её мгновенно
+loadTexture(scenes.main_entrance.variants[0].image);
 preloadAll();
 buildSidebar();
 
