@@ -804,6 +804,7 @@ function startViewer() {
   // Плавное проявление первой сцены
   setScene(DEFAULT_SCENE, 0).then(() => {
     sphere.material.transparent = true;
+    sphere.material.needsUpdate = true;
     sphere.material.opacity = 0;
     const start = performance.now();
     const dur = 1000;
@@ -812,7 +813,10 @@ function startViewer() {
       sphere.material.opacity = t;
       sphere.material.needsUpdate = true;
       if (t < 1) requestAnimationFrame(fadeIn);
-      else sphere.material.transparent = false;
+      else {
+        sphere.material.transparent = false;
+        sphere.material.needsUpdate = true;
+      }
     }
     requestAnimationFrame(fadeIn);
   });
@@ -1892,9 +1896,16 @@ mainTexPromise.then(() => {
   const delay = Math.max(0, INTRO_ANIM_DURATION - elapsed);
   setTimeout(() => {
     intro.classList.add('out');
-    intro.addEventListener('animationend', () => {
+    let preloadCalled = false;
+    const callPreload = () => {
+      if (preloadCalled) return;
+      preloadCalled = true;
       preloadAll();
-    }, { once: true });
+    };
+    // Ждём окончания introOut (анимация на ::before)
+    intro.addEventListener('animationend', callPreload, { once: true });
+    // Резервный таймер — если animationend не сработал
+    setTimeout(callPreload, 3000);
   }, delay);
 });
 
