@@ -592,6 +592,7 @@ loadSettings();
    THREE.JS
    ============================================================ */
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xff0000); // ДИАГНОСТИКА: красный фон
 const camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
