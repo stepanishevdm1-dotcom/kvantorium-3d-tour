@@ -592,7 +592,6 @@ loadSettings();
    THREE.JS
    ============================================================ */
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xff0000); // ДИАГНОСТИКА: красный фон
 const camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -608,12 +607,6 @@ scene.add(sphere);
 
 const euler = new THREE.Euler(0, 0, 0, 'YXZ');
 const hotspotVec = new THREE.Vector3(0, 0, -1);
-
-// Фон для экрана загрузки — Главный вход грузится сразу
-let mainTexPromise = loadTexture(scenes.main_entrance.variants[0].image).then(tex => {
-  sphere.material.map = tex;
-  sphere.material.needsUpdate = true;
-});
 
 /* ============================================================
    LOADING / PRELOAD
@@ -668,11 +661,8 @@ function preloadAll() {
   )).then(sizes => {
     totalBytes = sizes.reduce((a, b) => a + b, 0);
 
-    const mainFile = scenes.main_entrance.variants[0].image;
-
     for (let i = 0; i < images.length; i++) {
       const img = images[i];
-      if (img.file === mainFile) { loadedFiles++; continue; }
       const fileSize = sizes[i];
       const url = encodeURI(img.file);
 
@@ -1868,24 +1858,11 @@ function animate() {
    INIT
    ============================================================ */
 animate();
+preloadAll();
 buildSidebar();
 
-// Intro flow: show intro, animate out, then preload
-const intro = document.getElementById('intro');
-const INTRO_DELAY = 3200;
-const PRELOAD_FALLBACK = 6000;
-
-setTimeout(() => {
-  intro.classList.add('out');
-  let preloadCalled = false;
-  const callPreload = () => {
-    if (preloadCalled) return;
-    preloadCalled = true;
-    preloadAll();
-  };
-  intro.addEventListener('animationend', callPreload, { once: true });
-  setTimeout(callPreload, PRELOAD_FALLBACK);
-}, INTRO_DELAY);
+// Intro animation: начинает проигрываться независимо от загрузки
+setTimeout(() => document.getElementById('intro')?.classList.add('out'), 500);
 
 setInterval(() => { if (isTransitioning) isTransitioning = false; }, 10000);
 
