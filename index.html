@@ -16,59 +16,31 @@
 <body>
 
 <div id="intro">
-  <div id="intro-effects">
-    <div class="bg-shape s1"></div>
-    <div class="bg-shape s2"></div>
-    <div class="bg-shape s3"></div>
-    <div class="bg-shape s4"></div>
-    <div class="bg-shape s5"></div>
-    <div class="bg-shape s6"></div>
-    <div class="bg-shape s7"></div>
-    <div class="bg-shape s8"></div>
-    <div class="bg-shape s9"></div>
-    <div class="bg-shape s10"></div>
-    <div class="bg-shape s11"></div>
-    <div class="bg-shape s12"></div>
-    <div class="bg-shape s13"></div>
-    <div class="bg-shape s14"></div>
-    <div class="bg-shape s15"></div>
-    <div class="bg-shape s16"></div>
-    <div class="bg-shape s17"></div>
-    <div class="bg-shape s18"></div>
-    <div class="bg-shape s19"></div>
-    <div class="bg-shape s20"></div>
-    <div class="bg-shape s21"></div>
-    <div class="bg-shape s22"></div>
-    <div class="bg-shape s23"></div>
-    <div class="bg-shape s24"></div>
-    <div id="intro-orbital"></div>
-    <div id="intro-orbital-2"></div>
-    <div id="intro-orbital-3"></div>
-    <div id="intro-orbital-4"></div>
-    <div id="intro-particle-field"></div>
-    <div id="intro-particle-field-2"></div>
-  </div>
-  <div id="intro-gradient"></div>
-  <div id="intro-letters-wrapper">
-    <div id="intro-ring-outer"></div>
-    <div id="intro-ring-inner"></div>
-    <div id="intro-letters" aria-label="Кванториум">
-      <span>К</span><span>в</span><span>а</span><span>н</span><span>т</span>
-      <span>о</span><span>р</span><span>и</span><span>у</span><span>м</span>
-    </div>
+  <div id="intro-letters" aria-label="Кванториум">
+    <span>К</span><span>в</span><span>а</span><span>н</span><span>т</span>
+    <span>о</span><span>р</span><span>и</span><span>у</span><span>м</span>
   </div>
   <div id="intro-sub">3D Тур — 3 этаж</div>
-  <div id="intro-line"></div>
+  <div id="intro-shapes">
+    <div class="shape s1"></div>
+    <div class="shape s2"></div>
+    <div class="shape s3"></div>
+    <div class="shape s4"></div>
+    <div class="shape s5"></div>
+    <div class="shape s6"></div>
+  </div>
 </div>
 
-<div id="progress-overlay" class="hidden">
-  <div id="progress-inner">
-    <div id="progress-header">
-      <span id="progress-text">Загрузка… 0%</span>
-    </div>
-    <div id="progress-track"><div id="progress-bar"></div></div>
-    <div id="progress-files"></div>
+<div id="loading">
+  <div id="loading-content">
+    <p id="loading-status">Загрузка панорам…</p>
+    <p id="loading-hint">Если скорость скачивания медленная — выключите VPN и проверьте сигнал сети</p>
+    <button id="bg-load-btn">Загружать в фоне</button>
   </div>
+</div>
+
+<div id="bg-progress" class="hidden">
+  <div id="bg-progress-list"></div>
 </div>
 
 <div id="sidebar-btn">☰</div>
@@ -90,9 +62,6 @@
 </div>
 
 <div id="crosshair">+</div>
-
-<div id="speed-display" class="hidden">0 MB/s</div>
-<div id="debug-overlay" style="position:fixed;top:60px;right:12px;z-index:9999;background:rgba(0,0,0,0.8);padding:8px 12px;border-radius:8px;font-family:monospace;font-size:12px;color:#0f0;max-width:300px;pointer-events:none;white-space:pre-wrap;line-height:1.5;">Загрузка...</div>
 
 <script type="module" src="app.js"></script>
 </body>
