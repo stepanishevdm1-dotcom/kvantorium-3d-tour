@@ -598,15 +598,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 document.body.prepend(renderer.domElement);
-const gl = renderer.getContext();
-console.log('renderer canvas:', renderer.domElement.width, 'x', renderer.domElement.height, 'context:', gl ? 'OK' : 'NULL');
-debugLog('init: renderer ' + renderer.domElement.width + 'x' + renderer.domElement.height + ' webgl=' + (gl ? 'OK' : 'NULL') + ' sphere.visible=' + sphere.visible + ' sphere.material.opacity=' + sphere.material.opacity + ' transparent=' + sphere.material.transparent);
+
 
 const sphereGeo = new THREE.SphereGeometry(SPHERE_RADIUS, 64, 64);
 const sphereMat = new THREE.MeshBasicMaterial({ side: THREE.BackSide });
 const sphere = new THREE.Mesh(sphereGeo, sphereMat);
 scene.add(sphere);
-console.log('sphere added, children:', scene.children.length, 'sphere.visible:', sphere.visible);
 
 const euler = new THREE.Euler(0, 0, 0, 'YXZ');
 const hotspotVec = new THREE.Vector3(0, 0, -1);
@@ -615,10 +612,6 @@ const hotspotVec = new THREE.Vector3(0, 0, -1);
 let mainTexPromise = loadTexture(scenes.main_entrance.variants[0].image).then(tex => {
   sphere.material.map = tex;
   sphere.material.needsUpdate = true;
-  debugLog('mainTexPromise loaded: ' + (tex.image ? tex.image.width + 'x' + tex.image.height : 'no image'));
-  return tex;
-}).catch(e => {
-  debugLog('mainTexPromise ERROR: ' + e.message);
 });
 
 /* ============================================================
@@ -652,15 +645,13 @@ function humanSize(bytes) {
 }
 
 function preloadAll() {
-  debugLog('preloadAll: starting...');
   const images = getAllImages();
   const total = images.length;
   let loadedFiles = 0;
   let totalBytes = 0;
   let loadedBytes = 0;
 
-  if (total === 0) { debugLog('preloadAll: no images!'); return; }
-  debugLog('preloadAll: ' + total + ' images to load');
+  if (total === 0) return;
 
   progressOverlay.classList.remove('hidden');
   progressFiles.innerHTML = '';
@@ -744,7 +735,6 @@ function preloadAll() {
 let viewerStarted = false;
 
 function onLoadComplete() {
-  debugLog('onLoadComplete: all files loaded');
   loadingRotate = false;
   loadingBlocked = false;
   speedElement.classList.add('hidden');
@@ -780,14 +770,12 @@ function loadTexture(url) {
 }
 
 async function setScene(id, variantIdx, preserveRotation = false) {
-  if (isTransitioning) { debugLog('setScene: isTransitioning'); return; }
+  if (isTransitioning) return;
   const s = scenes[id];
-  if (!s) { debugLog('setScene: scene not found: ' + id); return; }
+  if (!s) return;
 
   const imgUrl = s.variants[variantIdx].image;
-  if (!imgUrl) { debugLog('setScene: no image for variant'); return; }
-
-  debugLog('setScene: loading ' + imgUrl + ' (cache: ' + (imageCache[imgUrl] ? 'HIT' : 'MISS') + ')');
+  if (!imgUrl) return;
 
   if (!preserveRotation) {
     const firstHotspot = s.hotspots[0];
@@ -803,38 +791,18 @@ async function setScene(id, variantIdx, preserveRotation = false) {
     sphere.material.needsUpdate = true;
     currentSceneId = id;
     currentVariantIdx = variantIdx;
-    debugLog('setScene OK: map set, tex=' + (tex ? tex.image.width + 'x' + tex.image.height : 'null'));
     updateUI();
     buildHotspots();
     buildSidebar();
   } catch (e) {
-    debugLog('setScene ERROR: ' + e.message);
     console.error('Failed to load texture:', imgUrl, e);
   }
 }
 
-let _dbg = '';
-function debugLog(msg) {
-  const el = document.getElementById('debug-overlay');
-  if (el) { _dbg += '\n' + msg; el.textContent = _dbg; }
-  console.log(msg);
-}
-
 function startViewer() {
   viewerStarted = true;
-  debugLog('startViewer: setting scene...');
   applySceneFilters();
-  setScene(DEFAULT_SCENE, 0).then(() => {
-    debugLog('setScene OK, canvas size: ' + renderer.domElement.width + 'x' + renderer.domElement.height);
-    // Проверяем, есть ли текстура
-    if (sphere.material.map) {
-      debugLog('Sphere has texture: ' + sphere.material.map.image.width + 'x' + sphere.material.map.image.height);
-    } else {
-      debugLog('WARNING: sphere has NO texture!');
-    }
-  }).catch(e => {
-    debugLog('ERROR: ' + e.message);
-  });
+  setScene(DEFAULT_SCENE, 0);
 }
 
 /* ============================================================
@@ -1872,11 +1840,8 @@ window.addEventListener('resize', () => {
 /* ============================================================
    RENDER LOOP
    ============================================================ */
-let frameCount = 0;
 function animate() {
   requestAnimationFrame(animate);
-  frameCount++;
-  if (frameCount === 60 || frameCount === 300 || frameCount === 600) debugLog('frame ' + frameCount + ' | viewerStarted=' + viewerStarted + ' loadingRotate=' + loadingRotate + ' loadingBlocked=' + loadingBlocked);
   if (loadingRotate) targetYaw += 0.002;
 
   yaw += (targetYaw - yaw) * SMOOTH;
@@ -1901,41 +1866,25 @@ function animate() {
 /* ============================================================
    INIT
    ============================================================ */
-debugLog('init: starting...');
 animate();
-debugLog('init: animate started');
 buildSidebar();
-updateDebugHUD();
 
-// Главный вход грузится первым — после него запускается introOut
-const INTRO_ANIM_DURATION = 4800; // мс — время на анимацию букв
-debugLog('init: mainTexPromise pending...');
-mainTexPromise.then(() => {
-  debugLog('init: mainTexPromise resolved');
-  const intro = document.getElementById('intro');
-  if (!intro) { debugLog('ERROR: #intro not found!'); return; }
-  // Ждём, пока анимация букв отыграет полностью
-  const elapsed = performance.now();
-  const delay = Math.max(0, INTRO_ANIM_DURATION - elapsed);
-  debugLog('init: intro out in ' + Math.round(delay) + 'ms');
-  setTimeout(() => {
-    debugLog('init: adding .out class');
-    intro.classList.add('out');
-    let preloadCalled = false;
-    const callPreload = () => {
-      if (preloadCalled) return;
-      preloadCalled = true;
-      debugLog('init: calling preloadAll');
-      preloadAll();
-    };
-    // Ждём окончания introOut (анимация на ::before)
-    intro.addEventListener('animationend', callPreload, { once: true });
-    // Резервный таймер — если animationend не сработал
-    setTimeout(callPreload, 3000);
-  }, delay);
-}).catch(e => {
-  debugLog('mainTexPromise rejected: ' + e.message);
-});
+// Intro flow: show intro, animate out, then preload
+const intro = document.getElementById('intro');
+const INTRO_DELAY = 3200;
+const PRELOAD_FALLBACK = 6000;
+
+setTimeout(() => {
+  intro.classList.add('out');
+  let preloadCalled = false;
+  const callPreload = () => {
+    if (preloadCalled) return;
+    preloadCalled = true;
+    preloadAll();
+  };
+  intro.addEventListener('animationend', callPreload, { once: true });
+  setTimeout(callPreload, PRELOAD_FALLBACK);
+}, INTRO_DELAY);
 
 setInterval(() => { if (isTransitioning) isTransitioning = false; }, 10000);
 
