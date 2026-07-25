@@ -598,11 +598,15 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 document.body.prepend(renderer.domElement);
+const gl = renderer.getContext();
+console.log('renderer canvas:', renderer.domElement.width, 'x', renderer.domElement.height, 'context:', gl ? 'OK' : 'NULL');
+debugLog('init: renderer ' + renderer.domElement.width + 'x' + renderer.domElement.height + ' webgl=' + (gl ? 'OK' : 'NULL') + ' sphere.visible=' + sphere.visible + ' sphere.material.opacity=' + sphere.material.opacity + ' transparent=' + sphere.material.transparent);
 
 const sphereGeo = new THREE.SphereGeometry(SPHERE_RADIUS, 64, 64);
 const sphereMat = new THREE.MeshBasicMaterial({ side: THREE.BackSide });
 const sphere = new THREE.Mesh(sphereGeo, sphereMat);
 scene.add(sphere);
+console.log('sphere added, children:', scene.children.length, 'sphere.visible:', sphere.visible);
 
 const euler = new THREE.Euler(0, 0, 0, 'YXZ');
 const hotspotVec = new THREE.Vector3(0, 0, -1);
@@ -809,9 +813,11 @@ async function setScene(id, variantIdx, preserveRotation = false) {
   }
 }
 
+let _dbg = '';
 function debugLog(msg) {
   const el = document.getElementById('debug-overlay');
-  if (el) el.textContent = msg;
+  if (el) { _dbg += '\n' + msg; el.textContent = _dbg; }
+  console.log(msg);
 }
 
 function startViewer() {
@@ -1870,7 +1876,7 @@ let frameCount = 0;
 function animate() {
   requestAnimationFrame(animate);
   frameCount++;
-  if (frameCount % 60 === 0) debugLog('animating frame ' + frameCount);
+  if (frameCount === 60 || frameCount === 300 || frameCount === 600) debugLog('frame ' + frameCount + ' | viewerStarted=' + viewerStarted + ' loadingRotate=' + loadingRotate + ' loadingBlocked=' + loadingBlocked);
   if (loadingRotate) targetYaw += 0.002;
 
   yaw += (targetYaw - yaw) * SMOOTH;
