@@ -267,6 +267,8 @@ const scenes = {
       { label: 'Обычная', image: '3 этаж 14.jpg' }
     ],
     hotspots: [
+      { yaw: 3.138, pitch: -0.037, label: 'Третий этаж 13', target: 'floor3_13',
+        returnYaw: 0, returnPitch: 0 }
     ]
   },
   'kabinet_304': {
@@ -1864,11 +1866,29 @@ function animate() {
 animate();
 // Загружаем главную текстуру в imageCache, чтобы setScene нашла её мгновенно
 loadTexture(scenes.main_entrance.variants[0].image);
-preloadAll();
 buildSidebar();
 
-// Intro animation: начинает проигрываться независимо от загрузки
-setTimeout(() => document.getElementById('intro')?.classList.add('out'), 500);
+// Intro анимация
+const introEl = document.getElementById('intro');
+const introSub = document.getElementById('intro-sub');
+const introLetters = document.querySelectorAll('#intro-letters span');
+
+introEl.classList.add('show');
+
+requestAnimationFrame(() => {
+  introLetters.forEach((span, i) => {
+    setTimeout(() => span.classList.add('in'), i * 120);
+  });
+  setTimeout(() => introSub.classList.add('in'), 2000);
+});
+
+setTimeout(() => {
+  introEl.classList.add('fade-out');
+  setTimeout(() => {
+    introEl.style.display = 'none';
+    preloadAll();
+  }, 800);
+}, 3600);
 
 setInterval(() => { if (isTransitioning) isTransitioning = false; }, 10000);
 
